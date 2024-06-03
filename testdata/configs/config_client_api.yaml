@@ -1,0 +1,35 @@
+# client_api 客户端api
+client_api:
+  # cluster_service 集群服务
+  # registry_endpoint = ${app.belong_to}/${app.env}/${app.env_branch}/${app.version}/${app.name}
+  # 例子：registry_endpoint = go-srv-saas/DEVELOP/main/v1.0.0/user-service
+  # registry_name = ${app.name}
+  # http_scheme : 默认值 http
+  cluster_service:
+    - name: ping-service
+      registry_name: saas-ping-service
+      http_host: http://127.0.0.1:10001
+      grpc_host: 127.0.0.1:10002
+    - name: snowflake-service
+      registry_name: saas-snowflake-service
+      http_host: http://127.0.0.1:10101
+      grpc_host: 127.0.0.1:10102
+    - name: user-service
+      registry_name: saas-user-service
+      http_host: http://127.0.0.1:10201
+      grpc_host: 127.0.0.1:10202
+    - name: admin-service
+      registry_name: saas-admin-service
+      http_host: http://127.0.0.1:10201
+      grpc_host: 127.0.0.1:10202
+  third_party:
+    - name: feishu-openapi
+      http_host: https://open.feishu.cn
+      grpc_host: https://open.feishu.cn
+    - name: dingtalk-openapi
+      http_host: https://api.dingtalk.com
+      grpc_host: https://api.dingtalk.com
+    - name: dingtalk-openapi-old
+      http_host: https://oapi.dingtalk.com
+      grpc_host: https://oapi.dingtalk.com
+
