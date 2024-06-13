@@ -1,7 +1,7 @@
 package clientutil
 
 import (
-	setuputil "github.com/go-micro-saas/kit/setup"
+	setuputil "github.com/go-micro-saas/service-kit/setup"
 	pingservicev1 "github.com/ikaiguang/go-srv-kit/api/ping/v1/services"
 )
 

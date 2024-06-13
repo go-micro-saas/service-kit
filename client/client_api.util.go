@@ -1,8 +1,8 @@
 package clientutil
 
 import (
-	configs "github.com/go-micro-saas/kit/api/config"
-	setuputil "github.com/go-micro-saas/kit/setup"
+	configs "github.com/go-micro-saas/service-kit/api/config"
+	setuputil "github.com/go-micro-saas/service-kit/setup"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 )
 

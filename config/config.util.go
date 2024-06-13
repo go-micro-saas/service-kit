@@ -1,7 +1,7 @@
 package configutil
 
 import (
-	configs "github.com/go-micro-saas/kit/api/config"
+	configs "github.com/go-micro-saas/service-kit/api/config"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 )
 

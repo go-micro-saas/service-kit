@@ -11,23 +11,5 @@ endif
 .PHONY: protoc-configs
 # protoc :-->: generate configs protobuf
 protoc-configs:
-	@echo "# generate configs protobuf"
-	if [ "$(SAAS_CONFIGS_PROTO_FILES)" != "" ]; then \
-		cd $(PROJECT_PATH); \
-		protoc \
-			--proto_path=. \
-			--proto_path=$(GOPATH)/src \
-			--proto_path=./third_party \
-			--go_out=paths=source_relative:. \
-			--go-grpc_out=paths=source_relative:. \
-			--go-http_out=paths=source_relative:. \
-			--go-errors_out=paths=source_relative:. \
-			--validate_out=paths=source_relative,lang=go:. \
-			--openapiv2_out . \
-			--openapiv2_opt logtostderr=true \
-			--openapiv2_opt allow_delete_body=true \
-			--openapiv2_opt json_names_for_fields=false \
-			--openapiv2_opt enums_as_ints=true \
-			--openapi_out=fq_schema_naming=true,enum_type=integer,default_response=true:. \
-			$(SAAS_CONFIGS_PROTO_FILES) ; \
-	fi
+	@echo "# generate ${service} protobuf"
+	$(call protoc_protobuf,$(SAAS_CONFIGS_PROTO_FILES))

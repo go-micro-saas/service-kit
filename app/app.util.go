@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/go-kratos/kratos/v2/transport/http"
-	configs "github.com/go-micro-saas/kit/api/config"
+	configs "github.com/go-micro-saas/service-kit/api/config"
 	apppkg "github.com/ikaiguang/go-srv-kit/kratos/app"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 )

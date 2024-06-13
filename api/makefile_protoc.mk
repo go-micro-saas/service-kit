@@ -1,28 +1,10 @@
 # saas services
 SAAS_SERVICE_PROTO_FILES=$(shell cd $(PROJECT_PATH) && find api -name "*.proto")
-.PHONY: protoc-services-protobuf
-# protoc :-->: generate services protobuf
-protoc-services-protobuf:
-	@echo "# generate services protobuf"
-	if [ "$(SAAS_SERVICE_PROTO_FILES)" != "" ]; then \
-		cd $(PROJECT_PATH); \
-		protoc \
-			--proto_path=. \
-			--proto_path=$(GOPATH)/src \
-			--proto_path=./third_party \
-			--go_out=paths=source_relative:. \
-			--go-grpc_out=paths=source_relative:. \
-			--go-http_out=paths=source_relative:. \
-			--go-errors_out=paths=source_relative:. \
-			--validate_out=paths=source_relative,lang=go:. \
-			--openapiv2_out . \
-			--openapiv2_opt logtostderr=true \
-			--openapiv2_opt allow_delete_body=true \
-			--openapiv2_opt json_names_for_fields=false \
-			--openapiv2_opt enums_as_ints=true \
-			--openapi_out=fq_schema_naming=true,enum_type=integer,default_response=true:. \
-			$(SAAS_SERVICE_PROTO_FILES) ; \
-	fi
+.PHONY: protoc-service-protobuf
+# protoc :-->: generate service protobuf
+protoc-service-protobuf:
+	@echo "# generate service protobuf"
+	$(call protoc_protobuf,$(SAAS_SERVICE_PROTO_FILES))
 
 # specified server
 SAAS_SERVICE_SPECIFIED_FILES=$(shell cd $(PROJECT_PATH) && find ./api/${service} -name "*.proto")
@@ -30,22 +12,4 @@ SAAS_SERVICE_SPECIFIED_FILES=$(shell cd $(PROJECT_PATH) && find ./api/${service}
 # protoc :-->: example: make protoc-specified-protobuf service=ping-service
 protoc-specified-protobuf:
 	@echo "# generate ${service} protobuf"
-	if [ "$(SAAS_SERVICE_SPECIFIED_FILES)" != "" ]; then \
-		cd $(PROJECT_PATH); \
-		protoc \
-			--proto_path=. \
-			--proto_path=$(GOPATH)/src \
-			--proto_path=./third_party \
-			--go_out=paths=source_relative:. \
-			--go-grpc_out=paths=source_relative:. \
-			--go-http_out=paths=source_relative:. \
-			--go-errors_out=paths=source_relative:. \
-			--validate_out=paths=source_relative,lang=go:. \
-			--openapiv2_out . \
-			--openapiv2_opt logtostderr=true \
-			--openapiv2_opt allow_delete_body=true \
-			--openapiv2_opt json_names_for_fields=false \
-			--openapiv2_opt enums_as_ints=true \
-			--openapi_out=fq_schema_naming=true,enum_type=integer,default_response=true:. \
-			$(SAAS_SERVICE_SPECIFIED_FILES) ; \
-	fi
+	$(call protoc_protobuf,$(SAAS_SERVICE_SPECIFIED_FILES))
