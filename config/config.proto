@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package saas.api.kit.configs;
 
-option go_package = "github.com/go-micro-saas/service-kit/api/config;configs";
+option go_package = "github.com/go-micro-saas/service-kit/config;configutil";
 option java_multiple_files = true;
 option java_package = "saas.api.kit.configs";
 option java_outer_classname = "SaasApiKitConfigs";
@@ -11,51 +11,33 @@ import "google/protobuf/duration.proto";
 
 // Bootstrap 配置引导
 message Bootstrap {
-  // App 应用
   App app = 1;
-  // Setting 配置
   Setting setting = 2;
 
-  // http http服务配置
-  HTTP http = 100;
-  // grpc grpc服务配置
-  GRPC grpc = 101;
+  Server server = 101;
 
-  // log 日志
   Log log = 201;
 
-  // mysql data
   MySQL mysql = 301;
   PSQL psql = 302;
   Redis redis = 303;
   Rabbitmq rabbitmq = 304;
   Consul consul = 305;
-  Jaeger jaeger = 306;
-  Etcd etcd = 307;
+  Etcd etcd = 306;
+  Jaeger jaeger = 307;
 
-  // Captcha 验证码
-  Captcha captcha = 401;
-  // Login 登录
-  Login login = 402;
-  // secret 密码
-  EncryptSecret encrypt_secret = 403;
+  Encrypt encrypt = 401;
 
-  // client_api 应用程序接口
-  ClientApi client_api = 501;
+  ClientApi client_api = 501; // 应用程序接口
 
-  // snowflake id
-  Snowflake snowflake = 601;
+  Snowflake snowflake = 502;
 }
 
 // App application
 message App {
-  // project_name 项目名称；例：my-saas-platform
   string project_name = 1;
-  // server_name 服务app名字；例：saas-ping-server
   string server_name = 2;
-  // server_env app 环境
-  string server_env = 3;
-  // server_version app版本
+  string server_env = 3; // 开发环境；值：DEVELOP、TESTING、PREVIEW、PRODUCTION
   string server_version = 4;
   // http_endpoints app站点
   repeated string http_endpoints = 6;
@@ -66,36 +48,58 @@ message App {
 
 // Setting 设置
 message Setting {
-  // enable_service_registry 启用服务注册与发现
-  bool enable_service_registry = 1;
-  // enable_migrate_db 启用数据库迁移
-  bool enable_migrate_db = 4;
-  // enable_schedule_task 启用定时任务、计划任务
-  bool enable_schedule_task = 5;
+  // Captcha 验证码
+  message Captcha {
+    uint32 captcha_len = 1; // 验证码长度
+    google.protobuf.Duration captcha_ttl = 2;// 验证码有效时间(s)
+  }
+  // Login 登录
+  message Login {
+    // 密码连续输错N次后短暂锁定账号
+    uint32 password_err_serial_times = 1;
+    // N分钟内连续输出密码(s)
+    google.protobuf.Duration password_err_serial_duration = 2;
+    // 密码连续错误后,锁定N分钟后重试(s)
+    google.protobuf.Duration password_err_lock_duration = 3;
+    // 当日密码错误上限
+    uint32  password_err_daily_limit_times = 4;
+  }
+
+  bool enable_service_registry = 1; // 启用服务注册与发现
+  bool enable_migrate_db = 2; // 启用数据库迁移
+  bool enable_schedule_task = 3; // 启用定时任务、计划任务
+  Captcha captcha = 101;
+  Login login = 201;
 }
 
-// HTTP http服务配置
-message HTTP {
-  // enable 是否启动
-  bool enable = 100;
-  // network 网络
-  string network = 1;
-  // addr 地址
-  string addr = 2;
-  // timeout 超时时间(s)
-  google.protobuf.Duration timeout = 3;
-}
-
-// GRPC grpc服务配置
-message GRPC {
-  // enable 是否启动
-  bool enable = 100;
-  // network 网络
-  string network = 1;
-  // addr 地址
-  string addr = 2;
-  // timeout 超时时间(s)
-  google.protobuf.Duration timeout = 3;
+// Server 服务
+message Server {
+  // HTTP http服务配置
+  message HTTP {
+    // enable 是否启动
+    bool enable = 100;
+    // network 网络
+    string network = 1;
+    // addr 地址
+    string addr = 2;
+    // timeout 超时时间(s)
+    google.protobuf.Duration timeout = 3;
+  }
+  // GRPC grpc服务配置
+  message GRPC {
+    // enable 是否启动
+    bool enable = 100;
+    // network 网络
+    string network = 1;
+    // addr 地址
+    string addr = 2;
+    // timeout 超时时间(s)
+    google.protobuf.Duration timeout = 3;
+  }
+  // http http服务配置
+  HTTP http = 1;
+  // grpc grpc服务配置
+  GRPC grpc = 2;
 }
 
 message Log {
@@ -254,37 +258,7 @@ message Rabbitmq {
   string tls_key_pem = 5;
 }
 
-// Snowflake snowflake
-message Snowflake {
-  // enable 是否启动
-  bool enable = 100;
-  string endpoint = 1;
-  bool with_discovery = 2;
-  bool with_http_basic_auth = 3;
-  string username = 4;
-  string password = 5;
-}
-
-// Captcha 验证码
-message Captcha {
-  uint32 captcha_len = 1; // 验证码长度
-  google.protobuf.Duration captcha_ttl = 2;// 验证码有效时间(s)
-}
-
-// Login 登录
-message Login {
-  // 密码连续输错N次后短暂锁定账号
-  uint32 password_err_serial_times = 1;
-  // N分钟内连续输出密码(s)
-  google.protobuf.Duration password_err_serial_duration = 2;
-  // 密码连续错误后,锁定N分钟后重试(s)
-  google.protobuf.Duration password_err_lock_duration = 3;
-  // 当日密码错误上限
-  uint32  password_err_daily_limit_times = 4;
-}
-
-// EncryptSecret ...
-message EncryptSecret {
+message Encrypt {
   // TransferEncrypt 非对称加密传输,主要用于密码传递等,防止传递过程中明文信息被log,导致泄露
   message TransferEncrypt {
     string public_key = 1;
@@ -315,4 +289,15 @@ message ClientApi {
   }
   repeated Endpoint cluster_service = 1;
   repeated Endpoint third_party = 2;
+}
+
+// Snowflake snowflake
+message Snowflake {
+  // enable 是否启动
+  bool enable = 100;
+  string endpoint = 1;
+  bool with_discovery = 2;
+  bool with_http_basic_auth = 3;
+  string username = 4;
+  string password = 5;
 }

@@ -1,5 +1,5 @@
 # config
-SAAS_CONFIGS_API_PROTO=$(shell cd $(PROJECT_PATH) && find api/config -name "*.proto")
+SAAS_CONFIGS_API_PROTO=$(shell cd $(PROJECT_PATH) && find config -name "*.proto")
 #SAAS_CONFIGS_INTERNAL_PROTO=$(shell cd $(PROJECT_PATH) && find app/config/internal/conf -name "*.proto")
 SAAS_CONFIGS_INTERNAL_PROTO=
 SAAS_CONFIGS_PROTO_FILES=""

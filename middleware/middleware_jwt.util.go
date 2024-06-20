@@ -6,7 +6,6 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware"
 	"github.com/go-kratos/kratos/v2/middleware/selector"
 	"github.com/go-kratos/kratos/v2/transport"
-	setuputil "github.com/go-micro-saas/service-kit/setup"
 	authpkg "github.com/ikaiguang/go-srv-kit/kratos/auth"
 )
 

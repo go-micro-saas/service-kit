@@ -81,10 +81,18 @@ init:
 	go install github.com/golang/mock/mockgen@latest
 	go install golang.org/x/tools/cmd/goimports@latest
 
-# include
+# ===== include =====
+# ===== include =====
+# ===== include =====
+
+# config
+include config/makefile_protoc.mk
+# api
 include api/makefile_protoc.mk
-# servers
-include api/config/makefile_protoc.mk
+
+# ===== include =====
+# ===== include =====
+# ===== include =====
 
 .PHONY: echo
 # echo test content
