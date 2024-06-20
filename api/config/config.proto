@@ -22,7 +22,7 @@ message Bootstrap {
   GRPC grpc = 101;
 
   // log 日志
-  Log log = 200;
+  Log log = 201;
 
   // mysql data
   MySQL mysql = 301;
@@ -31,19 +31,20 @@ message Bootstrap {
   Rabbitmq rabbitmq = 304;
   Consul consul = 305;
   Jaeger jaeger = 306;
-
-  // snowflake id
-  Snowflake snowflake = 400;
+  Etcd etcd = 307;
 
   // Captcha 验证码
-  Captcha captcha = 500;
+  Captcha captcha = 401;
   // Login 登录
-  Login login = 501;
+  Login login = 402;
   // secret 密码
-  EncryptSecret encrypt_secret = 102;
+  EncryptSecret encrypt_secret = 403;
 
   // client_api 应用程序接口
-  ClientApi client_api = 50;
+  ClientApi client_api = 501;
+
+  // snowflake id
+  Snowflake snowflake = 601;
 }
 
 // App application
@@ -221,6 +222,15 @@ message Consul {
   string tls_ca_pem = 14;
   string tls_cert_pem = 15;
   string tls_key_pem = 16;
+}
+
+message Etcd {
+  repeated string endpoints = 1;
+  string username = 2;
+  string password = 3;
+  google.protobuf.Duration dial_timeout = 4; // (s)
+  bytes ca_cert = 5;
+  bool insecure_skip_verify = 6;
 }
 
 // Jaeger jaeger
