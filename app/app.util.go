@@ -50,7 +50,7 @@ func appIdentifier(appConfig *configutil.App, sep string) string {
 func RuntimePath() (string, error) {
 	p, err := os.Getwd()
 	if err != nil {
-		e := errorpkg.ErrorInternalServer("os get runtime path failed")
+		e := errorpkg.ErrorInternalServer("get runtime path failed")
 		return "", errorpkg.WithStack(e)
 	}
 	return p, nil
