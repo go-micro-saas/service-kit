@@ -2,7 +2,6 @@ package middlewareutil
 
 import (
 	"context"
-
 	"github.com/go-kratos/kratos/v2/middleware"
 	"github.com/go-kratos/kratos/v2/middleware/selector"
 	"github.com/go-kratos/kratos/v2/transport"
@@ -55,17 +54,8 @@ func NewWhiteListMatcher(whiteList map[string]TransportServiceKind) selector.Mat
 }
 
 // NewJWTMiddleware jwt中间
-func NewJWTMiddleware(engineHandler setuputil.Launch, whiteList map[string]TransportServiceKind) (m middleware.Middleware, err error) {
-	// redis
-	redisCC, err := engineHandler.GetRedisClient()
-	if err != nil {
-		return m, err
-	}
-	authTokenRepo, err := engineHandler.GetAuthTokenRepo(redisCC)
-	if err != nil {
-		return m, err
-	}
-
+// func NewJWTMiddleware(engineHandler setuputil.Launch, whiteList map[string]TransportServiceKind) (m middleware.Middleware, err error) {
+func NewJWTMiddleware(authTokenRepo authpkg.AuthRepo, whiteList map[string]TransportServiceKind) (m middleware.Middleware, err error) {
 	m = selector.Server(
 		authpkg.Server(
 			authTokenRepo.JWTSigningKeyFunc,

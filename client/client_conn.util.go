@@ -2,6 +2,8 @@ package clientutil
 
 import (
 	"context"
+	configpb "github.com/go-micro-saas/service-kit/api/config"
+	setuputil "github.com/go-micro-saas/service-kit/mytest/backup/setup"
 	"strings"
 	"sync"
 
@@ -219,11 +221,15 @@ func getRegistryAndServerEndpoint(engineHandler setuputil.Launch, serviceName Se
 		return nil, "", err
 	}
 	// 端点 "discovery:///${registry_endpoint}"
-	// registry_endpoint = ${app.belong_to}/${app.env}/${app.env_branch}/${app.version}/${app.name}
-	// 例子：registry_endpoint = go-srv-saas/DEVELOP/main/v1.0.0/saas-user-service
-	appConfig := proto.Clone(engineHandler.AppConfig()).(*configs.App)
+	// registry_endpoint = ${app.project_name}/${app.server_name}/${app.server_env}/${app.server_version}
+	// 例子：registry_endpoint = go-micro-saas/user-service/DEVELOP/v1.0.0
+	appConfig := proto.Clone(engineHandler.AppConfig()).(*configpb.App)
 	appConfig.ServerName = registryName
 	endpoint := "discovery:///" + apputil.ID(appConfig)
 
 	return r, endpoint, nil
+}
+
+var RegistryEndpointFunc = func(registryName string) string {
+
 }

@@ -23,14 +23,13 @@ func ID(appConfig *configpb.App) string {
 
 // ConfigPath 配置路径；用于配置中心，如：consul、etcd、...
 // @result = app.ProjectName + "/" + app.ServerName + "/" + app.ServerEnv + "/" + app.ServerVersion
-// 例：go-srv-saas/DEVELOP/main/v1.0.0/user-service
+// 例：go-micro-saas/user-service/DEVELOP/v1.0.0
 func ConfigPath(appConfig *configpb.App) string {
 	return appIdentifier(appConfig, _configPathSep)
 }
 
 // appIdentifier app 唯一标准
 // @result = app.ProjectName + "/" + app.ServerName + "/" + app.ServerEnv + "/" + app.ServerVersion
-// 例：go-srv-saas/DEVELOP/main/v1.0.0/user-service
 func appIdentifier(appConfig *configpb.App, sep string) string {
 	var ss = make([]string, 0, 5)
 	if appConfig.ProjectName != "" {
