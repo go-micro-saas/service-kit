@@ -1,6 +1,7 @@
 package configutil
 
 import (
+	configpb "github.com/go-micro-saas/service-kit/api/config"
 	stdlog "log"
 
 	"github.com/go-kratos/kratos/v2/config"
@@ -9,7 +10,7 @@ import (
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 )
 
-func SetupWithFile(filePath string) (*Bootstrap, error) {
+func SetupWithFile(filePath string) (*configpb.Bootstrap, error) {
 	stdlog.Println("|==================== 加载配置文件 开始 ====================|")
 	defer stdlog.Println()
 	defer stdlog.Println("|==================== 加载配置文件 结束 ====================|")
@@ -33,7 +34,7 @@ func SetupWithFile(filePath string) (*Bootstrap, error) {
 	}
 
 	// 读取配置文件
-	conf := &Bootstrap{}
+	conf := &configpb.Bootstrap{}
 	if err = handler.Scan(conf); err != nil {
 		err = errorpkg.WithStack(errorpkg.ErrorInternalError(err.Error()))
 		return nil, err

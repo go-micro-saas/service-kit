@@ -1,6 +1,7 @@
 package configutil
 
 import (
+	configpb "github.com/go-micro-saas/service-kit/api/config"
 	"testing"
 )
 
@@ -12,13 +13,13 @@ func TestSetupWithFile(t *testing.T) {
 	tests := []struct {
 		name    string
 		args    args
-		want    *Bootstrap
+		want    *configpb.Bootstrap
 		wantErr bool
 	}{
 		{
 			name: "#TestSetupWithFile",
 			args: args{
-				filePath: "./config",
+				filePath: "config_example.yaml",
 			},
 			want:    nil,
 			wantErr: false,

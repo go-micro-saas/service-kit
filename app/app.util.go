@@ -1,11 +1,11 @@
 package apputil
 
 import (
+	configpb "github.com/go-micro-saas/service-kit/api/config"
 	"os"
 	"strings"
 
 	"github.com/go-kratos/kratos/v2/transport/http"
-	configutil "github.com/go-micro-saas/service-kit/config"
 	apppkg "github.com/ikaiguang/go-srv-kit/kratos/app"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 )
@@ -17,21 +17,21 @@ const (
 
 // ID 程序ID
 // 例：go-srv-saas/DEVELOP/main/v1.0.0/user-service
-func ID(appConfig *configutil.App) string {
+func ID(appConfig *configpb.App) string {
 	return appIdentifier(appConfig, _appIDSep)
 }
 
 // ConfigPath 配置路径；用于配置中心，如：consul、etcd、...
 // @result = app.ProjectName + "/" + app.ServerName + "/" + app.ServerEnv + "/" + app.ServerVersion
 // 例：go-srv-saas/DEVELOP/main/v1.0.0/user-service
-func ConfigPath(appConfig *configutil.App) string {
+func ConfigPath(appConfig *configpb.App) string {
 	return appIdentifier(appConfig, _configPathSep)
 }
 
 // appIdentifier app 唯一标准
 // @result = app.ProjectName + "/" + app.ServerName + "/" + app.ServerEnv + "/" + app.ServerVersion
 // 例：go-srv-saas/DEVELOP/main/v1.0.0/user-service
-func appIdentifier(appConfig *configutil.App, sep string) string {
+func appIdentifier(appConfig *configpb.App, sep string) string {
 	var ss = make([]string, 0, 5)
 	if appConfig.ProjectName != "" {
 		ss = append(ss, appConfig.ProjectName)

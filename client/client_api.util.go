@@ -1,7 +1,7 @@
 package clientutil
 
 import (
-	configutil "github.com/go-micro-saas/service-kit/config"
+	configpb "github.com/go-micro-saas/service-kit/api/config"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 )
 
@@ -31,7 +31,7 @@ type ClientApiEndpoint struct {
 	GrpcHost     string
 }
 
-func (s *ClientApiEndpoint) SetByPbClientApiEndpoint(cfg *configutil.ClientApi_Endpoint) {
+func (s *ClientApiEndpoint) SetByPbClientApiEndpoint(cfg *configpb.ClientApi_Endpoint) {
 	s.Name = cfg.Name
 	s.RegistryName = cfg.RegistryName
 	s.HttpHost = cfg.HttpHost
@@ -39,7 +39,7 @@ func (s *ClientApiEndpoint) SetByPbClientApiEndpoint(cfg *configutil.ClientApi_E
 }
 
 // getClientApiConfig ...
-func getClientApiConfig(apiConfig *configutil.ClientApi, serviceName ServiceName) (*ClientApiEndpoint, error) {
+func getClientApiConfig(apiConfig *configpb.ClientApi, serviceName ServiceName) (*ClientApiEndpoint, error) {
 	if apiConfig == nil {
 		msg := "请先配置: client_api"
 		e := errorpkg.ErrorInvalidParameter(msg)

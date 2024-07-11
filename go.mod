@@ -3,18 +3,19 @@ module github.com/go-micro-saas/service-kit
 go 1.21
 
 require (
+	github.com/envoyproxy/protoc-gen-validate v0.10.1
 	github.com/go-kratos/kratos/contrib/config/consul/v2 v2.0.0-20240401040316-f715eb0bd808
 	github.com/go-kratos/kratos/contrib/registry/consul/v2 v2.0.0-20230424154814-520b321fe99b
 	github.com/go-kratos/kratos/v2 v2.7.3
 	github.com/hashicorp/consul/api v1.26.1
-	github.com/ikaiguang/go-srv-kit v0.2.18
+	github.com/ikaiguang/go-srv-kit v0.2.22
 	github.com/pkg/errors v0.9.1
 	github.com/redis/go-redis/v9 v9.4.0
 	github.com/stretchr/testify v1.8.3
 	go.opentelemetry.io/otel/exporters/jaeger v1.14.0
 	go.opentelemetry.io/otel/trace v1.16.0
 	google.golang.org/grpc v1.56.3
-	google.golang.org/protobuf v1.33.0
+	google.golang.org/protobuf v1.34.2
 	gorm.io/gorm v1.25.10
 )
 
@@ -37,7 +38,7 @@ require (
 	github.com/go-redsync/redsync/v4 v4.12.1 // indirect
 	github.com/go-sql-driver/mysql v1.8.1 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
-	github.com/golang-jwt/jwt/v4 v4.5.0 // indirect
+	github.com/golang-jwt/jwt/v5 v5.2.1 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/handlers v1.5.2 // indirect
