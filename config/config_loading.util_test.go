@@ -27,13 +27,13 @@ func TestSetupWithFile(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := SetupWithFile(tt.args.filePath)
+			got, err := LoadingFile(tt.args.filePath)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("SetupWithFile() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("LoadingFile() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			//if !reflect.DeepEqual(got, tt.want) {
-			//	t.Errorf("SetupWithFile() got = %v, want %v", got, tt.want)
+			//	t.Errorf("LoadingFile() got = %v, want %v", got, tt.want)
 			//}
 			t.Logf("Boostrap.App: %#v\n", got.App)
 		})

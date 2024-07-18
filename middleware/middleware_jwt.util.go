@@ -54,7 +54,6 @@ func NewWhiteListMatcher(whiteList map[string]TransportServiceKind) selector.Mat
 }
 
 // NewJWTMiddleware jwt中间
-// func NewJWTMiddleware(engineHandler setuputil.Launch, whiteList map[string]TransportServiceKind) (m middleware.Middleware, err error) {
 func NewJWTMiddleware(authTokenRepo authpkg.AuthRepo, whiteList map[string]TransportServiceKind) (m middleware.Middleware, err error) {
 	m = selector.Server(
 		authpkg.Server(
