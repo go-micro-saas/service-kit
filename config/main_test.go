@@ -20,7 +20,7 @@ func TestMain(m *testing.M) {
 	}
 
 	SetBootstrap(boostrap)
-	handler = NewConfigInterface(boostrap)
+	handler = NewConfigManager(boostrap)
 
 	os.Exit(m.Run())
 }

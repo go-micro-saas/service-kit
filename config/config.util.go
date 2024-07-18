@@ -27,11 +27,15 @@ func GetBootstrap() (*configpb.Bootstrap, error) {
 type configManager struct {
 	conf *configpb.Bootstrap
 
+	// 不要直接使用 s.env, 请使用 Env()
 	env     apppkg.RuntimeEnvEnum_RuntimeEnv
 	envOnce sync.Once
 }
 
-func NewConfigInterface(conf *configpb.Bootstrap) ConfigManager {
+func NewConfigManager(conf *configpb.Bootstrap) ConfigManager {
+	if conf == nil {
+		panic("conf is nil")
+	}
 	return &configManager{conf: conf}
 }
 
