@@ -18,11 +18,12 @@ type consulManager struct {
 
 type ConsulManager interface {
 	GetClient() (*consulapi.Client, error)
+	Close() error
 }
 
 func NewConsulManager(conf *configpb.Consul) (ConsulManager, error) {
 	if conf == nil {
-		e := errorpkg.ErrorBadRequest("[请配置服务再启动] config key : consul")
+		e := errorpkg.ErrorBadRequest("[CONFIGURATION] config error, key = consul")
 		return nil, errorpkg.WithStack(e)
 	}
 	return &consulManager{
@@ -41,8 +42,20 @@ func (s *consulManager) GetClient() (*consulapi.Client, error) {
 	return s.consulClient, err
 }
 
+func (s *consulManager) Close() error {
+	if s.consulClient != nil {
+		//stdlog.Println("|*** STOP: close: consulClient")
+		//err := s.consulClient.Agent().ServiceDeregister(s.conf.ServiceName)
+		//if err != nil {
+		//	stdlog.Println("|*** STOP: close: consulClient failed: ", err.Error())
+		//	return err
+		//}
+	}
+	return nil
+}
+
 func (s *consulManager) loadingConsulClient() (*consulapi.Client, error) {
-	stdlog.Println("|*** 加载：Consul客户端：...")
+	stdlog.Println("|*** LOADING: Consul client: ...")
 	cc, err := consulpkg.NewConsulClient(ToConsulConfig(s.conf))
 	if err != nil {
 		e := errorpkg.ErrorInternalError(err.Error())

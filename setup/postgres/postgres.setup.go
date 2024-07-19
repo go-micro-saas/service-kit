@@ -22,17 +22,35 @@ type postgresManager struct {
 
 type PostgresManager interface {
 	GetDB() (*gorm.DB, error)
+	Close() error
 }
 
 func NewPostgresManager(conf *configpb.PSQL, loggerManager loggerutil.LoggerManager) (PostgresManager, error) {
 	if conf == nil {
-		e := errorpkg.ErrorBadRequest("[请配置服务再启动] config key : psql")
+		e := errorpkg.ErrorBadRequest("[CONFIGURATION] config error, key = psql")
 		return nil, errorpkg.WithStack(e)
 	}
 	return &postgresManager{
 		conf:          conf,
 		loggerManager: loggerManager,
 	}, nil
+}
+
+func (s *postgresManager) Close() error {
+	if s.postgresClient != nil {
+		stdlog.Println("|*** STOP: close: postgresClient")
+		db, err := s.postgresClient.DB()
+		if err != nil {
+			stdlog.Println("|*** STOP: close: postgresClient failed: ", err.Error())
+			return err
+		}
+		err = db.Close()
+		if err != nil {
+			stdlog.Println("|*** STOP: close: postgresClient failed: ", err.Error())
+			return err
+		}
+	}
+	return nil
 }
 
 func (s *postgresManager) GetDB() (*gorm.DB, error) {
@@ -47,7 +65,7 @@ func (s *postgresManager) GetDB() (*gorm.DB, error) {
 }
 
 func (s *postgresManager) loadingPostgresDB() (*gorm.DB, error) {
-	stdlog.Println("|*** 加载：PostgresDB：...")
+	stdlog.Println("|*** LOADING: PostgresDB: ...")
 	// logger
 	var (
 		writers = make([]logger.Writer, 0, 2)

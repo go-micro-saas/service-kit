@@ -18,16 +18,29 @@ type redisManager struct {
 
 type RedisManager interface {
 	GetClient() (redis.UniversalClient, error)
+	Close() error
 }
 
 func NewRedisManager(conf *configpb.Redis) (RedisManager, error) {
 	if conf == nil {
-		e := errorpkg.ErrorBadRequest("[请配置服务再启动] config key : redis")
+		e := errorpkg.ErrorBadRequest("[CONFIGURATION] config error, key = redis")
 		return nil, errorpkg.WithStack(e)
 	}
 	return &redisManager{
 		conf: conf,
 	}, nil
+}
+
+func (s *redisManager) Close() error {
+	if s.redisClient != nil {
+		stdlog.Println("|*** STOP: close: redisClient")
+		err := s.redisClient.Close()
+		if err != nil {
+			stdlog.Println("|*** STOP: close: redisClient failed: ", err.Error())
+			return err
+		}
+	}
+	return nil
 }
 
 func (s *redisManager) GetClient() (redis.UniversalClient, error) {
@@ -42,7 +55,7 @@ func (s *redisManager) GetClient() (redis.UniversalClient, error) {
 }
 
 func (s *redisManager) loadingRedisClient() (redis.UniversalClient, error) {
-	stdlog.Println("|*** 加载：Redis客户端：...")
+	stdlog.Println("|*** LOADING: Redis client: ...")
 	uc, err := redispkg.NewDB(ToRedisConfig(s.conf))
 	if err != nil {
 		e := errorpkg.ErrorInternalError(err.Error())

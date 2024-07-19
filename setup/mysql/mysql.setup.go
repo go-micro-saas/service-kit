@@ -22,17 +22,35 @@ type mysqlManager struct {
 
 type MysqlManager interface {
 	GetDB() (*gorm.DB, error)
+	Close() error
 }
 
 func NewMysqlManager(conf *configpb.MySQL, loggerManager loggerutil.LoggerManager) (MysqlManager, error) {
 	if conf == nil {
-		e := errorpkg.ErrorBadRequest("[请配置服务再启动] config key : mysql")
+		e := errorpkg.ErrorBadRequest("[CONFIGURATION] config error, key = mysql")
 		return nil, errorpkg.WithStack(e)
 	}
 	return &mysqlManager{
 		conf:          conf,
 		loggerManager: loggerManager,
 	}, nil
+}
+
+func (s *mysqlManager) Close() error {
+	if s.mysqlClient != nil {
+		stdlog.Println("|*** STOP: close: mysqlClient")
+		db, err := s.mysqlClient.DB()
+		if err != nil {
+			stdlog.Println("|*** STOP: close: mysqlClient failed: ", err.Error())
+			return err
+		}
+		err = db.Close()
+		if err != nil {
+			stdlog.Println("|*** STOP: close: mysqlClient failed: ", err.Error())
+			return err
+		}
+	}
+	return nil
 }
 
 func (s *mysqlManager) GetDB() (*gorm.DB, error) {
@@ -47,7 +65,7 @@ func (s *mysqlManager) GetDB() (*gorm.DB, error) {
 }
 
 func (s *mysqlManager) loadingMysqlDB() (*gorm.DB, error) {
-	stdlog.Println("|*** 加载：MysqlDB：...")
+	stdlog.Println("|*** LOADING: MysqlDB: ...")
 	// logger
 	var (
 		writers = make([]logger.Writer, 0, 2)

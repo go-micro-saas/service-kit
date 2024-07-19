@@ -63,10 +63,10 @@ func (s *loggerManager) setupLogger() error {
 	}
 	// 日志
 	if s.conf.GetConsole().GetEnable() {
-		stdlog.Println("|*** 加载：日志工具：日志输出到控制台")
+		stdlog.Println("|*** LOADING: ConsoleLogger: ...")
 	}
 	if s.conf.GetFile().GetEnable() {
-		stdlog.Println("|*** 加载：日志工具：日志输出到文件")
+		stdlog.Println("|*** LOADING: FileLogger: ...")
 	}
 
 	// logger

@@ -45,10 +45,10 @@ type LoggerManager interface {
 
 func NewLoggerManager(appConfig *configpb.App, conf *configpb.Log) (LoggerManager, error) {
 	if appConfig == nil {
-		e := errorpkg.ErrorBadRequest("[请配置服务再启动] config key : app")
+		e := errorpkg.ErrorBadRequest("[CONFIGURATION] config error, key = app")
 		return nil, errorpkg.WithStack(e)
 	} else if conf == nil {
-		e := errorpkg.ErrorBadRequest("[请配置服务再启动] config key : log")
+		e := errorpkg.ErrorBadRequest("[CONFIGURATION] config error, key = log")
 		return nil, errorpkg.WithStack(e)
 	}
 	return &loggerManager{
@@ -70,9 +70,9 @@ func (s *loggerManager) Close() error {
 
 	// loggers
 	if s.loggerCloser != nil {
-		stdlog.Println("|*** 退出程序：关闭日志 Logger")
+		stdlog.Println("|*** STOP: close: Logger")
 		if err := s.loggerCloser.Close(); err != nil {
-			stdlog.Println("|*** 退出程序：关闭日志 Logger 异常：", err.Error())
+			stdlog.Println("|*** STOP: close: Logger failed: ", err.Error())
 			errs = append(errs, err)
 		}
 	}
@@ -80,9 +80,9 @@ func (s *loggerManager) Close() error {
 	// writer
 	if s.writer != nil {
 		if writerCloser, ok := s.writer.(io.Closer); ok {
-			stdlog.Println("|*** 退出程序：关闭日志 Writer")
+			stdlog.Println("|*** STOP: close: Writer")
 			if err := writerCloser.Close(); err != nil {
-				stdlog.Println("|*** 退出程序：关闭日志 Writer 异常：", err.Error())
+				stdlog.Println("|*** STOP: close: Writer failed: ", err.Error())
 				errs = append(errs, err)
 			}
 		}

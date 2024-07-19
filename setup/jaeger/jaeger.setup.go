@@ -1,6 +1,7 @@
 package jaegerutil
 
 import (
+	"context"
 	configpb "github.com/go-micro-saas/service-kit/api/config"
 	apputil "github.com/go-micro-saas/service-kit/app"
 	jaegerpkg "github.com/ikaiguang/go-srv-kit/data/jaeger"
@@ -20,16 +21,29 @@ type jaegerManager struct {
 
 type JaegerManager interface {
 	GetExporter() (*jaeger.Exporter, error)
+	Close() error
 }
 
 func NewJaegerManager(conf *configpb.Jaeger) (JaegerManager, error) {
 	if conf == nil {
-		e := errorpkg.ErrorBadRequest("[请配置服务再启动] config key : jaeger")
+		e := errorpkg.ErrorBadRequest("[CONFIGURATION] config error, key = jaeger")
 		return nil, errorpkg.WithStack(e)
 	}
 	return &jaegerManager{
 		conf: conf,
 	}, nil
+}
+
+func (s *jaegerManager) Close() error {
+	if s.jaegerExporter != nil {
+		stdlog.Println("|*** STOP: close: jaegerExporter")
+		err := s.jaegerExporter.Shutdown(context.Background())
+		if err != nil {
+			stdlog.Println("|*** STOP: close: jaegerExporter failed: ", err.Error())
+			return err
+		}
+	}
+	return nil
 }
 
 func (s *jaegerManager) GetExporter() (*jaeger.Exporter, error) {
@@ -45,7 +59,7 @@ func (s *jaegerManager) GetExporter() (*jaeger.Exporter, error) {
 }
 
 func (s *jaegerManager) loadingJaegerTraceExporter() (*jaeger.Exporter, error) {
-	stdlog.Println("|*** 加载：JaegerExporter：...")
+	stdlog.Println("|*** LOADING: JaegerExporter: ...")
 	je, err := jaegerpkg.NewJaegerExporter(ToJaegerConfig(s.conf))
 	if err != nil {
 		e := errorpkg.ErrorInternalError(err.Error())
@@ -56,7 +70,7 @@ func (s *jaegerManager) loadingJaegerTraceExporter() (*jaeger.Exporter, error) {
 
 // InitTracerProvider trace provider
 func (s *jaegerManager) InitTracerProvider(appConfig *configpb.App) error {
-	stdlog.Println("|*** 加载：服务追踪：Tracer")
+	stdlog.Println("|*** LOADING: Tracer: ...")
 	// Create the Jaeger exporter
 	var opts []middlewarepkg.TracerOption
 	if s.conf.GetEnable() {

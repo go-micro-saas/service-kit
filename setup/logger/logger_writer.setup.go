@@ -23,7 +23,7 @@ func (s *loggerManager) GetWriter() (io.Writer, error) {
 func (s *loggerManager) getWriter() (io.Writer, error) {
 	fileLoggerConfig := s.conf.GetFile()
 	if fileLoggerConfig == nil || !fileLoggerConfig.GetEnable() {
-		stdlog.Println("|*** 加载：日志工具：虚拟的文件写手柄")
+		stdlog.Println("|*** LOADING: FakeLogger: ...")
 		writer, err := writerpkg.NewDummyWriter()
 		if err != nil {
 			e := errorpkg.ErrorInternalError(err.Error())

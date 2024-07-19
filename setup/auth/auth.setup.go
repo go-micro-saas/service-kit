@@ -34,15 +34,15 @@ type AuthManager interface {
 
 func NewAuthManager(conf *configpb.Encrypt_TokenEncrypt, redisCC redis.UniversalClient, loggerForMiddleware log.Logger) (AuthManager, error) {
 	if conf == nil {
-		e := errorpkg.ErrorBadRequest("[请配置服务再启动] config key : encrypt.token_encrypt")
+		e := errorpkg.ErrorBadRequest("[CONFIGURATION] config error, key = encrypt.token_encrypt")
 		return nil, errorpkg.WithStack(e)
 	}
 	if conf.GetSignKey() == "" {
-		e := errorpkg.ErrorBadRequest("[请配置服务再启动] config key : encrypt.token_encrypt.sign_key")
+		e := errorpkg.ErrorBadRequest("[CONFIGURATION] config error, key = encrypt.token_encrypt.sign_key")
 		return nil, errorpkg.WithStack(e)
 	}
 	if conf.GetRefreshKey() == "" {
-		e := errorpkg.ErrorBadRequest("[请配置服务再启动] config key : encrypt.token_encrypt.refresh_key")
+		e := errorpkg.ErrorBadRequest("[CONFIGURATION] config error, key = encrypt.token_encrypt.refresh_key")
 		return nil, errorpkg.WithStack(e)
 	}
 	return &authManager{
@@ -90,13 +90,13 @@ func (s *authManager) loadingTokenManagerOnce() error {
 }
 
 func (s *authManager) loadingTokenManager() (authpkg.TokenManger, authpkg.AuthRepo, error) {
-	stdlog.Println("|*** 加载：TokenManger：...")
+	stdlog.Println("|*** LOADING: TokenManger: ...")
 	tokenManger := authpkg.NewTokenManger(s.loggerForMiddleware, s.redisCC, authpkg.CheckAuthCacheKeyPrefix(nil))
 	config := &authpkg.Config{
 		SignCrypto:    authpkg.NewSignEncryptor(s.conf.GetSignKey()),
 		RefreshCrypto: authpkg.NewCBCCipher(s.conf.GetRefreshKey()),
 	}
-	stdlog.Println("|*** 加载：AuthManger：...")
+	stdlog.Println("|*** LOADING: AuthManger: ...")
 	authRepo, err := authpkg.NewAuthRepo(*config, s.loggerForMiddleware, tokenManger)
 	if err != nil {
 		return nil, nil, err
