@@ -3,6 +3,7 @@ package setuputil
 import (
 	"io"
 	stdlog "log"
+	"sync"
 
 	writerpkg "github.com/ikaiguang/go-srv-kit/kit/writer"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
@@ -12,6 +13,9 @@ func (s *loggerManager) GetWriter() (io.Writer, error) {
 	var err error
 	s.writerOnce.Do(func() {
 		s.writer, err = s.getWriter()
+		if err != nil {
+			s.writerOnce = sync.Once{}
+		}
 	})
 	return s.writer, err
 }
