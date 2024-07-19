@@ -34,10 +34,13 @@ type Loggers struct {
 }
 
 type LoggerManager interface {
+	EnableConsole() bool
+	EnableFile() bool
 	GetWriter() (io.Writer, error)
 	GetLogger() (log.Logger, error)
 	GetLoggerForMiddleware() (log.Logger, error)
 	GetLoggerForHelper() (log.Logger, error)
+	Close() error
 }
 
 func NewLoggerManager(appConfig *configpb.App, conf *configpb.Log) (LoggerManager, error) {
@@ -52,6 +55,14 @@ func NewLoggerManager(appConfig *configpb.App, conf *configpb.Log) (LoggerManage
 		appConfig: appConfig,
 		conf:      conf,
 	}, nil
+}
+
+func (s *loggerManager) EnableConsole() bool {
+	return s.conf.GetConsole().GetEnable()
+}
+
+func (s *loggerManager) EnableFile() bool {
+	return s.conf.GetFile().GetEnable()
 }
 
 func (s *loggerManager) Close() error {
