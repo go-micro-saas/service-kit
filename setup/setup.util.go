@@ -44,6 +44,10 @@ func LoadingConfig(filePath string) (*configpb.Bootstrap, error) {
 	}
 }
 
+// LoadingConfigFromConsul 从consul中加载配置
+// 首先：读取服务base配置
+// 然后：读取本服务配置
+// 最后：使用本服务配置 覆盖 base 配置
 func LoadingConfigFromConsul(consulManager consulutil.ConsulManager, appConfig *configpb.App) (*configpb.Bootstrap, error) {
 	stdlog.Println("|==================== LOADING CONFIGURATION FROM: START ====================|")
 	defer stdlog.Println()
