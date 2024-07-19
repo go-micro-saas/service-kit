@@ -11,18 +11,18 @@ import (
 )
 
 func LoadingFile(filePath string) (*configpb.Bootstrap, error) {
-	stdlog.Println("|==================== 加载配置文件 开始 ====================|")
+	stdlog.Println("|==================== LOADING CONFIGURATION FILE: START ====================|")
 	defer stdlog.Println()
-	defer stdlog.Println("|==================== 加载配置文件 结束 ====================|")
+	defer stdlog.Println("|==================== LOADING CONFIGURATION FILE: END ====================|")
 
 	p, err := apputil.RuntimePath()
 	if err != nil {
 		return nil, err
 	}
-	stdlog.Println("|*** INFO：当前程序运行路径: ", p)
+	stdlog.Println("|*** INFO: program running path: ", p)
 
 	var opts []config.Option
-	stdlog.Println("|*** 加载：配置文件路径: ", filePath)
+	stdlog.Println("|*** LOADING: path to configuration: ", filePath)
 	opts = append(opts, config.WithSource(file.NewSource(filePath)))
 
 	handler := config.New(opts...)

@@ -5,6 +5,8 @@ app:
   # 开发环境；值：DEVELOP、TESTING、PREVIEW、PRODUCTION
   server_env: develop
   server_version: v1.0.0
+  # 配置方式；值：LOCAL、CONSUL、ETCD
+  config_method: local
   http_endpoints:
     - https://uufff.com
   grpc_endpoints:

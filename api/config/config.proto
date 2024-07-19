@@ -40,6 +40,7 @@ message App {
   string server_name    = 2 [(validate.rules).string = { min_len: 1 }];
   string server_env     = 3 [(validate.rules).string = { min_len: 1 }];  // 开发环境；值：DEVELOP、TESTING、PREVIEW、PRODUCTION
   string server_version = 4 [(validate.rules).string = { min_len: 1 }];
+  string config_method  = 5;  // 配置方式；值：LOCAL、CONSUL、ETCD
 
   repeated string http_endpoints = 6;  // app站点
   repeated string grpc_endpoints = 7;  // grpc站点

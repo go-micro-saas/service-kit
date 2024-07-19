@@ -9,7 +9,7 @@ import (
 var (
 	//go:embed config_example.yaml
 	configBuf  []byte
-	configPath string = "config_example.yaml"
+	configPath = "config_example.yaml"
 	handler    ConfigManager
 )
 

@@ -1,10 +1,10 @@
 package authutil
 
 import (
+	loggerutil "github.com/go-micro-saas/service-kit/setup/logger"
 	stdlog "log"
 	"sync"
 
-	"github.com/go-kratos/kratos/v2/log"
 	configpb "github.com/go-micro-saas/service-kit/api/config"
 	authpkg "github.com/ikaiguang/go-srv-kit/kratos/auth"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
@@ -12,9 +12,9 @@ import (
 )
 
 type authManager struct {
-	conf                *configpb.Encrypt_TokenEncrypt
-	redisCC             redis.UniversalClient
-	loggerForMiddleware log.Logger
+	conf          *configpb.Encrypt_TokenEncrypt
+	redisCC       redis.UniversalClient
+	loggerManager loggerutil.LoggerManager
 
 	// 不要直接使用 s.tokenXxx, 请使用 GetAuthorizationManager()
 	tokenManager     authpkg.TokenManger
@@ -32,7 +32,7 @@ type AuthManager interface {
 	GetAuthManger() (authpkg.AuthRepo, error)
 }
 
-func NewAuthManager(conf *configpb.Encrypt_TokenEncrypt, redisCC redis.UniversalClient, loggerForMiddleware log.Logger) (AuthManager, error) {
+func NewAuthManager(conf *configpb.Encrypt_TokenEncrypt, redisCC redis.UniversalClient, loggerManager loggerutil.LoggerManager) (AuthManager, error) {
 	if conf == nil {
 		e := errorpkg.ErrorBadRequest("[CONFIGURATION] config error, key = encrypt.token_encrypt")
 		return nil, errorpkg.WithStack(e)
@@ -46,9 +46,9 @@ func NewAuthManager(conf *configpb.Encrypt_TokenEncrypt, redisCC redis.Universal
 		return nil, errorpkg.WithStack(e)
 	}
 	return &authManager{
-		conf:                conf,
-		redisCC:             redisCC,
-		loggerForMiddleware: loggerForMiddleware,
+		conf:          conf,
+		redisCC:       redisCC,
+		loggerManager: loggerManager,
 	}, nil
 }
 
@@ -91,13 +91,17 @@ func (s *authManager) loadingTokenManagerOnce() error {
 
 func (s *authManager) loadingTokenManager() (authpkg.TokenManger, authpkg.AuthRepo, error) {
 	stdlog.Println("|*** LOADING: TokenManger: ...")
-	tokenManger := authpkg.NewTokenManger(s.loggerForMiddleware, s.redisCC, authpkg.CheckAuthCacheKeyPrefix(nil))
+	logger, err := s.loggerManager.GetLoggerForMiddleware()
+	if err != nil {
+		return nil, nil, err
+	}
+	tokenManger := authpkg.NewTokenManger(logger, s.redisCC, authpkg.CheckAuthCacheKeyPrefix(nil))
 	config := &authpkg.Config{
 		SignCrypto:    authpkg.NewSignEncryptor(s.conf.GetSignKey()),
 		RefreshCrypto: authpkg.NewCBCCipher(s.conf.GetRefreshKey()),
 	}
 	stdlog.Println("|*** LOADING: AuthManger: ...")
-	authRepo, err := authpkg.NewAuthRepo(*config, s.loggerForMiddleware, tokenManger)
+	authRepo, err := authpkg.NewAuthRepo(*config, logger, tokenManger)
 	if err != nil {
 		return nil, nil, err
 	}
