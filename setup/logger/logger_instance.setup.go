@@ -21,6 +21,30 @@ func (s *loggerManager) GetLoggers() (*Loggers, error) {
 	}, nil
 }
 
+func (s *loggerManager) GetLogger() (log.Logger, error) {
+	loggers, err := s.GetLoggers()
+	if err != nil {
+		return nil, err
+	}
+	return loggers.Logger, nil
+}
+
+func (s *loggerManager) GetLoggerForMiddleware() (log.Logger, error) {
+	loggers, err := s.GetLoggers()
+	if err != nil {
+		return nil, err
+	}
+	return loggers.LoggerForMiddleware, nil
+}
+
+func (s *loggerManager) GetLoggerForHelper() (log.Logger, error) {
+	loggers, err := s.GetLoggers()
+	if err != nil {
+		return nil, err
+	}
+	return loggers.LoggerForHelper, nil
+}
+
 func (s *loggerManager) setupLoggerOnce() error {
 	var err error
 	s.loggerOnce.Do(func() {

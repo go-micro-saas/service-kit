@@ -33,6 +33,13 @@ type Loggers struct {
 	LoggerForHelper     log.Logger
 }
 
+type LoggerManager interface {
+	GetWriter() (io.Writer, error)
+	GetLogger() (log.Logger, error)
+	GetLoggerForMiddleware() (log.Logger, error)
+	GetLoggerForHelper() (log.Logger, error)
+}
+
 func NewLoggerManager(appConfig *configpb.App, conf *configpb.Log) (LoggerManager, error) {
 	if appConfig == nil {
 		e := errorpkg.ErrorBadRequest("[请配置服务再启动] config key : app")

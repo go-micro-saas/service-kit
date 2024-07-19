@@ -21,12 +21,12 @@ func Test_loggerManager_GetLoggers(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			loggers, err := handler.GetLoggers()
+			logger, err := handler.GetLogger()
 			if err != nil {
-				t.Errorf("GetLoggers() err = %v\n", err)
+				t.Errorf("GetLogger() err = %v\n", err)
 				t.FailNow()
 			}
-			logHandler := log.NewHelper(loggers.Logger)
+			logHandler := log.NewHelper(logger)
 			logHandler.Info(tt.msg)
 		})
 	}
