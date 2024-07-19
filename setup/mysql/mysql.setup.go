@@ -8,6 +8,7 @@ import (
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
+	stdlog "log"
 	"sync"
 )
 
@@ -46,6 +47,7 @@ func (s *mysqlManager) GetDB() (*gorm.DB, error) {
 }
 
 func (s *mysqlManager) loadingMysqlDB() (*gorm.DB, error) {
+	stdlog.Println("|*** 加载：MysqlDB：...")
 	// logger
 	var (
 		writers = make([]logger.Writer, 0, 2)

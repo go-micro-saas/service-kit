@@ -2,6 +2,7 @@ package loggerutil
 
 import (
 	"io"
+	stdlog "log"
 	"sync"
 
 	"github.com/go-kratos/kratos/v2/log"
@@ -59,6 +60,13 @@ func (s *loggerManager) setupLoggerOnce() error {
 func (s *loggerManager) setupLogger() error {
 	cleanup := &closer{
 		cs: make([]io.Closer, 0, 6),
+	}
+	// 日志
+	if s.conf.GetConsole().GetEnable() {
+		stdlog.Println("|*** 加载：日志工具：日志输出到控制台")
+	}
+	if s.conf.GetFile().GetEnable() {
+		stdlog.Println("|*** 加载：日志工具：日志输出到文件")
 	}
 
 	// logger

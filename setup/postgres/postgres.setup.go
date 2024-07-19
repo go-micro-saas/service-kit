@@ -8,6 +8,7 @@ import (
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
+	stdlog "log"
 	"sync"
 )
 
@@ -46,6 +47,7 @@ func (s *postgresManager) GetDB() (*gorm.DB, error) {
 }
 
 func (s *postgresManager) loadingPostgresDB() (*gorm.DB, error) {
+	stdlog.Println("|*** 加载：PostgresDB：...")
 	// logger
 	var (
 		writers = make([]logger.Writer, 0, 2)

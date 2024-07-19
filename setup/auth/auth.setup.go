@@ -1,6 +1,7 @@
 package authutil
 
 import (
+	stdlog "log"
 	"sync"
 
 	"github.com/go-kratos/kratos/v2/log"
@@ -89,11 +90,13 @@ func (s *authManager) loadingTokenManagerOnce() error {
 }
 
 func (s *authManager) loadingTokenManager() (authpkg.TokenManger, authpkg.AuthRepo, error) {
+	stdlog.Println("|*** 加载：TokenManger：...")
 	tokenManger := authpkg.NewTokenManger(s.loggerForMiddleware, s.redisCC, authpkg.CheckAuthCacheKeyPrefix(nil))
 	config := &authpkg.Config{
 		SignCrypto:    authpkg.NewSignEncryptor(s.conf.GetSignKey()),
 		RefreshCrypto: authpkg.NewCBCCipher(s.conf.GetRefreshKey()),
 	}
+	stdlog.Println("|*** 加载：AuthManger：...")
 	authRepo, err := authpkg.NewAuthRepo(*config, s.loggerForMiddleware, tokenManger)
 	if err != nil {
 		return nil, nil, err
