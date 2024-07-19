@@ -17,6 +17,7 @@ type redisManager struct {
 }
 
 type RedisManager interface {
+	Enable() bool
 	GetClient() (redis.UniversalClient, error)
 	Close() error
 }
@@ -31,6 +32,17 @@ func NewRedisManager(conf *configpb.Redis) (RedisManager, error) {
 	}, nil
 }
 
+func (s *redisManager) GetClient() (redis.UniversalClient, error) {
+	var err error
+	s.redisOnce.Do(func() {
+		s.redisClient, err = s.loadingRedisClient()
+		if err != nil {
+			s.redisOnce = sync.Once{}
+		}
+	})
+	return s.redisClient, err
+}
+
 func (s *redisManager) Close() error {
 	if s.redisClient != nil {
 		stdlog.Println("|*** STOP: close: redisClient")
@@ -43,15 +55,8 @@ func (s *redisManager) Close() error {
 	return nil
 }
 
-func (s *redisManager) GetClient() (redis.UniversalClient, error) {
-	var err error
-	s.redisOnce.Do(func() {
-		s.redisClient, err = s.loadingRedisClient()
-		if err != nil {
-			s.redisOnce = sync.Once{}
-		}
-	})
-	return s.redisClient, err
+func (s *redisManager) Enable() bool {
+	return s.conf.GetEnable()
 }
 
 func (s *redisManager) loadingRedisClient() (redis.UniversalClient, error) {

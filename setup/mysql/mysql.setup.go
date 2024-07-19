@@ -21,6 +21,7 @@ type mysqlManager struct {
 }
 
 type MysqlManager interface {
+	Enable() bool
 	GetDB() (*gorm.DB, error)
 	Close() error
 }
@@ -34,6 +35,17 @@ func NewMysqlManager(conf *configpb.MySQL, loggerManager loggerutil.LoggerManage
 		conf:          conf,
 		loggerManager: loggerManager,
 	}, nil
+}
+
+func (s *mysqlManager) GetDB() (*gorm.DB, error) {
+	var err error
+	s.mysqlOnce.Do(func() {
+		s.mysqlClient, err = s.loadingMysqlDB()
+		if err != nil {
+			s.mysqlOnce = sync.Once{}
+		}
+	})
+	return s.mysqlClient, err
 }
 
 func (s *mysqlManager) Close() error {
@@ -53,15 +65,8 @@ func (s *mysqlManager) Close() error {
 	return nil
 }
 
-func (s *mysqlManager) GetDB() (*gorm.DB, error) {
-	var err error
-	s.mysqlOnce.Do(func() {
-		s.mysqlClient, err = s.loadingMysqlDB()
-		if err != nil {
-			s.mysqlOnce = sync.Once{}
-		}
-	})
-	return s.mysqlClient, err
+func (s *mysqlManager) Enable() bool {
+	return s.conf.GetEnable()
 }
 
 func (s *mysqlManager) loadingMysqlDB() (*gorm.DB, error) {

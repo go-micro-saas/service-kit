@@ -17,6 +17,7 @@ type consulManager struct {
 }
 
 type ConsulManager interface {
+	Enable() bool
 	GetClient() (*consulapi.Client, error)
 	Close() error
 }
@@ -52,6 +53,10 @@ func (s *consulManager) Close() error {
 		//}
 	}
 	return nil
+}
+
+func (s *consulManager) Enable() bool {
+	return s.conf.GetEnable()
 }
 
 func (s *consulManager) loadingConsulClient() (*consulapi.Client, error) {

@@ -21,6 +21,7 @@ type postgresManager struct {
 }
 
 type PostgresManager interface {
+	Enable() bool
 	GetDB() (*gorm.DB, error)
 	Close() error
 }
@@ -34,6 +35,17 @@ func NewPostgresManager(conf *configpb.PSQL, loggerManager loggerutil.LoggerMana
 		conf:          conf,
 		loggerManager: loggerManager,
 	}, nil
+}
+
+func (s *postgresManager) GetDB() (*gorm.DB, error) {
+	var err error
+	s.postgresOnce.Do(func() {
+		s.postgresClient, err = s.loadingPostgresDB()
+		if err != nil {
+			s.postgresOnce = sync.Once{}
+		}
+	})
+	return s.postgresClient, err
 }
 
 func (s *postgresManager) Close() error {
@@ -53,15 +65,8 @@ func (s *postgresManager) Close() error {
 	return nil
 }
 
-func (s *postgresManager) GetDB() (*gorm.DB, error) {
-	var err error
-	s.postgresOnce.Do(func() {
-		s.postgresClient, err = s.loadingPostgresDB()
-		if err != nil {
-			s.postgresOnce = sync.Once{}
-		}
-	})
-	return s.postgresClient, err
+func (s *postgresManager) Enable() bool {
+	return s.conf.GetEnable()
 }
 
 func (s *postgresManager) loadingPostgresDB() (*gorm.DB, error) {

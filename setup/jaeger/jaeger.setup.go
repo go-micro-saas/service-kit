@@ -3,10 +3,8 @@ package jaegerutil
 import (
 	"context"
 	configpb "github.com/go-micro-saas/service-kit/api/config"
-	apputil "github.com/go-micro-saas/service-kit/app"
 	jaegerpkg "github.com/ikaiguang/go-srv-kit/data/jaeger"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
-	middlewarepkg "github.com/ikaiguang/go-srv-kit/kratos/middleware"
 	"go.opentelemetry.io/otel/exporters/jaeger"
 	stdlog "log"
 	"sync"
@@ -20,6 +18,7 @@ type jaegerManager struct {
 }
 
 type JaegerManager interface {
+	Enable() bool
 	GetExporter() (*jaeger.Exporter, error)
 	Close() error
 }
@@ -34,18 +33,6 @@ func NewJaegerManager(conf *configpb.Jaeger) (JaegerManager, error) {
 	}, nil
 }
 
-func (s *jaegerManager) Close() error {
-	if s.jaegerExporter != nil {
-		stdlog.Println("|*** STOP: close: jaegerExporter")
-		err := s.jaegerExporter.Shutdown(context.Background())
-		if err != nil {
-			stdlog.Println("|*** STOP: close: jaegerExporter failed: ", err.Error())
-			return err
-		}
-	}
-	return nil
-}
-
 func (s *jaegerManager) GetExporter() (*jaeger.Exporter, error) {
 
 	var err error
@@ -58,6 +45,22 @@ func (s *jaegerManager) GetExporter() (*jaeger.Exporter, error) {
 	return s.jaegerExporter, err
 }
 
+func (s *jaegerManager) Close() error {
+	if s.jaegerExporter != nil {
+		stdlog.Println("|*** STOP: close: jaegerExporter")
+		err := s.jaegerExporter.Shutdown(context.Background())
+		if err != nil {
+			stdlog.Println("|*** STOP: close: jaegerExporter failed: ", err.Error())
+			return err
+		}
+	}
+	return nil
+}
+
+func (s *jaegerManager) Enable() bool {
+	return s.conf.GetEnable()
+}
+
 func (s *jaegerManager) loadingJaegerTraceExporter() (*jaeger.Exporter, error) {
 	stdlog.Println("|*** LOADING: JaegerExporter: ...")
 	je, err := jaegerpkg.NewJaegerExporter(ToJaegerConfig(s.conf))
@@ -66,21 +69,6 @@ func (s *jaegerManager) loadingJaegerTraceExporter() (*jaeger.Exporter, error) {
 		return nil, errorpkg.WithStack(e)
 	}
 	return je, nil
-}
-
-// InitTracerProvider trace provider
-func (s *jaegerManager) InitTracerProvider(appConfig *configpb.App) error {
-	stdlog.Println("|*** LOADING: Tracer: ...")
-	// Create the Jaeger exporter
-	var opts []middlewarepkg.TracerOption
-	if s.conf.GetEnable() {
-		exp, err := s.GetExporter()
-		if err != nil {
-			return err
-		}
-		opts = append(opts, middlewarepkg.WithTracerJaegerExporter(exp))
-	}
-	return middlewarepkg.SetTracer(apputil.ID(appConfig), opts...)
 }
 
 // ToJaegerConfig ...
