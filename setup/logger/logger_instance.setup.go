@@ -1,4 +1,4 @@
-package setuputil
+package loggerutil
 
 import (
 	"io"
@@ -8,6 +8,18 @@ import (
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 	logpkg "github.com/ikaiguang/go-srv-kit/kratos/log"
 )
+
+func (s *loggerManager) GetLoggers() (*Loggers, error) {
+	err := s.setupLoggerOnce()
+	if err != nil {
+		return nil, err
+	}
+	return &Loggers{
+		Logger:              s.logger,
+		LoggerForMiddleware: s.loggerForMiddleware,
+		LoggerForHelper:     s.loggerForHelper,
+	}, nil
+}
 
 func (s *loggerManager) setupLoggerOnce() error {
 	var err error

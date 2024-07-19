@@ -1,4 +1,4 @@
-package setuputil
+package loggerutil
 
 import (
 	"io"

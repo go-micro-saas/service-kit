@@ -1,4 +1,4 @@
-package setuputil
+package loggerutil
 
 import (
 	"context"
@@ -33,10 +33,10 @@ func (s *ServiceInfo) Kvs() []interface{} {
 
 func NewServiceInfo(appConfig *configpb.App) *ServiceInfo {
 	res := &ServiceInfo{
-		Project:  appConfig.ProjectName,
-		Name:     appConfig.ServerName,
-		Env:      appConfig.ServerEnv,
-		Version:  appConfig.ServerVersion,
+		Project:  appConfig.GetProjectName(),
+		Name:     appConfig.GetServerName(),
+		Env:      appConfig.GetServerEnv(),
+		Version:  appConfig.GetServerVersion(),
 		Hostname: "",
 		IP:       ippkg.LocalIP(),
 	}

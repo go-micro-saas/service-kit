@@ -1,4 +1,4 @@
-package setuputil
+package loggerutil
 
 import (
 	stderrors "errors"
@@ -15,14 +15,22 @@ type loggerManager struct {
 	appConfig *configpb.App
 	conf      *configpb.Log
 
+	// 不要直接使用 s.writer, 请使用 GetWriter()
 	writer     io.Writer
 	writerOnce sync.Once
 
+	// 不要直接使用 s.loggerXxx, 请使用 GetLoggers()
 	loggerOnce          sync.Once
 	logger              log.Logger
 	loggerForMiddleware log.Logger
 	loggerForHelper     log.Logger
 	loggerCloser        io.Closer
+}
+
+type Loggers struct {
+	Logger              log.Logger
+	LoggerForMiddleware log.Logger
+	LoggerForHelper     log.Logger
 }
 
 func NewLoggerManager(appConfig *configpb.App, conf *configpb.Log) (LoggerManager, error) {
@@ -33,7 +41,10 @@ func NewLoggerManager(appConfig *configpb.App, conf *configpb.Log) (LoggerManage
 		e := errorpkg.ErrorBadRequest("[请配置服务再启动] config key : log")
 		return nil, errorpkg.WithStack(e)
 	}
-	return &loggerManager{conf: conf}, nil
+	return &loggerManager{
+		appConfig: appConfig,
+		conf:      conf,
+	}, nil
 }
 
 func (s *loggerManager) Close() error {

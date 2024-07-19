@@ -1,10 +1,11 @@
 package configutil
 
 import (
+	"sync"
+
 	configpb "github.com/go-micro-saas/service-kit/api/config"
 	apppkg "github.com/ikaiguang/go-srv-kit/kratos/app"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
-	"sync"
 )
 
 var (
