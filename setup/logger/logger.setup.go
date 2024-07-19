@@ -1,12 +1,18 @@
 package setuputil
 
 import (
+	"io"
+	"sync"
+
 	configpb "github.com/go-micro-saas/service-kit/api/config"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 )
 
 type loggerManager struct {
 	conf *configpb.Log
+
+	writer     io.Writer
+	writerOnce sync.Once
 }
 
 func NewLoggerManager(conf *configpb.Log) (LoggerManager, error) {
