@@ -52,11 +52,25 @@ func (s *loggerManager) setupLogger() error {
 		cleanup.cs = append(cleanup.cs, loggerClosers[i])
 	}
 
+	// prefix
+	prefixKvs := s.withLoggerPrefix()
+	logger = log.With(logger, prefixKvs...)
+	loggerForMiddleware = log.With(loggerForMiddleware, prefixKvs...)
+	loggerForHelper = log.With(loggerForHelper, prefixKvs...)
+
 	s.logger = logger
 	s.loggerForMiddleware = loggerForMiddleware
 	s.loggerForHelper = loggerForHelper
 	s.loggerCloser = cleanup
 	return nil
+}
+
+func (s *loggerManager) withLoggerPrefix() []interface{} {
+	var kvs = NewServiceInfo(s.appConfig).Kvs()
+	for _, kv := range NewTracerInfo().Kvs() {
+		kvs = append(kvs, kv)
+	}
+	return kvs
 }
 
 func (s *loggerManager) loadingLoggerWithCallerSkip(skip int) (logger log.Logger, closeFnSlice []io.Closer, err error) {
