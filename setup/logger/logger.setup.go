@@ -43,7 +43,7 @@ type LoggerManager interface {
 	Close() error
 }
 
-func NewLoggerManager(appConfig *configpb.App, conf *configpb.Log) (LoggerManager, error) {
+func NewLoggerManager(conf *configpb.Log, appConfig *configpb.App) (LoggerManager, error) {
 	if appConfig == nil {
 		e := errorpkg.ErrorBadRequest("[CONFIGURATION] config error, key = app")
 		return nil, errorpkg.WithStack(e)

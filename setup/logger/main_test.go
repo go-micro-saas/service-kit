@@ -40,7 +40,7 @@ var (
 
 func TestMain(m *testing.M) {
 	var err error
-	handler, err = NewLoggerManager(appConfig, logConfig)
+	handler, err = NewLoggerManager(logConfig, appConfig)
 	if err != nil {
 		panic(err)
 	}
