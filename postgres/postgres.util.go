@@ -1,15 +1,16 @@
 package postgresutil
 
 import (
+	stdlog "log"
+	"sync"
+
 	configpb "github.com/go-micro-saas/service-kit/api/config"
-	loggerutil "github.com/go-micro-saas/service-kit/setup/logger"
+	loggerutil "github.com/go-micro-saas/service-kit/logger"
 	gormpkg "github.com/ikaiguang/go-srv-kit/data/gorm"
 	psqlpkg "github.com/ikaiguang/go-srv-kit/data/postgres"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
-	stdlog "log"
-	"sync"
 )
 
 type postgresManager struct {

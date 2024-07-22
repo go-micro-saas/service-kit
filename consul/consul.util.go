@@ -1,12 +1,13 @@
 package consulutil
 
 import (
+	stdlog "log"
+	"sync"
+
 	configpb "github.com/go-micro-saas/service-kit/api/config"
 	consulapi "github.com/hashicorp/consul/api"
 	consulpkg "github.com/ikaiguang/go-srv-kit/data/consul"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
-	stdlog "log"
-	"sync"
 )
 
 type consulManager struct {

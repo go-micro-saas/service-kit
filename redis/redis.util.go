@@ -1,12 +1,13 @@
 package redisutil
 
 import (
+	stdlog "log"
+	"sync"
+
 	configpb "github.com/go-micro-saas/service-kit/api/config"
 	redispkg "github.com/ikaiguang/go-srv-kit/data/redis"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 	"github.com/redis/go-redis/v9"
-	stdlog "log"
-	"sync"
 )
 
 type redisManager struct {

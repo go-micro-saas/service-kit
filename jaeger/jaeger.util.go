@@ -2,12 +2,13 @@ package jaegerutil
 
 import (
 	"context"
+	stdlog "log"
+	"sync"
+
 	configpb "github.com/go-micro-saas/service-kit/api/config"
 	jaegerpkg "github.com/ikaiguang/go-srv-kit/data/jaeger"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 	"go.opentelemetry.io/otel/exporters/jaeger"
-	stdlog "log"
-	"sync"
 )
 
 type jaegerManager struct {

@@ -1,13 +1,14 @@
 package rabbitmqutil
 
 import (
-	"github.com/ThreeDotsLabs/watermill-amqp/v2/pkg/amqp"
-	configpb "github.com/go-micro-saas/service-kit/api/config"
-	loggerutil "github.com/go-micro-saas/service-kit/setup/logger"
-	rabbitmqpkg "github.com/ikaiguang/go-srv-kit/data/rabbitmq"
-	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 	stdlog "log"
 	"sync"
+
+	"github.com/ThreeDotsLabs/watermill-amqp/v2/pkg/amqp"
+	configpb "github.com/go-micro-saas/service-kit/api/config"
+	loggerutil "github.com/go-micro-saas/service-kit/logger"
+	rabbitmqpkg "github.com/ikaiguang/go-srv-kit/data/rabbitmq"
+	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 )
 
 type rabbitmqManager struct {

@@ -1,11 +1,11 @@
 package authutil
 
 import (
-	loggerutil "github.com/go-micro-saas/service-kit/setup/logger"
 	stdlog "log"
 	"sync"
 
 	configpb "github.com/go-micro-saas/service-kit/api/config"
+	loggerutil "github.com/go-micro-saas/service-kit/logger"
 	authpkg "github.com/ikaiguang/go-srv-kit/kratos/auth"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 	"github.com/redis/go-redis/v9"

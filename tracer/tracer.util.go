@@ -1,11 +1,12 @@
 package tracerutil
 
 import (
+	stdlog "log"
+
 	configpb "github.com/go-micro-saas/service-kit/api/config"
 	apputil "github.com/go-micro-saas/service-kit/app"
-	jaegerutil "github.com/go-micro-saas/service-kit/setup/jaeger"
+	jaegerutil "github.com/go-micro-saas/service-kit/jaeger"
 	middlewarepkg "github.com/ikaiguang/go-srv-kit/kratos/middleware"
-	stdlog "log"
 )
 
 func InitTracerWithJaegerExporter(appConfig *configpb.App, manager jaegerutil.JaegerManager) error {
