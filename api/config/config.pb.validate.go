@@ -605,7 +605,13 @@ func (m *App) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	// no validation rules for Id
+
 	// no validation rules for ConfigMethod
+
+	// no validation rules for ConfigPathForBase
+
+	// no validation rules for ConfigPathForServer
 
 	// no validation rules for Metadata
 

@@ -5,8 +5,12 @@ app:
   # 开发环境；值：DEVELOP、TESTING、PREVIEW、PRODUCTION
   server_env: develop
   server_version: v1.0.0
+  # ID: apputil.ID 服务唯一标识; 也用于服务注册发现
+  id: "${app.project_name}:${app.server_name}:${app.server_env}:${app.version}"
   # 配置方式；值：LOCAL、CONSUL、ETCD
   config_method: local
+  config_path_for_base: "${app.project_name}/base-config"
+  config_path_for_server: "${app.project_name}/${app.server_name}"
   http_endpoints:
     - https://uufff.com
   grpc_endpoints:

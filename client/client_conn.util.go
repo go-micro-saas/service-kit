@@ -3,7 +3,6 @@ package clientutil
 import (
 	"context"
 	configpb "github.com/go-micro-saas/service-kit/api/config"
-	setuputil "github.com/go-micro-saas/service-kit/mytest/backup/setup"
 	"strings"
 	"sync"
 

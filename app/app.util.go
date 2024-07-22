@@ -3,6 +3,8 @@ package apputil
 import (
 	configpb "github.com/go-micro-saas/service-kit/api/config"
 	"os"
+	"path/filepath"
+	"runtime"
 	"strings"
 
 	"github.com/go-kratos/kratos/v2/transport/http"
@@ -11,27 +13,24 @@ import (
 )
 
 const (
-	_appIDSep      = ":"
-	_configPathSep = "/"
+	RedisSep = ":"
+	PathSep  = "/"
 )
 
 // ID 程序ID
-// 例：go-srv-saas/DEVELOP/main/v1.0.0/user-service
+// 例：go-srv-saas:user-service:DEVELOP:v1.0.0
 func ID(appConfig *configpb.App) string {
-	return appIdentifier(appConfig, _appIDSep)
+	return Identifier(appConfig, RedisSep)
 }
 
-// ConfigPath 配置路径；用于配置中心，如：consul、etcd、...
-// @result = app.ProjectName + "/" + app.ServerName + "/" + app.ServerEnv + "/" + app.ServerVersion
-// 例：go-micro-saas/user-service/DEVELOP/v1.0.0
-func ConfigPath(appConfig *configpb.App) string {
-	return appIdentifier(appConfig, _configPathSep)
+func Path(appConfig *configpb.App) string {
+	return PathSep + Identifier(appConfig, PathSep)
 }
 
-// appIdentifier app 唯一标准
+// Identifier app 唯一标准
 // @result = app.ProjectName + "/" + app.ServerName + "/" + app.ServerEnv + "/" + app.ServerVersion
-func appIdentifier(appConfig *configpb.App, sep string) string {
-	var ss = make([]string, 0, 5)
+func Identifier(appConfig *configpb.App, sep string) string {
+	var ss = make([]string, 0, 4)
 	if appConfig.ProjectName != "" {
 		ss = append(ss, appConfig.ProjectName)
 	}
@@ -43,6 +42,13 @@ func appIdentifier(appConfig *configpb.App, sep string) string {
 		ss = append(ss, appConfig.ServerVersion)
 	}
 	return strings.Join(ss, sep)
+}
+
+// CurrentPath ...
+func CurrentPath() string {
+	_, file, _, _ := runtime.Caller(0)
+
+	return filepath.Dir(file)
 }
 
 // RuntimePath ...
