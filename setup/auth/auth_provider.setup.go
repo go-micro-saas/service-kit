@@ -1,12 +1,13 @@
 package authutil
 
 import (
+	"sync"
+
 	configpb "github.com/go-micro-saas/service-kit/api/config"
 	loggerutil "github.com/go-micro-saas/service-kit/setup/logger"
 	"github.com/google/wire"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 	"github.com/redis/go-redis/v9"
-	"sync"
 )
 
 var ProviderSet = wire.NewSet(NewSingletonAuthManager)
@@ -33,7 +34,7 @@ func NewSingletonAuthManager(
 
 func GetAuthManager() (AuthManager, error) {
 	if singletonAuthManager == nil {
-		e := errorpkg.ErrorUnimplemented("")
+		e := errorpkg.ErrorUninitialized("")
 		return nil, errorpkg.WithStack(e)
 	}
 	return singletonAuthManager, nil

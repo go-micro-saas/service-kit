@@ -17,10 +17,10 @@ func Test_configManager_IsDebugMode(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := handler.IsDebugMode(); got != tt.want {
+			if got := IsDebugMode(); got != tt.want {
 				t.Errorf("IsDebugMode() = %v, want %v", got, tt.want)
 			}
-			t.Log("config env: ", handler.Env())
+			t.Log("config env: ", Env())
 		})
 	}
 }

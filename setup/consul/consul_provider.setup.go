@@ -1,10 +1,11 @@
 package consulutil
 
 import (
+	"sync"
+
 	configpb "github.com/go-micro-saas/service-kit/api/config"
 	"github.com/google/wire"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
-	"sync"
 )
 
 var ProviderSet = wire.NewSet(NewSingletonConsulManager)
@@ -27,7 +28,7 @@ func NewSingletonConsulManager(conf *configpb.Consul) (ConsulManager, error) {
 
 func GetConsulManager() (ConsulManager, error) {
 	if singletonConsulManager == nil {
-		e := errorpkg.ErrorUnimplemented("")
+		e := errorpkg.ErrorUninitialized("")
 		return nil, errorpkg.WithStack(e)
 	}
 	return singletonConsulManager, nil

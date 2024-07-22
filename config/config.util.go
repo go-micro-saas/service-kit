@@ -10,6 +10,10 @@ import (
 
 var (
 	_bootstrap *configpb.Bootstrap
+
+	// 不要直接使用 s.env, 请使用 Env()
+	_env     apppkg.RuntimeEnvEnum_RuntimeEnv
+	_envOnce sync.Once
 )
 
 func SetBootstrap(bootstrap *configpb.Bootstrap) {
@@ -21,34 +25,22 @@ func GetBootstrap() (*configpb.Bootstrap, error) {
 		e := errorpkg.ErrorUninitialized("bootstrap is uninitialized")
 		return nil, errorpkg.WithStack(e)
 	}
-	return _bootstrap, nil
+	return getBootstrap(), nil
 }
 
-// configManager 实现 Config
-type configManager struct {
-	conf *configpb.Bootstrap
-
-	// 不要直接使用 s.env, 请使用 Env()
-	env     apppkg.RuntimeEnvEnum_RuntimeEnv
-	envOnce sync.Once
+func getBootstrap() *configpb.Bootstrap {
+	return _bootstrap
 }
 
-func NewConfigManager(conf *configpb.Bootstrap) ConfigManager {
-	if conf == nil {
-		panic("conf is nil")
-	}
-	return &configManager{conf: conf}
-}
-
-func (s *configManager) Env() apppkg.RuntimeEnvEnum_RuntimeEnv {
-	s.envOnce.Do(func() {
-		s.env = apppkg.ParseEnv(s.conf.GetApp().GetServerEnv())
+func Env() apppkg.RuntimeEnvEnum_RuntimeEnv {
+	_envOnce.Do(func() {
+		_env = apppkg.ParseEnv(getBootstrap().GetApp().GetServerEnv())
 	})
-	return s.env
+	return _env
 }
 
-func (s *configManager) IsDebugMode() bool {
-	switch s.Env() {
+func IsDebugMode() bool {
+	switch Env() {
 	default:
 		return false
 	case apppkg.RuntimeEnvEnum_LOCAL, apppkg.RuntimeEnvEnum_DEVELOP, apppkg.RuntimeEnvEnum_TESTING:
@@ -56,8 +48,8 @@ func (s *configManager) IsDebugMode() bool {
 	}
 }
 
-func (s *configManager) IsLocalMode() bool {
-	switch s.Env() {
+func IsLocalMode() bool {
+	switch Env() {
 	default:
 		return false
 	case apppkg.RuntimeEnvEnum_LOCAL:
@@ -65,76 +57,76 @@ func (s *configManager) IsLocalMode() bool {
 	}
 }
 
-func (s *configManager) AppConfig() *configpb.App {
-	return s.conf.GetApp()
+func AppConfig() *configpb.App {
+	return getBootstrap().GetApp()
 }
 
-func (s *configManager) SettingConfig() *configpb.Setting {
-	return s.conf.GetSetting()
+func SettingConfig() *configpb.Setting {
+	return getBootstrap().GetSetting()
 }
-func (s *configManager) SettingCaptchaConfig() *configpb.Setting_Captcha {
-	return s.conf.GetSetting().GetCaptcha()
+func SettingCaptchaConfig() *configpb.Setting_Captcha {
+	return getBootstrap().GetSetting().GetCaptcha()
 }
-func (s *configManager) SettingLoginConfig() *configpb.Setting_Login {
-	return s.conf.GetSetting().GetLogin()
-}
-
-func (s *configManager) HTTPConfig() *configpb.Server_HTTP {
-	return s.conf.GetServer().GetHttp()
-}
-func (s *configManager) GRPCConfig() *configpb.Server_GRPC {
-	return s.conf.GetServer().GetGrpc()
+func SettingLoginConfig() *configpb.Setting_Login {
+	return getBootstrap().GetSetting().GetLogin()
 }
 
-func (s *configManager) LogConfig() *configpb.Log {
-	return s.conf.GetLog()
+func HTTPConfig() *configpb.Server_HTTP {
+	return getBootstrap().GetServer().GetHttp()
 }
-func (s *configManager) LogConsoleConfig() *configpb.Log_Console {
-	return s.conf.GetLog().GetConsole()
-}
-func (s *configManager) LogFileConfig() *configpb.Log_File {
-	return s.conf.GetLog().GetFile()
+func GRPCConfig() *configpb.Server_GRPC {
+	return getBootstrap().GetServer().GetGrpc()
 }
 
-func (s *configManager) MysqlConfig() *configpb.MySQL {
-	return s.conf.GetMysql()
+func LogConfig() *configpb.Log {
+	return getBootstrap().GetLog()
 }
-func (s *configManager) PostgresConfig() *configpb.PSQL {
-	return s.conf.GetPsql()
+func LogConsoleConfig() *configpb.Log_Console {
+	return getBootstrap().GetLog().GetConsole()
 }
-func (s *configManager) RedisConfig() *configpb.Redis {
-	return s.conf.GetRedis()
-}
-func (s *configManager) RabbitMQConfig() *configpb.Rabbitmq {
-	return s.conf.GetRabbitmq()
-}
-func (s *configManager) ConsulConfig() *configpb.Consul {
-	return s.conf.GetConsul()
-}
-func (s *configManager) EtcdConfig() *configpb.Etcd {
-	return s.conf.GetEtcd()
-}
-func (s *configManager) Jaeger() *configpb.Jaeger {
-	return s.conf.GetJaeger()
+func LogFileConfig() *configpb.Log_File {
+	return getBootstrap().GetLog().GetFile()
 }
 
-func (s *configManager) TransferEncryptConfig() *configpb.Encrypt_TransferEncrypt {
-	return s.conf.GetEncrypt().GetTransferEncrypt()
+func MysqlConfig() *configpb.MySQL {
+	return getBootstrap().GetMysql()
 }
-func (s *configManager) ServiceEncryptConfig() *configpb.Encrypt_ServiceEncrypt {
-	return s.conf.GetEncrypt().GetServiceEncrypt()
+func PostgresConfig() *configpb.PSQL {
+	return getBootstrap().GetPsql()
 }
-func (s *configManager) TokenEncryptConfig() *configpb.Encrypt_TokenEncrypt {
-	return s.conf.GetEncrypt().GetTokenEncrypt()
+func RedisConfig() *configpb.Redis {
+	return getBootstrap().GetRedis()
+}
+func RabbitMQConfig() *configpb.Rabbitmq {
+	return getBootstrap().GetRabbitmq()
+}
+func ConsulConfig() *configpb.Consul {
+	return getBootstrap().GetConsul()
+}
+func EtcdConfig() *configpb.Etcd {
+	return getBootstrap().GetEtcd()
+}
+func Jaeger() *configpb.Jaeger {
+	return getBootstrap().GetJaeger()
 }
 
-func (s *configManager) ClusterServiceEndpoints() []*configpb.ClientApi_Endpoint {
-	return s.conf.GetClientApi().ClusterService
+func TransferEncryptConfig() *configpb.Encrypt_TransferEncrypt {
+	return getBootstrap().GetEncrypt().GetTransferEncrypt()
 }
-func (s *configManager) ThirdPartyEndpoints() []*configpb.ClientApi_Endpoint {
-	return s.conf.GetClientApi().ThirdParty
+func ServiceEncryptConfig() *configpb.Encrypt_ServiceEncrypt {
+	return getBootstrap().GetEncrypt().GetServiceEncrypt()
+}
+func TokenEncryptConfig() *configpb.Encrypt_TokenEncrypt {
+	return getBootstrap().GetEncrypt().GetTokenEncrypt()
 }
 
-func (s *configManager) SnowflakeConfig() *configpb.Snowflake {
-	return s.conf.GetSnowflake()
+func ClusterServiceEndpoints() []*configpb.ClientApi_Endpoint {
+	return getBootstrap().GetClientApi().ClusterService
+}
+func ThirdPartyEndpoints() []*configpb.ClientApi_Endpoint {
+	return getBootstrap().GetClientApi().ThirdParty
+}
+
+func SnowflakeConfig() *configpb.Snowflake {
+	return getBootstrap().GetSnowflake()
 }

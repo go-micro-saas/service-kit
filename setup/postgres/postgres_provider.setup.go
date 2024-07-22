@@ -1,11 +1,12 @@
 package postgresutil
 
 import (
+	"sync"
+
 	configpb "github.com/go-micro-saas/service-kit/api/config"
 	loggerutil "github.com/go-micro-saas/service-kit/setup/logger"
 	"github.com/google/wire"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
-	"sync"
 )
 
 var ProviderSet = wire.NewSet(NewSingletonPostgresManager)
@@ -28,7 +29,7 @@ func NewSingletonPostgresManager(conf *configpb.PSQL, loggerManager loggerutil.L
 
 func GetPostgresManager() (PostgresManager, error) {
 	if singletonPostgresManager == nil {
-		e := errorpkg.ErrorUnimplemented("")
+		e := errorpkg.ErrorUninitialized("")
 		return nil, errorpkg.WithStack(e)
 	}
 	return singletonPostgresManager, nil

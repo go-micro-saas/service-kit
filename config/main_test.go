@@ -10,7 +10,6 @@ var (
 	//go:embed config_example.yaml
 	configBuf  []byte
 	configPath = "config_example.yaml"
-	handler    ConfigManager
 )
 
 func TestMain(m *testing.M) {
@@ -20,7 +19,6 @@ func TestMain(m *testing.M) {
 	}
 
 	SetBootstrap(boostrap)
-	handler = NewConfigManager(boostrap)
 
 	os.Exit(m.Run())
 }

@@ -1,11 +1,12 @@
 package mysqlutil
 
 import (
+	"sync"
+
 	configpb "github.com/go-micro-saas/service-kit/api/config"
 	loggerutil "github.com/go-micro-saas/service-kit/setup/logger"
 	"github.com/google/wire"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
-	"sync"
 )
 
 var ProviderSet = wire.NewSet(NewSingletonMysqlManager)
@@ -28,7 +29,7 @@ func NewSingletonMysqlManager(conf *configpb.MySQL, loggerManager loggerutil.Log
 
 func GetMysqlManager() (MysqlManager, error) {
 	if singletonMysqlManager == nil {
-		e := errorpkg.ErrorUnimplemented("")
+		e := errorpkg.ErrorUninitialized("")
 		return nil, errorpkg.WithStack(e)
 	}
 	return singletonMysqlManager, nil

@@ -1,8 +1,9 @@
 package configutil
 
 import (
-	configpb "github.com/go-micro-saas/service-kit/api/config"
 	"testing"
+
+	configpb "github.com/go-micro-saas/service-kit/api/config"
 )
 
 // go test -v -count=1 ./config/ -test.run=TestSetupWithFile

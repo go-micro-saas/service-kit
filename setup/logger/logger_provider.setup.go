@@ -1,10 +1,11 @@
 package loggerutil
 
 import (
+	"sync"
+
 	configpb "github.com/go-micro-saas/service-kit/api/config"
 	"github.com/google/wire"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
-	"sync"
 )
 
 var ProviderSet = wire.NewSet(NewSingletonLoggerManager)
@@ -27,7 +28,7 @@ func NewSingletonLoggerManager(conf *configpb.Log, appConfig *configpb.App) (Log
 
 func GetLoggerManager() (LoggerManager, error) {
 	if singletonLoggerManager == nil {
-		e := errorpkg.ErrorUnimplemented("")
+		e := errorpkg.ErrorUninitialized("")
 		return nil, errorpkg.WithStack(e)
 	}
 	return singletonLoggerManager, nil

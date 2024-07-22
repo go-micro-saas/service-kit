@@ -1,11 +1,12 @@
 package rabbitmqutil
 
 import (
+	"sync"
+
 	configpb "github.com/go-micro-saas/service-kit/api/config"
 	loggerutil "github.com/go-micro-saas/service-kit/setup/logger"
 	"github.com/google/wire"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
-	"sync"
 )
 
 var ProviderSet = wire.NewSet(NewSingletonRabbitmqManager)
@@ -28,7 +29,7 @@ func NewSingletonRabbitmqManager(conf *configpb.Rabbitmq, loggerManager loggerut
 
 func GetRabbitmqManager() (RabbitmqManager, error) {
 	if singletonRabbitmqManager == nil {
-		e := errorpkg.ErrorUnimplemented("")
+		e := errorpkg.ErrorUninitialized("")
 		return nil, errorpkg.WithStack(e)
 	}
 	return singletonRabbitmqManager, nil
