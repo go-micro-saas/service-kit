@@ -6,8 +6,8 @@ import (
 	configpb "github.com/go-micro-saas/service-kit/api/config"
 )
 
-// go test -v -count=1 ./config/ -test.run=TestSetupWithFile
-func TestSetupWithFile(t *testing.T) {
+// go test -v -count=1 ./config/ -test.run=TestLoadingFile
+func TestLoadingFile(t *testing.T) {
 	type args struct {
 		filePath string
 	}
@@ -18,7 +18,7 @@ func TestSetupWithFile(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "#TestSetupWithFile",
+			name: "#TestLoadingFile",
 			args: args{
 				filePath: "config_example.yaml",
 			},

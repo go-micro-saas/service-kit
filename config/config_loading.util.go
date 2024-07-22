@@ -1,6 +1,8 @@
 package configutil
 
 import (
+	"path/filepath"
+	"runtime"
 	"strings"
 
 	configpb "github.com/go-micro-saas/service-kit/api/config"
@@ -37,4 +39,10 @@ func Loading(filePath string) (*configpb.Bootstrap, error) {
 		}
 		return LoadingConfigFromConsul(consulClient, bootstrap.GetApp())
 	}
+}
+
+func CurrentPath() string {
+	_, file, _, _ := runtime.Caller(0)
+
+	return filepath.Dir(file)
 }
