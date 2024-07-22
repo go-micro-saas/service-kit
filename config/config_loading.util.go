@@ -1,46 +1,40 @@
 package configutil
 
 import (
-	configpb "github.com/go-micro-saas/service-kit/api/config"
-	stdlog "log"
+	"strings"
 
-	"github.com/go-kratos/kratos/v2/config"
-	"github.com/go-kratos/kratos/v2/config/file"
-	apputil "github.com/go-micro-saas/service-kit/app"
+	configpb "github.com/go-micro-saas/service-kit/api/config"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 )
 
-func LoadingFile(filePath string) (*configpb.Bootstrap, error) {
-	stdlog.Println("|==================== LOADING CONFIGURATION FILE: START ====================|")
-	defer stdlog.Println()
-	defer stdlog.Println("|==================== LOADING CONFIGURATION FILE: END ====================|")
+const (
+	CONFIG_METHOD_LOCAL  = "local"
+	CONFIG_METHOD_CONSUL = "consul"
+)
 
-	p, err := apputil.RuntimePath()
+func Loading(filePath string) (*configpb.Bootstrap, error) {
+	bootstrap, err := LoadingFile(filePath)
 	if err != nil {
 		return nil, err
 	}
-	stdlog.Println("|*** INFO: program running path: ", p)
-
-	var opts []config.Option
-	stdlog.Println("|*** LOADING: path to configuration: ", filePath)
-	opts = append(opts, config.WithSource(file.NewSource(filePath)))
-
-	handler := config.New(opts...)
-	defer func() {
-		_ = handler.Close()
-	}()
-
-	// 加载配置
-	if err = handler.Load(); err != nil {
-		err = errorpkg.WithStack(errorpkg.ErrorInternalError(err.Error()))
-		return nil, err
+	if bootstrap.GetApp() == nil {
+		e := errorpkg.ErrorBadRequest("[CONFIGURATION] config error, key = app")
+		return nil, errorpkg.WithStack(e)
 	}
-
-	// 读取配置文件
-	conf := &configpb.Bootstrap{}
-	if err = handler.Scan(conf); err != nil {
-		err = errorpkg.WithStack(errorpkg.ErrorInternalError(err.Error()))
-		return nil, err
+	if bootstrap.GetConsul() == nil {
+		e := errorpkg.ErrorBadRequest("[CONFIGURATION] config error, key = consul")
+		return nil, errorpkg.WithStack(e)
 	}
-	return conf, nil
+	method := strings.ToLower(bootstrap.GetApp().GetConfigMethod())
+	switch method {
+	default:
+		return bootstrap, err
+	case CONFIG_METHOD_CONSUL:
+		//从consul加载配置
+		consulClient, err := newConsulClient(bootstrap.GetConsul())
+		if err != nil {
+			return nil, err
+		}
+		return LoadingConfigFromConsul(consulClient, bootstrap.GetApp())
+	}
 }
