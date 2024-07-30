@@ -81,6 +81,12 @@ init:
 	go install github.com/golang/mock/mockgen@latest
 	go install golang.org/x/tools/cmd/goimports@latest
 
+.PHONY: generate
+# generate
+generate:
+	#go mod tidy
+	go generate ./...
+
 # ===== include =====
 # ===== include =====
 # ===== include =====
