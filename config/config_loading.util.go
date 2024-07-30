@@ -1,6 +1,8 @@
 package configutil
 
 import (
+	"google.golang.org/protobuf/reflect/protoreflect"
+	stdlog "log"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -39,6 +41,22 @@ func Loading(filePath string) (*configpb.Bootstrap, error) {
 		}
 		return LoadingConfigFromConsul(consulClient, bootstrap.GetApp())
 	}
+}
+
+// MergeConfig 合并配置；后面的覆盖前面的
+func MergeConfig(first, second *configpb.Bootstrap) {
+	stdlog.Println("|==================== MERGE CONFIGURATION : START ====================|")
+	defer stdlog.Println()
+	defer stdlog.Println("|==================== MERGE CONFIGURATION : END ====================|")
+
+	firstMessage := first.ProtoReflect()
+	secondMessage := second.ProtoReflect()
+	var rangeFn = func(fd protoreflect.FieldDescriptor, v protoreflect.Value) bool {
+		stdlog.Println("|*** INFO: merge config key: ", fd.Name())
+		firstMessage.Set(fd, v)
+		return true
+	}
+	secondMessage.Range(rangeFn)
 }
 
 func CurrentPath() string {

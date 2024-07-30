@@ -11,9 +11,9 @@ import (
 )
 
 func LoadingFile(filePath string) (*configpb.Bootstrap, error) {
-	stdlog.Println("|==================== LOADING CONFIGURATION FILE: START ====================|")
+	stdlog.Println("|==================== LOADING FILE CONFIGURATION : START ====================|")
 	defer stdlog.Println()
-	defer stdlog.Println("|==================== LOADING CONFIGURATION FILE: END ====================|")
+	defer stdlog.Println("|==================== LOADING FILE CONFIGURATION FILE: END ====================|")
 
 	p, err := apputil.RuntimePath()
 	if err != nil {
@@ -22,11 +22,12 @@ func LoadingFile(filePath string) (*configpb.Bootstrap, error) {
 	stdlog.Println("|*** INFO: program running path: ", p)
 
 	var opts []config.Option
-	stdlog.Println("|*** LOADING: path to configuration: ", filePath)
+	stdlog.Println("|*** LOADING: file configuration path: ", filePath)
 	opts = append(opts, config.WithSource(file.NewSource(filePath)))
 
 	handler := config.New(opts...)
 	defer func() {
+		stdlog.Println("|*** LOADING: COMPLETE : file configuration path: ", filePath)
 		_ = handler.Close()
 	}()
 

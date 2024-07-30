@@ -32,7 +32,7 @@ func TestLoadingConfigFromConsul(t *testing.T) {
 	appConfig := &configpb.App{
 		ConfigMethod:         CONFIG_METHOD_CONSUL,
 		ConfigPathForGeneral: "go-micro-saas/general-config",
-		ConfigPathForServer:  "go-micro-saas/general-config/production/v1.0.0",
+		ConfigPathForServer:  "go-micro-saas/ping-service/production/v1.0.0",
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
