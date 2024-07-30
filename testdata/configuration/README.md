@@ -10,4 +10,5 @@
 
 ```shell
 go run testdata/configuration/main.go
+go run testdata/configuration/main.go -path go-micro-saas/base-config
 ```

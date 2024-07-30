@@ -26,10 +26,12 @@ const (
 
 var (
 	configFlag string
+	storePath  string
 )
 
 func init() {
 	flag.StringVar(&configFlag, "conf", "", "config path, eg: -conf ./configs")
+	flag.StringVar(&storePath, "path", "", "custom store path, eg: -path project_name/service_name/file_path")
 }
 
 func currentPath() string {
@@ -176,7 +178,10 @@ func (s *ConsulConfig) ReadConfigFiles() (map[string][]byte, error) {
 		err = fmt.Errorf(format, s.config.App.ServerName, configFlag, s.serverName)
 		return nil, pkgerrors.WithStack(err)
 	}
-	consulPath := apputil.Path(s.config.App)
+	consulPath := storePath
+	if consulPath == "" {
+		consulPath = apputil.Path(s.config.GetApp())
+	}
 	stdlog.Println("|*** 本地配置路径：	", configFlag)
 	stdlog.Println("|*** Consul配置路径：", consulPath)
 	configDataM := make(map[string][]byte)
