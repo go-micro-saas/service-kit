@@ -648,7 +648,7 @@ func (m *App) validate(all bool) error {
 
 	// no validation rules for ConfigMethod
 
-	// no validation rules for ConfigPathForBase
+	// no validation rules for ConfigPathForGeneral
 
 	// no validation rules for ConfigPathForServer
 

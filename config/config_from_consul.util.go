@@ -6,32 +6,19 @@ import (
 	"github.com/go-kratos/kratos/contrib/config/consul/v2"
 	"github.com/go-kratos/kratos/v2/config"
 	configpb "github.com/go-micro-saas/service-kit/api/config"
-	apputil "github.com/go-micro-saas/service-kit/app"
 	consulapi "github.com/hashicorp/consul/api"
 	consulpkg "github.com/ikaiguang/go-srv-kit/data/consul"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 )
 
-// LoadingConfigFromConsul 从consul中加载配置
-// 首先：读取服务base配置
-// 然后：读取本服务配置
-// 最后：使用本服务配置 覆盖 base 配置
-func LoadingConfigFromConsul(consulClient *consulapi.Client, appConfig *configpb.App) (*configpb.Bootstrap, error) {
-	stdlog.Println("|==================== LOADING CONFIGURATION FROM: START ====================|")
-	defer stdlog.Println()
-	defer stdlog.Println("|==================== LOADING CONFIGURATION FROM: END ====================|")
-
+func loadingConfigFromConsul(consulClient *consulapi.Client, consulConfigPath string) (*configpb.Bootstrap, error) {
 	// 配置source
-	consulKeyPath := apputil.Path(appConfig)
-	stdlog.Println("|*** LOADING: path to consul configuration: ", consulKeyPath)
-	cs, err := consul.New(consulClient, consul.WithPath(consulKeyPath))
+	cs, err := consul.New(consulClient, consul.WithPath(consulConfigPath))
 	if err != nil {
 		e := errorpkg.ErrorInternalError(err.Error())
 		return nil, errorpkg.WithStack(e)
 	}
-
 	var opts []config.Option
-	stdlog.Println("|*** LOADING: consul source: ...")
 	opts = append(opts, config.WithSource(cs))
 
 	handler := config.New(opts...)
@@ -51,8 +38,32 @@ func LoadingConfigFromConsul(consulClient *consulapi.Client, appConfig *configpb
 		err = errorpkg.WithStack(errorpkg.ErrorInternalError(err.Error()))
 		return nil, err
 	}
-
 	return conf, nil
+}
+
+// LoadingConfigFromConsul 从consul中加载配置
+// 首先：读取服务base配置
+// 然后：读取本服务配置
+// 最后：使用本服务配置 覆盖 base 配置
+func LoadingConfigFromConsul(consulClient *consulapi.Client, appConfig *configpb.App) (*configpb.Bootstrap, error) {
+	stdlog.Println("|==================== LOADING CONFIGURATION FROM: START ====================|")
+	defer stdlog.Println()
+	defer stdlog.Println("|==================== LOADING CONFIGURATION FROM: END ====================|")
+
+	var bootstrap = &configpb.Bootstrap{}
+
+	// 通用配置
+	generalPath := appConfig.GetConfigPathForGeneral()
+	if generalPath != "" {
+		stdlog.Println("|*** LOADING: path to consul configuration: ", generalPath)
+		conf, err := loadingConfigFromConsul(consulClient, generalPath)
+		if err != nil {
+			return nil, err
+		}
+		bootstrap = conf
+	}
+
+	return bootstrap, nil
 }
 
 func newConsulClient(cfg *configpb.Consul) (*consulapi.Client, error) {

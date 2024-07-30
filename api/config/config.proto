@@ -43,9 +43,9 @@ message App {
   string server_version = 4 [(validate.rules).string = { min_len: 1 }];  //
   string id             = 5;                                             // 服务注册名称
 
-  string config_method          = 40;  // 配置方式；值：LOCAL、CONSUL、ETCD
-  string config_path_for_base   = 41;  // 配置中心：基本配置路径
-  string config_path_for_server = 42;  // 配置中心：本服务的配置路径
+  string config_method           = 40;  // 配置方式；值：LOCAL、CONSUL、ETCD
+  string config_path_for_general = 41;  // 配置中心：基本配置路径
+  string config_path_for_server  = 42;  // 配置中心：本服务的配置路径
 
   repeated string http_endpoints = 60;  // app站点
   repeated string grpc_endpoints = 61;  // grpc站点
