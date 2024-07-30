@@ -3,13 +3,12 @@ package main
 import (
 	"flag"
 	"fmt"
-	"io/ioutil"
+	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
+	"os"
 	"path/filepath"
 	"runtime"
 	"sort"
 	"strings"
-
-	pkgerrors "github.com/pkg/errors"
 
 	debugutil "github.com/ikaiguang/go-srv-kit/debug"
 	bufferutil "github.com/ikaiguang/go-srv-kit/kit/buffer"
@@ -72,8 +71,8 @@ func genProtoScriptFileAndExecScript(dir string) (scriptFilePath string, err err
 		return scriptFilePath, err
 	}
 	if len(protoFiles) == 0 {
-		err = pkgerrors.Errorf("==> 未找到proto文件；Path=%s", dir)
-		return scriptFilePath, err
+		e := errorpkg.ErrorBadRequest("==> 未找到proto文件；Path=%s", dir)
+		return scriptFilePath, errorpkg.WithStack(e)
 	}
 
 	// 执行脚本
@@ -94,13 +93,13 @@ func genProtoScriptFileAndExecScript(dir string) (scriptFilePath string, err err
 		newArgs := append(args, scripts[i])
 		out, err := cmdutil.RunCommand(command, newArgs)
 		if err != nil {
-			err = pkgerrors.WithStack(err)
-			return scriptFilePath, err
+			e := errorpkg.ErrorInternalServer(err.Error())
+			return scriptFilePath, errorpkg.WithStack(e)
 		}
 		if strings.Contains(string(out), "exit status 1") {
 			err = fmt.Errorf("\n\tscript : %s \n\terror : %s", scripts[i], out)
-			err = pkgerrors.WithStack(err)
-			return scriptFilePath, err
+			e := errorpkg.ErrorInternalServer(err.Error())
+			return scriptFilePath, errorpkg.WithStack(e)
 		}
 		fmt.Println("==> Exec : ", scripts[i])
 		fmt.Println("==> Output : ", string(out))
@@ -140,10 +139,10 @@ func (s *Proto) GenProtoScriptFile(filename string, scripts []string) (err error
 		buf.WriteString("\n")
 	}
 
-	err = ioutil.WriteFile(filename, buf.Bytes(), fileutil.DefaultFileMode)
+	err = os.WriteFile(filename, buf.Bytes(), fileutil.DefaultFileMode)
 	if err != nil {
-		err = pkgerrors.WithStack(err)
-		return err
+		e := errorpkg.ErrorInternalServer(err.Error())
+		return errorpkg.WithStack(e)
 	}
 	return err
 }
@@ -166,8 +165,8 @@ func (s *Proto) GenProtoExecScripts(protoFiles []string) (scripts []string) {
 func (s *Proto) FindProtoFiles(dir string) (protoFiles []string, err error) {
 	filePaths, _, err := filepathutil.WaldDir(dir)
 	if err != nil {
-		err = pkgerrors.WithStack(err)
-		return protoFiles, err
+		e := errorpkg.ErrorInternalServer(err.Error())
+		return protoFiles, errorpkg.WithStack(e)
 	}
 
 	for i := range filePaths {
