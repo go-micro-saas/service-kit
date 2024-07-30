@@ -16,11 +16,11 @@ var (
 	_envOnce sync.Once
 )
 
-func SetBootstrap(bootstrap *configpb.Bootstrap) {
+func SetConfig(bootstrap *configpb.Bootstrap) {
 	_bootstrap = bootstrap
 }
 
-func GetBootstrap() (*configpb.Bootstrap, error) {
+func GetConfig() (*configpb.Bootstrap, error) {
 	if _bootstrap == nil {
 		e := errorpkg.ErrorUninitialized("bootstrap is uninitialized")
 		return nil, errorpkg.WithStack(e)
@@ -120,11 +120,11 @@ func TokenEncryptConfig() *configpb.Encrypt_TokenEncrypt {
 	return getBootstrap().GetEncrypt().GetTokenEncrypt()
 }
 
-func ClusterServiceEndpoints() []*configpb.ClusterClientApi_Config {
-	return getBootstrap().GetClusterClientApi().GetClusterClientApi()
+func ClusterClientApis() []*configpb.ClusterClientApi {
+	return getBootstrap().GetClusterClientApi()
 }
-func ThirdPartyEndpoints() []*configpb.ThirdPartyApi_Config {
-	return getBootstrap().GetThirdPartyApi().GetThirdPartyApi()
+func ThirdPartyApis() []*configpb.ThirdPartyApi {
+	return getBootstrap().GetThirdPartyApi()
 }
 
 func SnowflakeConfig() *configpb.Snowflake {

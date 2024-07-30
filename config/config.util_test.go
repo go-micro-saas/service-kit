@@ -21,6 +21,13 @@ func Test_configManager_IsDebugMode(t *testing.T) {
 				t.Errorf("IsDebugMode() = %v, want %v", got, tt.want)
 			}
 			t.Log("config env: ", Env())
+			conf, err := GetConfig()
+			if err != nil {
+				t.Error(err)
+				t.FailNow()
+			}
+			t.Log("==> GetClusterClientApi length: ", len(conf.GetClusterClientApi()))
+			t.Log("==> GetThirdPartyApi length: ", len(conf.GetThirdPartyApi()))
 		})
 	}
 }

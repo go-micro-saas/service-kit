@@ -2,6 +2,7 @@ package configutil
 
 import (
 	_ "embed"
+	stdlog "log"
 	"os"
 	"testing"
 )
@@ -15,10 +16,11 @@ var (
 func TestMain(m *testing.M) {
 	boostrap, err := LoadingFile(configPath)
 	if err != nil {
+		stdlog.Printf("%+v\n", err)
 		panic(err)
 	}
 
-	SetBootstrap(boostrap)
+	SetConfig(boostrap)
 
 	os.Exit(m.Run())
 }

@@ -1,7 +1,7 @@
 # app 程序
 app:
   project_name: go-micro-saas
-  server_name: example-service
+  server_name: ping-service
   # 开发环境；值：DEVELOP、TESTING、PREVIEW、PRODUCTION
   server_env: PRODUCTION
   server_version: v1.0.0

@@ -191,40 +191,55 @@ encrypt:
     sign_key: SlUuI12txD4iBMT6oAYHXezQq38cfhbN
     refresh_key: JZuD1Pq3lnNUi907MdFLyjY8VzrXcBK2
 
-# client_api 客户端api
-client_api:
-  # cluster_service 集群服务
-  # registry_endpoint = ${app.project_name}/${app.server_name}/${app.server_env}/${app.version}
-  # 例子：registry_endpoint = go-micro-saas/DEVELOP/v1.0.0-xxx/user-service
-  # registry_name = ${app.server_name}
-  # http_scheme : 默认值 http
-  cluster_service:
-    - name: ping-service
-      registry_name: ping-service
-      http_host: http://127.0.0.1:10001
-      grpc_host: 127.0.0.1:10002
-    - name: snowflake-service
-      registry_name: snowflake-service
-      http_host: http://127.0.0.1:10101
-      grpc_host: 127.0.0.1:10102
-    - name: user-service
-      registry_name: user-service
-      http_host: http://127.0.0.1:10201
-      grpc_host: 127.0.0.1:10202
-    - name: admin-service
-      registry_name: admin-service
-      http_host: http://127.0.0.1:10201
-      grpc_host: 127.0.0.1:10202
-  third_party:
-    - name: feishu-openapi
-      http_host: https://open.feishu.cn
-      grpc_host: https://open.feishu.cn
-    - name: dingtalk-openapi
-      http_host: https://api.dingtalk.com
-      grpc_host: https://api.dingtalk.com
-    - name: dingtalk-openapi-old
-      http_host: https://oapi.dingtalk.com
-      grpc_host: https://oapi.dingtalk.com
+# cluster_client_api 项目集群客户端api
+# registry_endpoint = ${app.project_name}/${app.server_name}/${app.server_env}/${app.version}
+# 例子：registry_endpoint = go-micro-saas/DEVELOP/v1.0.0-xxx/user-service
+# registry_name = ${app.server_name}
+# http_scheme : 默认值 http
+cluster_client_api:
+  - name: ping-service
+    registry_name: ping-service
+    http_host: http://127.0.0.1:10001
+    grpc_host: 127.0.0.1:10002
+  - name: snowflake-service
+    registry_name: snowflake-service
+    http_host: http://127.0.0.1:10101
+    grpc_host: 127.0.0.1:10102
+  - name: user-service
+    registry_name: user-service
+    http_host: http://127.0.0.1:10201
+    grpc_host: 127.0.0.1:10202
+  - name: admin-service
+    registry_name: admin-service
+    http_host: http://127.0.0.1:10201
+    grpc_host: 127.0.0.1:10202
+
+# third_party_api 第三方api
+third_party_api:
+  - name: feishu-openapi
+    http_host: https://open.feishu.cn
+    grpc_host: https://open.feishu.cn
+    is_debug: false
+    access_id:
+    access_secret:
+    encrypt_id:
+    encrypt_secret:
+  - name: dingtalk-openapi
+    http_host: https://api.dingtalk.com
+    grpc_host: https://api.dingtalk.com
+    is_debug: false
+    access_id:
+    access_secret:
+    encrypt_id:
+    encrypt_secret:
+  - name: dingtalk-openapi-old
+    http_host: https://oapi.dingtalk.com
+    grpc_host: https://oapi.dingtalk.com
+    is_debug: false
+    access_id:
+    access_secret:
+    encrypt_id:
+    encrypt_secret:
 
 # snowflake 雪花算法
 snowflake:
