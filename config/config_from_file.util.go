@@ -13,7 +13,7 @@ import (
 func LoadingFile(filePath string) (*configpb.Bootstrap, error) {
 	stdlog.Println("|==================== LOADING FILE CONFIGURATION : START ====================|")
 	defer stdlog.Println()
-	defer stdlog.Println("|==================== LOADING FILE CONFIGURATION FILE: END ====================|")
+	defer stdlog.Println("|==================== LOADING FILE CONFIGURATION : END ====================|")
 
 	p, err := apputil.RuntimePath()
 	if err != nil {

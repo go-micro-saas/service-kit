@@ -25,16 +25,16 @@ func GetConfig() (*configpb.Bootstrap, error) {
 		e := errorpkg.ErrorUninitialized("bootstrap is uninitialized")
 		return nil, errorpkg.WithStack(e)
 	}
-	return getBootstrap(), nil
+	return getConfig(), nil
 }
 
-func getBootstrap() *configpb.Bootstrap {
+func getConfig() *configpb.Bootstrap {
 	return _bootstrap
 }
 
 func Env() apppkg.RuntimeEnvEnum_RuntimeEnv {
 	_envOnce.Do(func() {
-		_env = apppkg.ParseEnv(getBootstrap().GetApp().GetServerEnv())
+		_env = apppkg.ParseEnv(getConfig().GetApp().GetServerEnv())
 	})
 	return _env
 }
@@ -58,75 +58,75 @@ func IsLocalMode() bool {
 }
 
 func AppConfig() *configpb.App {
-	return getBootstrap().GetApp()
+	return getConfig().GetApp()
 }
 
 func SettingConfig() *configpb.Setting {
-	return getBootstrap().GetSetting()
+	return getConfig().GetSetting()
 }
 func SettingCaptchaConfig() *configpb.Setting_Captcha {
-	return getBootstrap().GetSetting().GetCaptcha()
+	return getConfig().GetSetting().GetCaptcha()
 }
 func SettingLoginConfig() *configpb.Setting_Login {
-	return getBootstrap().GetSetting().GetLogin()
+	return getConfig().GetSetting().GetLogin()
 }
 
 func HTTPConfig() *configpb.Server_HTTP {
-	return getBootstrap().GetServer().GetHttp()
+	return getConfig().GetServer().GetHttp()
 }
 func GRPCConfig() *configpb.Server_GRPC {
-	return getBootstrap().GetServer().GetGrpc()
+	return getConfig().GetServer().GetGrpc()
 }
 
 func LogConfig() *configpb.Log {
-	return getBootstrap().GetLog()
+	return getConfig().GetLog()
 }
 func LogConsoleConfig() *configpb.Log_Console {
-	return getBootstrap().GetLog().GetConsole()
+	return getConfig().GetLog().GetConsole()
 }
 func LogFileConfig() *configpb.Log_File {
-	return getBootstrap().GetLog().GetFile()
+	return getConfig().GetLog().GetFile()
 }
 
 func MysqlConfig() *configpb.MySQL {
-	return getBootstrap().GetMysql()
+	return getConfig().GetMysql()
 }
 func PostgresConfig() *configpb.PSQL {
-	return getBootstrap().GetPsql()
+	return getConfig().GetPsql()
 }
 func RedisConfig() *configpb.Redis {
-	return getBootstrap().GetRedis()
+	return getConfig().GetRedis()
 }
 func RabbitMQConfig() *configpb.Rabbitmq {
-	return getBootstrap().GetRabbitmq()
+	return getConfig().GetRabbitmq()
 }
 func ConsulConfig() *configpb.Consul {
-	return getBootstrap().GetConsul()
+	return getConfig().GetConsul()
 }
 func EtcdConfig() *configpb.Etcd {
-	return getBootstrap().GetEtcd()
+	return getConfig().GetEtcd()
 }
 func Jaeger() *configpb.Jaeger {
-	return getBootstrap().GetJaeger()
+	return getConfig().GetJaeger()
 }
 
 func TransferEncryptConfig() *configpb.Encrypt_TransferEncrypt {
-	return getBootstrap().GetEncrypt().GetTransferEncrypt()
+	return getConfig().GetEncrypt().GetTransferEncrypt()
 }
 func ServiceEncryptConfig() *configpb.Encrypt_ServiceEncrypt {
-	return getBootstrap().GetEncrypt().GetServiceEncrypt()
+	return getConfig().GetEncrypt().GetServiceEncrypt()
 }
 func TokenEncryptConfig() *configpb.Encrypt_TokenEncrypt {
-	return getBootstrap().GetEncrypt().GetTokenEncrypt()
+	return getConfig().GetEncrypt().GetTokenEncrypt()
 }
 
 func ClusterClientApis() []*configpb.ClusterClientApi {
-	return getBootstrap().GetClusterClientApi()
+	return getConfig().GetClusterClientApi()
 }
 func ThirdPartyApis() []*configpb.ThirdPartyApi {
-	return getBootstrap().GetThirdPartyApi()
+	return getConfig().GetThirdPartyApi()
 }
 
 func SnowflakeConfig() *configpb.Snowflake {
-	return getBootstrap().GetSnowflake()
+	return getConfig().GetSnowflake()
 }
