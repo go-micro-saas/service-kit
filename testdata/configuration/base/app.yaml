@@ -1,0 +1,19 @@
+# app 程序
+app:
+  project_name: go-micro-saas
+  server_name: ping-service
+  # 开发环境；值：develop、testing、preview、production
+  server_env: production
+  server_version: v1.0.0
+  # ID: apputil.ID 服务唯一标识; 也用于服务注册发现
+  id: "${app.project_name}:${app.server_name}:${app.server_env}:${app.server_version}"
+  # 配置方式；值：local、consul、etcd
+  config_method: consul
+  config_path_for_base: "${app.project_name}/base-config"
+  config_path_for_server: "${app.project_name}/${app.server_name}/${app.server_env}/${app.version}"
+  http_endpoints:
+    - https://uufff.com
+  grpc_endpoints:
+    - 127.0.0.1:10102
+  metadata:
+    id: "${app.project_name}:${app.server_name}:${app.server_env}:${app.server_version}"
