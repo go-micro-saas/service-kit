@@ -650,7 +650,7 @@ func (m *App) validate(all bool) error {
 
 	// no validation rules for ConfigPathForBase
 
-	// no validation rules for ConfigPathForServer
+	// no validation rules for ConfigPathForService
 
 	// no validation rules for Metadata
 

@@ -41,7 +41,7 @@ func Identifier(appConfig *configpb.App, sep string) string {
 	if appConfig.ServerName != "" {
 		ss = append(ss, appConfig.ServerName)
 	}
-	ss = append(ss, apppkg.ParseEnv(appConfig.ServerEnv).String())
+	ss = append(ss, strings.ToLower(apppkg.ParseEnv(appConfig.ServerEnv).String()))
 	if appConfig.ServerVersion != "" {
 		ss = append(ss, appConfig.ServerVersion)
 	}

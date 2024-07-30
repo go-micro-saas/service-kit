@@ -28,6 +28,8 @@ func Test_configManager_IsDebugMode(t *testing.T) {
 			}
 			t.Log("==> GetClusterClientApi length: ", len(conf.GetClusterClientApi()))
 			t.Log("==> GetThirdPartyApi length: ", len(conf.GetThirdPartyApi()))
+			t.Log("==> conf.GetApp().Id: ", conf.GetApp().GetId())
+			t.Log("==> conf.GetApp().GetMetadata: ", conf.GetApp().GetMetadata())
 		})
 	}
 }

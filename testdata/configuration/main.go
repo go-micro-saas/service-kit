@@ -4,20 +4,20 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	stdlog "log"
-	"os"
-	"path/filepath"
-	"strings"
-
 	"github.com/go-kratos/kratos/v2/config"
 	"github.com/go-kratos/kratos/v2/config/file"
 	configpb "github.com/go-micro-saas/service-kit/api/config"
 	apputil "github.com/go-micro-saas/service-kit/app"
-	setuputil "github.com/go-micro-saas/service-kit/mytest/setup"
+	configutil "github.com/go-micro-saas/service-kit/config"
+	consulutil "github.com/go-micro-saas/service-kit/consul"
 	"github.com/hashicorp/consul/api"
-	consulutil "github.com/ikaiguang/go-srv-kit/data/consul"
-	filepathutil "github.com/ikaiguang/go-srv-kit/kit/filepath"
+	consulpkg "github.com/ikaiguang/go-srv-kit/data/consul"
+	filepathpkg "github.com/ikaiguang/go-srv-kit/kit/filepath"
 	pkgerrors "github.com/pkg/errors"
+	stdlog "log"
+	"os"
+	"path/filepath"
+	"runtime"
 )
 
 const (
@@ -30,6 +30,12 @@ var (
 
 func init() {
 	flag.StringVar(&configFlag, "conf", "", "config path, eg: -conf ./configs")
+}
+
+func currentPath() string {
+	_, file, _, _ := runtime.Caller(0)
+
+	return filepath.Dir(file)
 }
 
 func main() {
@@ -46,13 +52,19 @@ func main() {
 	}()
 
 	// 配置
-	bootConfig, err := loadingConfig()
+	configPath := filepath.Join(currentPath(), "configs")
+	bootConfig, err := configutil.LoadingFile(configPath)
 	if err != nil {
-		return
+		panic(err)
 	}
 
 	// consul
-	consulHandler, err := NewConsulConfig(bootConfig)
+	absPath := configPath
+	//absPath, err := filepath.Abs(configFlag)
+	if err != nil {
+		panic(err)
+	}
+	consulHandler, err := NewConsulConfig(bootConfig, absPath)
 	if err != nil {
 		return
 	}
@@ -102,28 +114,17 @@ type ConsulConfig struct {
 }
 
 // NewConsulConfig 初始化
-func NewConsulConfig(config *configpb.Bootstrap) (*ConsulConfig, error) {
+func NewConsulConfig(config *configpb.Bootstrap, absPath string) (*ConsulConfig, error) {
 	if config.GetConsul() == nil {
 		err := pkgerrors.New("请先配置Consul配置再试")
 		return nil, err
 	}
-	cc, err := consulutil.NewClient(setuputil.ToConsulConfig(config.GetConsul()))
-	if err != nil {
-		return nil, pkgerrors.WithStack(err)
-	}
-	absPath, err := filepath.Abs(configFlag)
+	cc, err := consulpkg.NewClient(consulutil.ToConsulConfig(config.GetConsul()))
 	if err != nil {
 		return nil, pkgerrors.WithStack(err)
 	}
 
-	var serverName string
-	ps := strings.Split(configFlag, string(filepath.Separator))
-	for i := range ps {
-		if strings.HasSuffix(ps[i], serverNameSuffix) {
-			serverName = ps[i]
-			break
-		}
-	}
+	var serverName = config.GetApp().ServerName
 	if serverName == "" {
 		err = fmt.Errorf("查找不到服务名；配置路径: %s， 查找的服务名后缀：%s", configFlag, serverName)
 		return nil, pkgerrors.WithStack(err)
@@ -162,7 +163,7 @@ func (s *ConsulConfig) StoreToConsul() error {
 
 // ReadConfigFiles 读取文件
 func (s *ConsulConfig) ReadConfigFiles() (map[string][]byte, error) {
-	fs, err := filepathutil.ReadDir(s.path)
+	fs, err := filepathpkg.ReadDir(s.path)
 	if err != nil {
 		return nil, pkgerrors.WithStack(err)
 	}
@@ -175,7 +176,7 @@ func (s *ConsulConfig) ReadConfigFiles() (map[string][]byte, error) {
 		err = fmt.Errorf(format, s.config.App.ServerName, configFlag, s.serverName)
 		return nil, pkgerrors.WithStack(err)
 	}
-	consulPath := apputil.ConfigPath(s.config.App)
+	consulPath := apputil.Path(s.config.App)
 	stdlog.Println("|*** 本地配置路径：	", configFlag)
 	stdlog.Println("|*** Consul配置路径：", consulPath)
 	configDataM := make(map[string][]byte)
