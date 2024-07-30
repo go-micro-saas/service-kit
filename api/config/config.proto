@@ -29,9 +29,10 @@ message Bootstrap {
 
   Encrypt encrypt = 401;
 
-  ClientApi client_api = 501;  // 应用程序接口
+  ClusterClientApi cluster_client_api = 501;  // 应用程序接口
+  ThirdPartyApi third_party_api       = 502;  // 应用程序接口
 
-  Snowflake snowflake = 502;
+  Snowflake snowflake = 602;
 }
 
 // App application
@@ -235,16 +236,26 @@ message Encrypt {
   TokenEncrypt token_encrypt       = 3;
 }
 
-// ClientApi 客户端api
-message ClientApi {
-  message Endpoint {
+// ClusterClientApi 项目集群客户端api
+message ClusterClientApi {
+  message Config {
     string name          = 1;
     string registry_name = 2;
     string http_host     = 3;
     string grpc_host     = 4;
   }
-  repeated Endpoint cluster_service = 1;
-  repeated Endpoint third_party     = 2;
+  repeated Config cluster_client_api = 1;
+}
+
+// ThirdPartyApi 第三方api
+message ThirdPartyApi {
+  message Config {
+    string name          = 1;
+    string registry_name = 2;
+    string http_host     = 3;
+    string grpc_host     = 4;
+  }
+  repeated Config third_party_api = 1;
 }
 
 // Snowflake snowflake

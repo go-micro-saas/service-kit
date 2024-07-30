@@ -406,11 +406,11 @@ func (m *Bootstrap) validate(all bool) error {
 	}
 
 	if all {
-		switch v := interface{}(m.GetClientApi()).(type) {
+		switch v := interface{}(m.GetClusterClientApi()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
 				errors = append(errors, BootstrapValidationError{
-					field:  "ClientApi",
+					field:  "ClusterClientApi",
 					reason: "embedded message failed validation",
 					cause:  err,
 				})
@@ -418,16 +418,45 @@ func (m *Bootstrap) validate(all bool) error {
 		case interface{ Validate() error }:
 			if err := v.Validate(); err != nil {
 				errors = append(errors, BootstrapValidationError{
-					field:  "ClientApi",
+					field:  "ClusterClientApi",
 					reason: "embedded message failed validation",
 					cause:  err,
 				})
 			}
 		}
-	} else if v, ok := interface{}(m.GetClientApi()).(interface{ Validate() error }); ok {
+	} else if v, ok := interface{}(m.GetClusterClientApi()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return BootstrapValidationError{
-				field:  "ClientApi",
+				field:  "ClusterClientApi",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetThirdPartyApi()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, BootstrapValidationError{
+					field:  "ThirdPartyApi",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, BootstrapValidationError{
+					field:  "ThirdPartyApi",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetThirdPartyApi()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return BootstrapValidationError{
+				field:  "ThirdPartyApi",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -2528,45 +2557,45 @@ var _ interface {
 	ErrorName() string
 } = EncryptValidationError{}
 
-// Validate checks the field values on ClientApi with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
-func (m *ClientApi) Validate() error {
+// Validate checks the field values on ClusterClientApi with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *ClusterClientApi) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on ClientApi with the rules defined in
-// the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in ClientApiMultiError, or nil
-// if none found.
-func (m *ClientApi) ValidateAll() error {
+// ValidateAll checks the field values on ClusterClientApi with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ClusterClientApiMultiError, or nil if none found.
+func (m *ClusterClientApi) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *ClientApi) validate(all bool) error {
+func (m *ClusterClientApi) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
 
-	for idx, item := range m.GetClusterService() {
+	for idx, item := range m.GetClusterClientApi() {
 		_, _ = idx, item
 
 		if all {
 			switch v := interface{}(item).(type) {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, ClientApiValidationError{
-						field:  fmt.Sprintf("ClusterService[%v]", idx),
+					errors = append(errors, ClusterClientApiValidationError{
+						field:  fmt.Sprintf("ClusterClientApi[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
 					})
 				}
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
-					errors = append(errors, ClientApiValidationError{
-						field:  fmt.Sprintf("ClusterService[%v]", idx),
+					errors = append(errors, ClusterClientApiValidationError{
+						field:  fmt.Sprintf("ClusterClientApi[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
 					})
@@ -2574,42 +2603,8 @@ func (m *ClientApi) validate(all bool) error {
 			}
 		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return ClientApiValidationError{
-					field:  fmt.Sprintf("ClusterService[%v]", idx),
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	}
-
-	for idx, item := range m.GetThirdParty() {
-		_, _ = idx, item
-
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, ClientApiValidationError{
-						field:  fmt.Sprintf("ThirdParty[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, ClientApiValidationError{
-						field:  fmt.Sprintf("ThirdParty[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ClientApiValidationError{
-					field:  fmt.Sprintf("ThirdParty[%v]", idx),
+				return ClusterClientApiValidationError{
+					field:  fmt.Sprintf("ClusterClientApi[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
@@ -2619,18 +2614,19 @@ func (m *ClientApi) validate(all bool) error {
 	}
 
 	if len(errors) > 0 {
-		return ClientApiMultiError(errors)
+		return ClusterClientApiMultiError(errors)
 	}
 
 	return nil
 }
 
-// ClientApiMultiError is an error wrapping multiple validation errors returned
-// by ClientApi.ValidateAll() if the designated constraints aren't met.
-type ClientApiMultiError []error
+// ClusterClientApiMultiError is an error wrapping multiple validation errors
+// returned by ClusterClientApi.ValidateAll() if the designated constraints
+// aren't met.
+type ClusterClientApiMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m ClientApiMultiError) Error() string {
+func (m ClusterClientApiMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -2639,11 +2635,11 @@ func (m ClientApiMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m ClientApiMultiError) AllErrors() []error { return m }
+func (m ClusterClientApiMultiError) AllErrors() []error { return m }
 
-// ClientApiValidationError is the validation error returned by
-// ClientApi.Validate if the designated constraints aren't met.
-type ClientApiValidationError struct {
+// ClusterClientApiValidationError is the validation error returned by
+// ClusterClientApi.Validate if the designated constraints aren't met.
+type ClusterClientApiValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -2651,22 +2647,22 @@ type ClientApiValidationError struct {
 }
 
 // Field function returns field value.
-func (e ClientApiValidationError) Field() string { return e.field }
+func (e ClusterClientApiValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e ClientApiValidationError) Reason() string { return e.reason }
+func (e ClusterClientApiValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e ClientApiValidationError) Cause() error { return e.cause }
+func (e ClusterClientApiValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e ClientApiValidationError) Key() bool { return e.key }
+func (e ClusterClientApiValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e ClientApiValidationError) ErrorName() string { return "ClientApiValidationError" }
+func (e ClusterClientApiValidationError) ErrorName() string { return "ClusterClientApiValidationError" }
 
 // Error satisfies the builtin error interface
-func (e ClientApiValidationError) Error() string {
+func (e ClusterClientApiValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -2678,14 +2674,14 @@ func (e ClientApiValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sClientApi.%s: %s%s",
+		"invalid %sClusterClientApi.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = ClientApiValidationError{}
+var _ error = ClusterClientApiValidationError{}
 
 var _ interface {
 	Field() string
@@ -2693,7 +2689,141 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = ClientApiValidationError{}
+} = ClusterClientApiValidationError{}
+
+// Validate checks the field values on ThirdPartyApi with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *ThirdPartyApi) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ThirdPartyApi with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in ThirdPartyApiMultiError, or
+// nil if none found.
+func (m *ThirdPartyApi) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ThirdPartyApi) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	for idx, item := range m.GetThirdPartyApi() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ThirdPartyApiValidationError{
+						field:  fmt.Sprintf("ThirdPartyApi[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ThirdPartyApiValidationError{
+						field:  fmt.Sprintf("ThirdPartyApi[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ThirdPartyApiValidationError{
+					field:  fmt.Sprintf("ThirdPartyApi[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return ThirdPartyApiMultiError(errors)
+	}
+
+	return nil
+}
+
+// ThirdPartyApiMultiError is an error wrapping multiple validation errors
+// returned by ThirdPartyApi.ValidateAll() if the designated constraints
+// aren't met.
+type ThirdPartyApiMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ThirdPartyApiMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ThirdPartyApiMultiError) AllErrors() []error { return m }
+
+// ThirdPartyApiValidationError is the validation error returned by
+// ThirdPartyApi.Validate if the designated constraints aren't met.
+type ThirdPartyApiValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ThirdPartyApiValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ThirdPartyApiValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ThirdPartyApiValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ThirdPartyApiValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ThirdPartyApiValidationError) ErrorName() string { return "ThirdPartyApiValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ThirdPartyApiValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sThirdPartyApi.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ThirdPartyApiValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ThirdPartyApiValidationError{}
 
 // Validate checks the field values on Snowflake with the rules defined in the
 // proto definition for this message. If any rules are violated, the first
@@ -3975,22 +4105,22 @@ var _ interface {
 	ErrorName() string
 } = Encrypt_TokenEncryptValidationError{}
 
-// Validate checks the field values on ClientApi_Endpoint with the rules
+// Validate checks the field values on ClusterClientApi_Config with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
-func (m *ClientApi_Endpoint) Validate() error {
+func (m *ClusterClientApi_Config) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on ClientApi_Endpoint with the rules
-// defined in the proto definition for this message. If any rules are
+// ValidateAll checks the field values on ClusterClientApi_Config with the
+// rules defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// ClientApi_EndpointMultiError, or nil if none found.
-func (m *ClientApi_Endpoint) ValidateAll() error {
+// ClusterClientApi_ConfigMultiError, or nil if none found.
+func (m *ClusterClientApi_Config) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *ClientApi_Endpoint) validate(all bool) error {
+func (m *ClusterClientApi_Config) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -4006,19 +4136,19 @@ func (m *ClientApi_Endpoint) validate(all bool) error {
 	// no validation rules for GrpcHost
 
 	if len(errors) > 0 {
-		return ClientApi_EndpointMultiError(errors)
+		return ClusterClientApi_ConfigMultiError(errors)
 	}
 
 	return nil
 }
 
-// ClientApi_EndpointMultiError is an error wrapping multiple validation errors
-// returned by ClientApi_Endpoint.ValidateAll() if the designated constraints
-// aren't met.
-type ClientApi_EndpointMultiError []error
+// ClusterClientApi_ConfigMultiError is an error wrapping multiple validation
+// errors returned by ClusterClientApi_Config.ValidateAll() if the designated
+// constraints aren't met.
+type ClusterClientApi_ConfigMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m ClientApi_EndpointMultiError) Error() string {
+func (m ClusterClientApi_ConfigMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -4027,11 +4157,11 @@ func (m ClientApi_EndpointMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m ClientApi_EndpointMultiError) AllErrors() []error { return m }
+func (m ClusterClientApi_ConfigMultiError) AllErrors() []error { return m }
 
-// ClientApi_EndpointValidationError is the validation error returned by
-// ClientApi_Endpoint.Validate if the designated constraints aren't met.
-type ClientApi_EndpointValidationError struct {
+// ClusterClientApi_ConfigValidationError is the validation error returned by
+// ClusterClientApi_Config.Validate if the designated constraints aren't met.
+type ClusterClientApi_ConfigValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -4039,24 +4169,24 @@ type ClientApi_EndpointValidationError struct {
 }
 
 // Field function returns field value.
-func (e ClientApi_EndpointValidationError) Field() string { return e.field }
+func (e ClusterClientApi_ConfigValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e ClientApi_EndpointValidationError) Reason() string { return e.reason }
+func (e ClusterClientApi_ConfigValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e ClientApi_EndpointValidationError) Cause() error { return e.cause }
+func (e ClusterClientApi_ConfigValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e ClientApi_EndpointValidationError) Key() bool { return e.key }
+func (e ClusterClientApi_ConfigValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e ClientApi_EndpointValidationError) ErrorName() string {
-	return "ClientApi_EndpointValidationError"
+func (e ClusterClientApi_ConfigValidationError) ErrorName() string {
+	return "ClusterClientApi_ConfigValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e ClientApi_EndpointValidationError) Error() string {
+func (e ClusterClientApi_ConfigValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -4068,14 +4198,14 @@ func (e ClientApi_EndpointValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sClientApi_Endpoint.%s: %s%s",
+		"invalid %sClusterClientApi_Config.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = ClientApi_EndpointValidationError{}
+var _ error = ClusterClientApi_ConfigValidationError{}
 
 var _ interface {
 	Field() string
@@ -4083,4 +4213,114 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = ClientApi_EndpointValidationError{}
+} = ClusterClientApi_ConfigValidationError{}
+
+// Validate checks the field values on ThirdPartyApi_Config with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ThirdPartyApi_Config) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ThirdPartyApi_Config with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ThirdPartyApi_ConfigMultiError, or nil if none found.
+func (m *ThirdPartyApi_Config) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ThirdPartyApi_Config) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Name
+
+	// no validation rules for RegistryName
+
+	// no validation rules for HttpHost
+
+	// no validation rules for GrpcHost
+
+	if len(errors) > 0 {
+		return ThirdPartyApi_ConfigMultiError(errors)
+	}
+
+	return nil
+}
+
+// ThirdPartyApi_ConfigMultiError is an error wrapping multiple validation
+// errors returned by ThirdPartyApi_Config.ValidateAll() if the designated
+// constraints aren't met.
+type ThirdPartyApi_ConfigMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ThirdPartyApi_ConfigMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ThirdPartyApi_ConfigMultiError) AllErrors() []error { return m }
+
+// ThirdPartyApi_ConfigValidationError is the validation error returned by
+// ThirdPartyApi_Config.Validate if the designated constraints aren't met.
+type ThirdPartyApi_ConfigValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ThirdPartyApi_ConfigValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ThirdPartyApi_ConfigValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ThirdPartyApi_ConfigValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ThirdPartyApi_ConfigValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ThirdPartyApi_ConfigValidationError) ErrorName() string {
+	return "ThirdPartyApi_ConfigValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ThirdPartyApi_ConfigValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sThirdPartyApi_Config.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ThirdPartyApi_ConfigValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ThirdPartyApi_ConfigValidationError{}

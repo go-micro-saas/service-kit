@@ -1,0 +1,10 @@
+third_party:
+  - name: feishu-openapi
+    http_host: https://open.feishu.cn
+    grpc_host: https://open.feishu.cn
+  - name: dingtalk-openapi
+    http_host: https://api.dingtalk.com
+    grpc_host: https://api.dingtalk.com
+  - name: dingtalk-openapi-old
+    http_host: https://oapi.dingtalk.com
+    grpc_host: https://oapi.dingtalk.com

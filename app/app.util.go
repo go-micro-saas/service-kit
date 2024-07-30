@@ -24,6 +24,10 @@ func ID(appConfig *configpb.App) string {
 }
 
 func Path(appConfig *configpb.App) string {
+	return Identifier(appConfig, PathSep)
+}
+
+func AbsPath(appConfig *configpb.App) string {
 	return PathSep + Identifier(appConfig, PathSep)
 }
 

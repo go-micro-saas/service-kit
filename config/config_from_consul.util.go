@@ -22,7 +22,7 @@ func LoadingConfigFromConsul(consulClient *consulapi.Client, appConfig *configpb
 	defer stdlog.Println("|==================== LOADING CONFIGURATION FROM: END ====================|")
 
 	// 配置source
-	consulKeyPath := apputil.ConfigPath(appConfig)
+	consulKeyPath := apputil.Path(appConfig)
 	stdlog.Println("|*** LOADING: path to consul configuration: ", consulKeyPath)
 	cs, err := consul.New(consulClient, consul.WithPath(consulKeyPath))
 	if err != nil {

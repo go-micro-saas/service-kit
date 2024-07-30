@@ -120,11 +120,11 @@ func TokenEncryptConfig() *configpb.Encrypt_TokenEncrypt {
 	return getBootstrap().GetEncrypt().GetTokenEncrypt()
 }
 
-func ClusterServiceEndpoints() []*configpb.ClientApi_Endpoint {
-	return getBootstrap().GetClientApi().ClusterService
+func ClusterServiceEndpoints() []*configpb.ClusterClientApi_Config {
+	return getBootstrap().GetClusterClientApi().GetClusterClientApi()
 }
-func ThirdPartyEndpoints() []*configpb.ClientApi_Endpoint {
-	return getBootstrap().GetClientApi().ThirdParty
+func ThirdPartyEndpoints() []*configpb.ThirdPartyApi_Config {
+	return getBootstrap().GetThirdPartyApi().GetThirdPartyApi()
 }
 
 func SnowflakeConfig() *configpb.Snowflake {
