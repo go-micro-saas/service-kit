@@ -9,7 +9,7 @@ app:
   id: "${app.project_name}:${app.server_name}:${app.server_env}:${app.server_version}"
   # 配置方式；值：local、consul、etcd
   config_method: consul
-  config_path_for_base: "${app.project_name}/base-config"
+  config_path_for_base: "${app.project_name}/general-config"
   config_path_for_server: "${app.project_name}/${app.server_name}/${app.server_env}/${app.version}"
   http_endpoints:
     - https://uufff.com

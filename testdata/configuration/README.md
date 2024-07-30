@@ -18,7 +18,7 @@
 go run testdata/configuration/main.go \
   -consul_config consul \
   -source_dir base \
-  -store_dir go-micro-saas/base-config
+  -store_dir go-micro-saas/general-config
 
 # service config
 go run testdata/configuration/main.go \
