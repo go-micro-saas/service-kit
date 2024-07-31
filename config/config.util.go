@@ -97,7 +97,7 @@ func PostgresConfig() *configpb.PSQL {
 func RedisConfig() *configpb.Redis {
 	return getConfig().GetRedis()
 }
-func RabbitMQConfig() *configpb.Rabbitmq {
+func RabbitmqConfig() *configpb.Rabbitmq {
 	return getConfig().GetRabbitmq()
 }
 func ConsulConfig() *configpb.Consul {
@@ -106,7 +106,7 @@ func ConsulConfig() *configpb.Consul {
 func EtcdConfig() *configpb.Etcd {
 	return getConfig().GetEtcd()
 }
-func Jaeger() *configpb.Jaeger {
+func JaegerConfig() *configpb.Jaeger {
 	return getConfig().GetJaeger()
 }
 
