@@ -1,12 +1,12 @@
 package mysqlutil
 
 import (
+	"gorm.io/gorm"
 	"sync"
 
 	configpb "github.com/go-micro-saas/service-kit/api/config"
 	loggerutil "github.com/go-micro-saas/service-kit/logger"
 	"github.com/google/wire"
-	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 )
 
 var ProviderSet = wire.NewSet(NewSingletonMysqlManager)
@@ -27,10 +27,6 @@ func NewSingletonMysqlManager(conf *configpb.MySQL, loggerManager loggerutil.Log
 	return singletonMysqlManager, err
 }
 
-func GetMysqlManager() (MysqlManager, error) {
-	if singletonMysqlManager == nil {
-		e := errorpkg.ErrorUninitialized("")
-		return nil, errorpkg.WithStack(e)
-	}
-	return singletonMysqlManager, nil
+func GetMysqlManager(mysqlManager MysqlManager) (*gorm.DB, error) {
+	return mysqlManager.GetDB()
 }

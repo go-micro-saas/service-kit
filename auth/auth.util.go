@@ -11,28 +11,28 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-type authManager struct {
+type authInstance struct {
 	conf          *configpb.Encrypt_TokenEncrypt
 	redisCC       redis.UniversalClient
 	loggerManager loggerutil.LoggerManager
 
-	// 不要直接使用 s.tokenXxx, 请使用 GetAuthorizationManager()
+	// 不要直接使用 s.tokenXxx, 请使用 GetAuthCollection()
 	tokenManager     authpkg.TokenManger
 	tokenAuthRepo    authpkg.AuthRepo
 	tokenManagerOnce sync.Once
 }
 
-type AuthorizationManager struct {
+type AuthCollection struct {
 	TokenManager authpkg.TokenManger
 	AuthManager  authpkg.AuthRepo
 }
 
-type AuthManager interface {
+type AuthInstance interface {
 	GetTokenManger() (authpkg.TokenManger, error)
 	GetAuthManger() (authpkg.AuthRepo, error)
 }
 
-func NewAuthManager(conf *configpb.Encrypt_TokenEncrypt, redisCC redis.UniversalClient, loggerManager loggerutil.LoggerManager) (AuthManager, error) {
+func NewAuthInstance(conf *configpb.Encrypt_TokenEncrypt, redisCC redis.UniversalClient, loggerManager loggerutil.LoggerManager) (AuthInstance, error) {
 	if conf == nil {
 		e := errorpkg.ErrorBadRequest("[CONFIGURATION] config error, key = encrypt.token_encrypt")
 		return nil, errorpkg.WithStack(e)
@@ -45,40 +45,40 @@ func NewAuthManager(conf *configpb.Encrypt_TokenEncrypt, redisCC redis.Universal
 		e := errorpkg.ErrorBadRequest("[CONFIGURATION] config error, key = encrypt.token_encrypt.refresh_key")
 		return nil, errorpkg.WithStack(e)
 	}
-	return &authManager{
+	return &authInstance{
 		conf:          conf,
 		redisCC:       redisCC,
 		loggerManager: loggerManager,
 	}, nil
 }
 
-func (s *authManager) GetAuthorizationManager() (*AuthorizationManager, error) {
+func (s *authInstance) GetAuthCollection() (*AuthCollection, error) {
 	err := s.loadingTokenManagerOnce()
 	if err != nil {
 		return nil, err
 	}
-	return &AuthorizationManager{
+	return &AuthCollection{
 		TokenManager: s.tokenManager,
 		AuthManager:  s.tokenAuthRepo,
 	}, nil
 }
 
-func (s *authManager) GetTokenManger() (authpkg.TokenManger, error) {
-	manager, err := s.GetAuthorizationManager()
+func (s *authInstance) GetTokenManger() (authpkg.TokenManger, error) {
+	manager, err := s.GetAuthCollection()
 	if err != nil {
 		return nil, err
 	}
 	return manager.TokenManager, nil
 }
-func (s *authManager) GetAuthManger() (authpkg.AuthRepo, error) {
-	manager, err := s.GetAuthorizationManager()
+func (s *authInstance) GetAuthManger() (authpkg.AuthRepo, error) {
+	manager, err := s.GetAuthCollection()
 	if err != nil {
 		return nil, err
 	}
 	return manager.AuthManager, nil
 }
 
-func (s *authManager) loadingTokenManagerOnce() error {
+func (s *authInstance) loadingTokenManagerOnce() error {
 	var err error
 	s.tokenManagerOnce.Do(func() {
 		s.tokenManager, s.tokenAuthRepo, err = s.loadingTokenManager()
@@ -89,7 +89,7 @@ func (s *authManager) loadingTokenManagerOnce() error {
 	return err
 }
 
-func (s *authManager) loadingTokenManager() (authpkg.TokenManger, authpkg.AuthRepo, error) {
+func (s *authInstance) loadingTokenManager() (authpkg.TokenManger, authpkg.AuthRepo, error) {
 	stdlog.Println("|*** LOADING: TokenManger: ...")
 	logger, err := s.loggerManager.GetLoggerForMiddleware()
 	if err != nil {
