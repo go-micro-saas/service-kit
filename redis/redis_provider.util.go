@@ -1,11 +1,11 @@
 package redisutil
 
 import (
+	"github.com/redis/go-redis/v9"
 	"sync"
 
 	configpb "github.com/go-micro-saas/service-kit/api/config"
 	"github.com/google/wire"
-	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 )
 
 var ProviderSet = wire.NewSet(NewSingletonRedisManager)
@@ -26,10 +26,6 @@ func NewSingletonRedisManager(conf *configpb.Redis) (RedisManager, error) {
 	return singletonRedisManager, err
 }
 
-func GetRedisManager() (RedisManager, error) {
-	if singletonRedisManager == nil {
-		e := errorpkg.ErrorUninitialized("")
-		return nil, errorpkg.WithStack(e)
-	}
-	return singletonRedisManager, nil
+func GetRedisClient(redisManager RedisManager) (redis.UniversalClient, error) {
+	return redisManager.GetClient()
 }

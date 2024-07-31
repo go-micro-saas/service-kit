@@ -1,10 +1,10 @@
 package loggerutil
 
 import (
+	"github.com/go-kratos/kratos/v2/log"
 	configpb "github.com/go-micro-saas/service-kit/api/config"
-	configutil "github.com/go-micro-saas/service-kit/config"
 	"github.com/google/wire"
-	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
+	"io"
 	"sync"
 )
 
@@ -26,18 +26,18 @@ func NewSingletonLoggerManager(conf *configpb.Log, appConfig *configpb.App) (Log
 	return singletonLoggerManager, err
 }
 
-func GetLoggerManager() (LoggerManager, error) {
-	//if singletonLoggerManager == nil {
-	//	return AttemptNewLoggerManager()
-	//}
-	if singletonLoggerManager == nil {
-		e := errorpkg.ErrorUninitialized("")
-		return nil, errorpkg.WithStack(e)
-	}
-	return singletonLoggerManager, nil
+func GetWriter(loggerManager LoggerManager) (io.Writer, error) {
+	return loggerManager.GetWriter()
 }
 
-// AttemptNewLoggerManager 尝试初始化
-func AttemptNewLoggerManager() (LoggerManager, error) {
-	return NewSingletonLoggerManager(configutil.LogConfig(), configutil.AppConfig())
+func GetLogger(loggerManager LoggerManager) (log.Logger, error) {
+	return loggerManager.GetLogger()
+}
+
+func GetLoggerForMiddleware(loggerManager LoggerManager) (log.Logger, error) {
+	return loggerManager.GetLoggerForMiddleware()
+}
+
+func GetLoggerForHelper(loggerManager LoggerManager) (log.Logger, error) {
+	return loggerManager.GetLoggerForHelper()
 }

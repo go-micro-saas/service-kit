@@ -27,6 +27,6 @@ func NewSingletonMysqlManager(conf *configpb.MySQL, loggerManager loggerutil.Log
 	return singletonMysqlManager, err
 }
 
-func GetMysqlManager(mysqlManager MysqlManager) (*gorm.DB, error) {
+func GetDBConn(mysqlManager MysqlManager) (*gorm.DB, error) {
 	return mysqlManager.GetDB()
 }

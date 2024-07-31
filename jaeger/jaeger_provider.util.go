@@ -1,11 +1,11 @@
 package jaegerutil
 
 import (
+	"go.opentelemetry.io/otel/exporters/jaeger"
 	"sync"
 
 	configpb "github.com/go-micro-saas/service-kit/api/config"
 	"github.com/google/wire"
-	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 )
 
 var ProviderSet = wire.NewSet(NewSingletonJaegerManager)
@@ -26,10 +26,6 @@ func NewSingletonJaegerManager(conf *configpb.Jaeger) (JaegerManager, error) {
 	return singletonJaegerManager, err
 }
 
-func GetJaegerManager() (JaegerManager, error) {
-	if singletonJaegerManager == nil {
-		e := errorpkg.ErrorUninitialized("")
-		return nil, errorpkg.WithStack(e)
-	}
-	return singletonJaegerManager, nil
+func GetJaegerExporter(jaegerManager JaegerManager) (*jaeger.Exporter, error) {
+	return jaegerManager.GetExporter()
 }

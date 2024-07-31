@@ -26,6 +26,6 @@ func NewSingletonConsulManager(conf *configpb.Consul) (ConsulManager, error) {
 	return singletonConsulManager, err
 }
 
-func GetConsulManager(consulManager ConsulManager) (*consulapi.Client, error) {
+func GetConsulClient(consulManager ConsulManager) (*consulapi.Client, error) {
 	return consulManager.GetClient()
 }

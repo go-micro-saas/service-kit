@@ -1,24 +1,19 @@
 package tracerutil
 
 import (
+	"go.opentelemetry.io/otel/exporters/jaeger"
 	stdlog "log"
 
 	configpb "github.com/go-micro-saas/service-kit/api/config"
 	apputil "github.com/go-micro-saas/service-kit/app"
-	jaegerutil "github.com/go-micro-saas/service-kit/jaeger"
 	middlewarepkg "github.com/ikaiguang/go-srv-kit/kratos/middleware"
 )
 
-func InitTracerWithJaegerExporter(appConfig *configpb.App, manager jaegerutil.JaegerManager) error {
+func InitTracerWithJaegerExporter(appConfig *configpb.App, jaegerExporter *jaeger.Exporter) error {
 	stdlog.Println("|*** LOADING: Tracer: ...")
 	// Create the Jaeger exporter
-	var opts []middlewarepkg.TracerOption
-	if manager.Enable() {
-		exp, err := manager.GetExporter()
-		if err != nil {
-			return err
-		}
-		opts = append(opts, middlewarepkg.WithTracerJaegerExporter(exp))
+	var opts = []middlewarepkg.TracerOption{
+		middlewarepkg.WithTracerJaegerExporter(jaegerExporter),
 	}
 	return middlewarepkg.SetTracer(apputil.ID(appConfig), opts...)
 }

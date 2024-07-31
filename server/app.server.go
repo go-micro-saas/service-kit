@@ -22,7 +22,11 @@ func InitTracer(conf *configpb.Bootstrap) error {
 		if err != nil {
 			return err
 		}
-		return tracerutil.InitTracerWithJaegerExporter(conf.GetApp(), jaegerManager)
+		jaegerExporter, err := jaegerManager.GetExporter()
+		if err != nil {
+			return err
+		}
+		return tracerutil.InitTracerWithJaegerExporter(conf.GetApp(), jaegerExporter)
 	}
 	return tracerutil.InitTracer(conf.GetApp())
 }

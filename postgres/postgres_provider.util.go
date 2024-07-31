@@ -1,12 +1,12 @@
 package postgresutil
 
 import (
+	"gorm.io/gorm"
 	"sync"
 
 	configpb "github.com/go-micro-saas/service-kit/api/config"
 	loggerutil "github.com/go-micro-saas/service-kit/logger"
 	"github.com/google/wire"
-	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 )
 
 var ProviderSet = wire.NewSet(NewSingletonPostgresManager)
@@ -27,10 +27,6 @@ func NewSingletonPostgresManager(conf *configpb.PSQL, loggerManager loggerutil.L
 	return singletonPostgresManager, err
 }
 
-func GetPostgresManager() (PostgresManager, error) {
-	if singletonPostgresManager == nil {
-		e := errorpkg.ErrorUninitialized("")
-		return nil, errorpkg.WithStack(e)
-	}
-	return singletonPostgresManager, nil
+func GetDBConn(postgresManager PostgresManager) (*gorm.DB, error) {
+	return postgresManager.GetDB()
 }
