@@ -752,11 +752,15 @@ func (m *Setting) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for EnableServiceRegistry
+	// no validation rules for EnableJaegerTracer
+
+	// no validation rules for EnableConsulRegistry
 
 	// no validation rules for EnableMigrateDb
 
 	// no validation rules for EnableScheduleTask
+
+	// no validation rules for EnableSnowflakeWorker
 
 	if all {
 		switch v := interface{}(m.GetCaptcha()).(type) {

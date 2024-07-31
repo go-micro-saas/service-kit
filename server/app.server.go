@@ -6,33 +6,44 @@ import (
 	"github.com/go-kratos/kratos/v2/transport"
 	configpb "github.com/go-micro-saas/service-kit/api/config"
 	apputil "github.com/go-micro-saas/service-kit/app"
+	consulutil "github.com/go-micro-saas/service-kit/consul"
+	jaegerutil "github.com/go-micro-saas/service-kit/jaeger"
 	middlewareutil "github.com/go-micro-saas/service-kit/middleware"
-	consulapi "github.com/hashicorp/consul/api"
+	tracerutil "github.com/go-micro-saas/service-kit/tracer"
 	authpkg "github.com/ikaiguang/go-srv-kit/kratos/auth"
 	registrypkg "github.com/ikaiguang/go-srv-kit/kratos/registry"
 	pkgerrors "github.com/pkg/errors"
 	stdlog "log"
 )
 
+func InitTracer(conf *configpb.Bootstrap) error {
+	if conf.GetSetting().GetEnableJaegerTracer() {
+		jaegerManager, err := jaegerutil.NewSingletonJaegerManager(conf.GetJaeger())
+		if err != nil {
+			return err
+		}
+		return tracerutil.InitTracerWithJaegerExporter(conf.GetApp(), jaegerManager)
+	}
+	return tracerutil.InitTracer(conf.GetApp())
+}
+
 // NewApp .
 func NewApp(
-	appConfig *configpb.App,
-	httpConfig *configpb.Server_HTTP,
-	grpcConfig *configpb.Server_GRPC,
+	conf *configpb.Bootstrap,
 	logger log.Logger,
 	loggerForMiddleware log.Logger,
 	authManager authpkg.AuthRepo,
 	authWhiteList map[string]middlewareutil.TransportServiceKind,
-	settingConfig *configpb.Setting,
-	consulClient *consulapi.Client,
 ) (app *kratos.App, err error) {
-	//tracerutil.InitTracer()
-	//tracerutil.InitTracerWithJaegerExporter()
+	if err := InitTracer(conf); err != nil {
+		return app, err
+	}
 
 	// 服务
 	var servers []transport.Server
 
 	// http
+	httpConfig := conf.GetServer().GetHttp()
 	if httpConfig.GetEnable() {
 		hs, err := NewHTTPServer(httpConfig, loggerForMiddleware, authManager, authWhiteList)
 		if err != nil {
@@ -40,6 +51,9 @@ func NewApp(
 		}
 		servers = append(servers, hs)
 	}
+
+	// grpc
+	grpcConfig := conf.GetServer().GetGrpc()
 	if grpcConfig.GetEnable() {
 		gs, err := NewGRPCServer(grpcConfig, loggerForMiddleware, authManager, authWhiteList)
 		if err != nil {
@@ -53,6 +67,7 @@ func NewApp(
 	}
 
 	// appid
+	appConfig := conf.GetApp()
 	appID := apputil.ID(appConfig)
 	appConfig.Id = appID
 	if appConfig.GetMetadata() == nil {
@@ -73,22 +88,22 @@ func NewApp(
 	)
 
 	// 启用服务注册中心
-	if settingConfig.GetEnableServiceRegistry() {
+	if conf.GetSetting().GetEnableConsulRegistry() {
 		stdlog.Println("|*** 加载：服务注册与发现")
-
+		consulManager, err := consulutil.NewSingletonConsulManager(conf.GetConsul())
+		if err != nil {
+			return app, err
+		}
+		consulClient, err := consulManager.GetClient()
+		if err != nil {
+			return app, err
+		}
 		r, err := registrypkg.NewConsulRegistry(consulClient)
 		if err != nil {
 			return app, err
 		}
-		//registrypkg.SetRegistryType(registrypkg.RegistryTypeConsul)
 		appOptions = append(appOptions, kratos.Registrar(r))
 	}
-
-	// 路由；放置在"服务注册"后，否则 engineHandler.RegistryType 不生效
-	//err = routes.RegisterRoutes(hs, gs)
-	//if err != nil {
-	//	return app, err
-	//}
 
 	app = kratos.New(appOptions...)
 	return app, err

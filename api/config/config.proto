@@ -68,9 +68,11 @@ message Setting {
     uint32 password_err_daily_limit_times                 = 4;  // 当日密码错误上限
   }
 
-  bool enable_service_registry = 1;  // 启用服务注册与发现
-  bool enable_migrate_db       = 2;  // 启用数据库迁移
-  bool enable_schedule_task    = 3;  // 启用定时任务、计划任务
+  bool enable_jaeger_tracer    = 1;  // 启用jaeger追踪
+  bool enable_consul_registry  = 2;  // 启用服务注册与发现
+  bool enable_migrate_db       = 3;  // 启用数据库迁移
+  bool enable_schedule_task    = 4;  // 启用定时任务、计划任务
+  bool enable_snowflake_worker = 5;  // 雪花算法节点
 
   Captcha captcha = 101;
   Login login     = 201;
