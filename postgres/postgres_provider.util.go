@@ -6,10 +6,7 @@ import (
 
 	configpb "github.com/go-micro-saas/service-kit/api/config"
 	loggerutil "github.com/go-micro-saas/service-kit/logger"
-	"github.com/google/wire"
 )
-
-var ProviderSet = wire.NewSet(NewSingletonPostgresManager)
 
 var (
 	singletonMutex           sync.Once

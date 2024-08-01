@@ -6,8 +6,8 @@ import (
 	"testing"
 )
 
-// go test -v -count=1 ./setup/ -test.run=TestSetup
-func TestSetup(t *testing.T) {
+// go test -v -count=1 ./setup/ -test.run=TestNewLauncherManager
+func TestNewLauncherManager(t *testing.T) {
 	confPath := configutil.CurrentPath()
 	confPath = filepath.Join(confPath, "config_example.yaml")
 	type args struct {
@@ -26,9 +26,11 @@ func TestSetup(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			//if err := Setup(tt.args.configFilePath); (err != nil) != tt.wantErr {
-			//	t.Errorf("Setup() error = %v, wantErr %v", err, tt.wantErr)
-			//}
+			got, err := NewLauncherManager(tt.args.configFilePath)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Setup() error = %v, wantErr %v", err, tt.wantErr)
+			}
+			_ = got
 		})
 	}
 }

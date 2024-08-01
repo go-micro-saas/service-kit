@@ -3,12 +3,9 @@ package loggerutil
 import (
 	"github.com/go-kratos/kratos/v2/log"
 	configpb "github.com/go-micro-saas/service-kit/api/config"
-	"github.com/google/wire"
 	"io"
 	"sync"
 )
-
-var ProviderSet = wire.NewSet(NewSingletonLoggerManager)
 
 var (
 	singletonMutex         sync.Once

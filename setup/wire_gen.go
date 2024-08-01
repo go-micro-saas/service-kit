@@ -21,7 +21,7 @@ import (
 
 // Injectors from wire.go:
 
-func setupLauncherManager(configFilePath string) (LauncherManager, error) {
+func testWire(configFilePath string) (LauncherManager, error) {
 	bootstrap, err := LoadingConfig(configFilePath)
 	if err != nil {
 		return nil, err
@@ -71,7 +71,7 @@ func setupLauncherManager(configFilePath string) (LauncherManager, error) {
 	if err != nil {
 		return nil, err
 	}
-	launcherManager, err := Setup(bootstrap, loggerManager, mysqlManager, postgresManager, redisManager, authInstance, consulManager, jaegerManager, rabbitmqManager)
+	launcherManager, err := testWireSetup(bootstrap, loggerManager, mysqlManager, postgresManager, redisManager, authInstance, consulManager, jaegerManager, rabbitmqManager)
 	if err != nil {
 		return nil, err
 	}

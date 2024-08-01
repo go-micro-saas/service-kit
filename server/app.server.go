@@ -11,8 +11,8 @@ import (
 	middlewareutil "github.com/go-micro-saas/service-kit/middleware"
 	tracerutil "github.com/go-micro-saas/service-kit/tracer"
 	authpkg "github.com/ikaiguang/go-srv-kit/kratos/auth"
+	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 	registrypkg "github.com/ikaiguang/go-srv-kit/kratos/registry"
-	pkgerrors "github.com/pkg/errors"
 	stdlog "log"
 )
 
@@ -66,8 +66,8 @@ func NewApp(
 		servers = append(servers, gs)
 	}
 	if len(servers) == 0 {
-		err = pkgerrors.New("服务列表为空")
-		return app, err
+		e := errorpkg.ErrorInvalidParameter("服务列表为空")
+		return app, errorpkg.WithStack(e)
 	}
 
 	// appid

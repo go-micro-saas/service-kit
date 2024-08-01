@@ -6,11 +6,8 @@ import (
 
 	configpb "github.com/go-micro-saas/service-kit/api/config"
 	loggerutil "github.com/go-micro-saas/service-kit/logger"
-	"github.com/google/wire"
 	"github.com/redis/go-redis/v9"
 )
-
-var ProviderSet = wire.NewSet(NewSingletonAuthInstance)
 
 var (
 	singletonMutex        sync.Once

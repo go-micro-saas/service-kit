@@ -20,6 +20,7 @@ app:
 
 # setting 业务
 setting:
+  enable_auth_middleware: false
   enable_jaeger_tracer: false
   enable_consul_registry: false
   enable_migrate_db: false

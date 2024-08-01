@@ -5,10 +5,7 @@ import (
 	"sync"
 
 	configpb "github.com/go-micro-saas/service-kit/api/config"
-	"github.com/google/wire"
 )
-
-var ProviderSet = wire.NewSet(NewSingletonConsulManager)
 
 var (
 	singletonMutex         sync.Once

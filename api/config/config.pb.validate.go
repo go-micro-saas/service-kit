@@ -752,6 +752,8 @@ func (m *Setting) validate(all bool) error {
 
 	var errors []error
 
+	// no validation rules for EnableAuthMiddleware
+
 	// no validation rules for EnableJaegerTracer
 
 	// no validation rules for EnableConsulRegistry

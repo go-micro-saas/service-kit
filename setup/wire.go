@@ -27,11 +27,11 @@ var (
 	RabbitmqProviderSet = wire.NewSet(configutil.RabbitmqConfig, rabbitmqutil.NewSingletonRabbitmqManager)
 )
 
-func setupLauncherManager(configFilePath string) (LauncherManager, error) {
+func testWire(configFilePath string) (LauncherManager, error) {
 	panic(wire.Build(
 		LoadingConfig, LoggerProviderSet, MysqlProviderSet, PostgresProviderSet, RedisProviderSet,
 		AuthProviderSet, ConsulProviderSet, JaegerProviderSet, RabbitmqProviderSet,
-		Setup,
+		testWireSetup,
 	))
 	return nil, nil
 }
