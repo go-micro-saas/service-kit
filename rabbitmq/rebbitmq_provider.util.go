@@ -17,10 +17,10 @@ func NewSingletonRabbitmqManager(conf *configpb.Rabbitmq, loggerManager loggerut
 	var err error
 	singletonMutex.Do(func() {
 		singletonRabbitmqManager, err = NewRabbitmqManager(conf, loggerManager)
-		if err != nil {
-			singletonMutex = sync.Once{}
-		}
 	})
+	if err != nil {
+		singletonMutex = sync.Once{}
+	}
 	return singletonRabbitmqManager, err
 }
 

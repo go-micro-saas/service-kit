@@ -4,6 +4,7 @@ import (
 	"github.com/ThreeDotsLabs/watermill-amqp/v2/pkg/amqp"
 	"github.com/go-kratos/kratos/v2/log"
 	configpb "github.com/go-micro-saas/service-kit/api/config"
+	apputil "github.com/go-micro-saas/service-kit/app"
 	authutil "github.com/go-micro-saas/service-kit/auth"
 	configutil "github.com/go-micro-saas/service-kit/config"
 	consulutil "github.com/go-micro-saas/service-kit/consul"
@@ -44,7 +45,7 @@ func LoadingConfig(configFilePath string) (*configpb.Bootstrap, error) {
 	if err != nil {
 		return nil, err
 	}
-	configutil.SetConfig(conf)
+	apputil.SetConfig(conf)
 	return conf, nil
 }
 

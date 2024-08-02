@@ -42,10 +42,10 @@ func (s *mysqlManager) GetDB() (*gorm.DB, error) {
 	var err error
 	s.mysqlOnce.Do(func() {
 		s.mysqlClient, err = s.loadingMysqlDB()
-		if err != nil {
-			s.mysqlOnce = sync.Once{}
-		}
 	})
+	if err != nil {
+		s.mysqlOnce = sync.Once{}
+	}
 	return s.mysqlClient, err
 }
 

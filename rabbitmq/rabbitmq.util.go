@@ -40,10 +40,10 @@ func (s *rabbitmqManager) GetClient() (*amqp.ConnectionWrapper, error) {
 	var err error
 	s.rabbitmqOnce.Do(func() {
 		s.rabbitmqConn, err = s.loadingRabbitmqClient()
-		if err != nil {
-			s.rabbitmqOnce = sync.Once{}
-		}
 	})
+	if err != nil {
+		s.rabbitmqOnce = sync.Once{}
+	}
 	return s.rabbitmqConn, err
 }
 

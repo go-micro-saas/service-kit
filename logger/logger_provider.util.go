@@ -16,10 +16,10 @@ func NewSingletonLoggerManager(conf *configpb.Log, appConfig *configpb.App) (Log
 	var err error
 	singletonMutex.Do(func() {
 		singletonLoggerManager, err = NewLoggerManager(conf, appConfig)
-		if err != nil {
-			singletonMutex = sync.Once{}
-		}
 	})
+	if err != nil {
+		singletonMutex = sync.Once{}
+	}
 	return singletonLoggerManager, err
 }
 

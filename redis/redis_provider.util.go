@@ -16,10 +16,10 @@ func NewSingletonRedisManager(conf *configpb.Redis) (RedisManager, error) {
 	var err error
 	singletonMutex.Do(func() {
 		singletonRedisManager, err = NewRedisManager(conf)
-		if err != nil {
-			singletonMutex = sync.Once{}
-		}
 	})
+	if err != nil {
+		singletonMutex = sync.Once{}
+	}
 	return singletonRedisManager, err
 }
 

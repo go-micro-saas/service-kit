@@ -17,10 +17,10 @@ func NewSingletonMysqlManager(conf *configpb.MySQL, loggerManager loggerutil.Log
 	var err error
 	singletonMutex.Do(func() {
 		singletonMysqlManager, err = NewMysqlManager(conf, loggerManager)
-		if err != nil {
-			singletonMutex = sync.Once{}
-		}
 	})
+	if err != nil {
+		singletonMutex = sync.Once{}
+	}
 	return singletonMysqlManager, err
 }
 

@@ -19,7 +19,7 @@ func TestLoading_Config(t *testing.T) {
 	}{
 		{
 			name:    "#testLoadingConfig",
-			args:    args{filePath: configPath},
+			args:    args{filePath: "config_example.yaml"},
 			want:    nil,
 			wantErr: false,
 		},
@@ -37,8 +37,7 @@ func TestLoading_Config(t *testing.T) {
 			if got.GetApp().GetServerName() == "" {
 				t.Fatal("==> got.GetApp().GetServerName() is empty")
 			}
-			t.Log("==> Testing got.GetApp().GetServerName(): ", getConfig().GetApp().GetServerName())
-			t.Log("==> Consul got.GetApp().GetServerName(): ", got.GetApp().GetServerName())
+			t.Log("==> got.GetApp().GetServerName(): ", got.GetApp().GetServerName())
 		})
 	}
 }

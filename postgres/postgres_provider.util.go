@@ -17,10 +17,10 @@ func NewSingletonPostgresManager(conf *configpb.PSQL, loggerManager loggerutil.L
 	var err error
 	singletonMutex.Do(func() {
 		singletonPostgresManager, err = NewPostgresManager(conf, loggerManager)
-		if err != nil {
-			singletonMutex = sync.Once{}
-		}
 	})
+	if err != nil {
+		singletonMutex = sync.Once{}
+	}
 	return singletonPostgresManager, err
 }
 

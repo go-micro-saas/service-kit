@@ -26,28 +26,28 @@ func testWire(configFilePath string) (LauncherManager, error) {
 	if err != nil {
 		return nil, err
 	}
-	log := configutil.LogConfig()
-	app := configutil.AppConfig()
+	log := configutil.LogConfig(bootstrap)
+	app := configutil.AppConfig(bootstrap)
 	loggerManager, err := loggerutil.NewSingletonLoggerManager(log, app)
 	if err != nil {
 		return nil, err
 	}
-	mySQL := configutil.MysqlConfig()
+	mySQL := configutil.MysqlConfig(bootstrap)
 	mysqlManager, err := mysqlutil.NewSingletonMysqlManager(mySQL, loggerManager)
 	if err != nil {
 		return nil, err
 	}
-	psql := configutil.PostgresConfig()
+	psql := configutil.PostgresConfig(bootstrap)
 	postgresManager, err := postgresutil.NewSingletonPostgresManager(psql, loggerManager)
 	if err != nil {
 		return nil, err
 	}
-	redis := configutil.RedisConfig()
+	redis := configutil.RedisConfig(bootstrap)
 	redisManager, err := redisutil.NewSingletonRedisManager(redis)
 	if err != nil {
 		return nil, err
 	}
-	encrypt_TokenEncrypt := configutil.TokenEncryptConfig()
+	encrypt_TokenEncrypt := configutil.TokenEncryptConfig(bootstrap)
 	universalClient, err := redisutil.GetRedisClient(redisManager)
 	if err != nil {
 		return nil, err
@@ -56,26 +56,26 @@ func testWire(configFilePath string) (LauncherManager, error) {
 	if err != nil {
 		return nil, err
 	}
-	consul := configutil.ConsulConfig()
+	consul := configutil.ConsulConfig(bootstrap)
 	consulManager, err := consulutil.NewSingletonConsulManager(consul)
 	if err != nil {
 		return nil, err
 	}
-	jaeger := configutil.JaegerConfig()
+	jaeger := configutil.JaegerConfig(bootstrap)
 	jaegerManager, err := jaegerutil.NewSingletonJaegerManager(jaeger)
 	if err != nil {
 		return nil, err
 	}
-	rabbitmq := configutil.RabbitmqConfig()
+	rabbitmq := configutil.RabbitmqConfig(bootstrap)
 	rabbitmqManager, err := rabbitmqutil.NewSingletonRabbitmqManager(rabbitmq, loggerManager)
 	if err != nil {
 		return nil, err
 	}
-	launcherManager, err := testWireSetup(bootstrap, loggerManager, mysqlManager, postgresManager, redisManager, authInstance, consulManager, jaegerManager, rabbitmqManager)
+	setuputilLauncherManager, err := testWireSetup(bootstrap, loggerManager, mysqlManager, postgresManager, redisManager, authInstance, consulManager, jaegerManager, rabbitmqManager)
 	if err != nil {
 		return nil, err
 	}
-	return launcherManager, nil
+	return setuputilLauncherManager, nil
 }
 
 // wire.go:

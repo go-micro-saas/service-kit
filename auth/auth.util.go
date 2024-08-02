@@ -82,10 +82,10 @@ func (s *authInstance) loadingTokenManagerOnce() error {
 	var err error
 	s.tokenManagerOnce.Do(func() {
 		s.tokenManager, s.tokenAuthRepo, err = s.loadingTokenManager()
-		if err != nil {
-			s.tokenManagerOnce = sync.Once{}
-		}
 	})
+	if err != nil {
+		s.tokenManagerOnce = sync.Once{}
+	}
 	return err
 }
 

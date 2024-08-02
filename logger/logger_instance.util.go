@@ -50,10 +50,10 @@ func (s *loggerManager) setupLoggerOnce() error {
 	var err error
 	s.loggerOnce.Do(func() {
 		err = s.setupLogger()
-		if err != nil {
-			s.loggerOnce = sync.Once{}
-		}
 	})
+	if err != nil {
+		s.loggerOnce = sync.Once{}
+	}
 	return err
 }
 

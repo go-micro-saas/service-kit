@@ -37,10 +37,10 @@ func (s *consulManager) GetClient() (*consulapi.Client, error) {
 	var err error
 	s.consulOnce.Do(func() {
 		s.consulClient, err = s.loadingConsulClient()
-		if err != nil {
-			s.consulOnce = sync.Once{}
-		}
 	})
+	if err != nil {
+		s.consulOnce = sync.Once{}
+	}
 	return s.consulClient, err
 }
 

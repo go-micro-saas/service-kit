@@ -22,10 +22,10 @@ func NewSingletonAuthInstance(
 	var err error
 	singletonMutex.Do(func() {
 		singletonAuthInstance, err = NewAuthInstance(conf, redisCC, loggerManager)
-		if err != nil {
-			singletonMutex = sync.Once{}
-		}
 	})
+	if err != nil {
+		singletonMutex = sync.Once{}
+	}
 	return singletonAuthInstance, err
 }
 

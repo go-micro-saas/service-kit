@@ -39,10 +39,10 @@ func (s *jaegerManager) GetExporter() (*jaeger.Exporter, error) {
 	var err error
 	s.jaegerOnce.Do(func() {
 		s.jaegerExporter, err = s.loadingJaegerTraceExporter()
-		if err != nil {
-			s.jaegerOnce = sync.Once{}
-		}
 	})
+	if err != nil {
+		s.jaegerOnce = sync.Once{}
+	}
 	return s.jaegerExporter, err
 }
 

@@ -16,10 +16,10 @@ func NewSingletonConsulManager(conf *configpb.Consul) (ConsulManager, error) {
 	var err error
 	singletonMutex.Do(func() {
 		singletonConsulManager, err = NewConsulManager(conf)
-		if err != nil {
-			singletonMutex = sync.Once{}
-		}
 	})
+	if err != nil {
+		singletonMutex = sync.Once{}
+	}
 	return singletonConsulManager, err
 }
 

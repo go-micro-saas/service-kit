@@ -42,10 +42,10 @@ func (s *postgresManager) GetDB() (*gorm.DB, error) {
 	var err error
 	s.postgresOnce.Do(func() {
 		s.postgresClient, err = s.loadingPostgresDB()
-		if err != nil {
-			s.postgresOnce = sync.Once{}
-		}
 	})
+	if err != nil {
+		s.postgresOnce = sync.Once{}
+	}
 	return s.postgresClient, err
 }
 

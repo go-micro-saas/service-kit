@@ -37,10 +37,10 @@ func (s *redisManager) GetClient() (redis.UniversalClient, error) {
 	var err error
 	s.redisOnce.Do(func() {
 		s.redisClient, err = s.loadingRedisClient()
-		if err != nil {
-			s.redisOnce = sync.Once{}
-		}
 	})
+	if err != nil {
+		s.redisOnce = sync.Once{}
+	}
 	return s.redisClient, err
 }
 

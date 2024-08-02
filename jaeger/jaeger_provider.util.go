@@ -16,10 +16,10 @@ func NewSingletonJaegerManager(conf *configpb.Jaeger) (JaegerManager, error) {
 	var err error
 	singletonMutex.Do(func() {
 		singletonJaegerManager, err = NewJaegerManager(conf)
-		if err != nil {
-			singletonMutex = sync.Once{}
-		}
 	})
+	if err != nil {
+		singletonMutex = sync.Once{}
+	}
 	return singletonJaegerManager, err
 }
 

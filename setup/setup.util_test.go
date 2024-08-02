@@ -1,15 +1,13 @@
 package setuputil
 
 import (
-	configutil "github.com/go-micro-saas/service-kit/config"
-	"path/filepath"
+	configtestdata "github.com/go-micro-saas/service-kit/testdata/configs"
 	"testing"
 )
 
 // go test -v -count=1 ./setup/ -test.run=TestNewLauncherManager
 func TestNewLauncherManager(t *testing.T) {
-	confPath := configutil.CurrentPath()
-	confPath = filepath.Join(confPath, "config_example.yaml")
+	confPath := configtestdata.ConfigPath()
 	type args struct {
 		configFilePath string
 	}
@@ -28,9 +26,14 @@ func TestNewLauncherManager(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := NewLauncherManager(tt.args.configFilePath)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("Setup() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Setup() error = %+v, wantErr %v", err, tt.wantErr)
+				t.FailNow()
 			}
-			_ = got
+			err = Close(got)
+			if err != nil {
+				t.Errorf("Close() error = %+v", err)
+				t.FailNow()
+			}
 		})
 	}
 }

@@ -20,12 +20,12 @@ app:
 
 # setting 业务
 setting:
-  enable_auth_middleware: false
-  enable_jaeger_tracer: false
-  enable_consul_registry: false
-  enable_migrate_db: false
-  enable_schedule_task: false
-  enable_snowflake_worker: false
+  enable_auth_middleware: true
+  enable_jaeger_tracer: true
+  enable_consul_registry: true
+  enable_migrate_db: true
+  enable_schedule_task: true
+  enable_snowflake_worker: true
   # captcha 验证码
   captcha:
     captcha_len: 4
@@ -61,7 +61,7 @@ log:
     # level 日志级别；值：DEBUG、INFO、WARN、ERROR、FATAL
     level: debug
   file:
-    enable: false
+    enable: true
     # level 日志级别；值：DEBUG、INFO、WARN、ERROR、FATAL
     level: DEBUG
     dir: ./runtime/logs
@@ -81,7 +81,7 @@ log:
 
 # mysql MySQL
 mysql:
-  enable: false
+  enable: true
   dsn: root:Mysql.123456@tcp(127.0.0.1:3306)/mysql?charset=utf8mb4&timeout=30s&parseTime=True&loc=Local
   # slow_threshold 慢查询时间
   slow_threshold: 0.1s
@@ -100,7 +100,7 @@ mysql:
 
 # psql postgres
 psql:
-  enable: false
+  enable: true
   dsn: "host=127.0.0.1 user=postgres password=Postgres.123456 dbname=postgres port=5432 sslmode=disable TimeZone=Asia/Shanghai"
   # slow_threshold 慢查询时间
   slow_threshold: 0.1s
@@ -119,7 +119,7 @@ psql:
 
 # redis
 redis:
-  enable: false
+  enable: true
   addresses:
     - 127.0.0.1:6379
   username:
@@ -139,6 +139,7 @@ redis:
 
 # rabbitmq 消息队列rabbitmq
 rabbitmq:
+  enable: true
   url: amqp://rabbitmq:Rabbitmq.123456@127.0.0.1:5672/
   tls_address:
   tls_ca_pem:
@@ -147,6 +148,7 @@ rabbitmq:
 
 # consul 服务注册与发现
 consul:
+  enable: true
   scheme:
   address: 127.0.0.1:8500
   path_prefix:
@@ -166,6 +168,7 @@ consul:
 
 # etcd k-v
 etcd:
+  enable: true
   endpoints:
     - 127.0.0.1:2379
   username:
@@ -176,6 +179,7 @@ etcd:
 
 # jaeger 服务追踪
 jaeger:
+  enable: true
   endpoint: http://127.0.0.1:14268/api/traces
   with_http_basic_auth: false
   username:
@@ -245,6 +249,7 @@ third_party_api:
 
 # snowflake 雪花算法
 snowflake:
+  enable: true
   endpoint: http://127.0.0.1:50627
   # with_discovery 服务注册与发现；调用 apputil.ID 可获取 discovery.endpoint
   #with_discovery: false

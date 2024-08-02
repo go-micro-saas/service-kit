@@ -13,10 +13,10 @@ func (s *loggerManager) GetWriter() (io.Writer, error) {
 	var err error
 	s.writerOnce.Do(func() {
 		s.writer, err = s.getWriter()
-		if err != nil {
-			s.writerOnce = sync.Once{}
-		}
 	})
+	if err != nil {
+		s.writerOnce = sync.Once{}
+	}
 	return s.writer, err
 }
 
