@@ -40,8 +40,8 @@ type LauncherManager interface {
 	Close() error
 }
 
-func LoadingConfig(configFilePath string) (*configpb.Bootstrap, error) {
-	conf, err := configutil.Loading(configFilePath)
+func LoadingConfig(configFilePath string, configOpts ...configutil.Option) (*configpb.Bootstrap, error) {
+	conf, err := configutil.Loading(configFilePath, configOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -49,13 +49,13 @@ func LoadingConfig(configFilePath string) (*configpb.Bootstrap, error) {
 	return conf, nil
 }
 
-func NewLauncherManager(configFilePath string) (LauncherManager, error) {
+func NewLauncherManager(configFilePath string, configOpts ...configutil.Option) (LauncherManager, error) {
 	// 开始配置
 	stdlog.Println("|==================== LOADING PROGRAM : START ====================|")
 	defer stdlog.Println("|==================== LOADING PROGRAM : END ====================|")
 
 	// 加载配置文件
-	bootstrap, err := LoadingConfig(configFilePath)
+	bootstrap, err := LoadingConfig(configFilePath, configOpts...)
 	if err != nil {
 		return nil, err
 	}
