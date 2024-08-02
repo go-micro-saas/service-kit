@@ -1,6 +1,7 @@
 package configutil
 
 import (
+	"google.golang.org/protobuf/proto"
 	stdlog "log"
 
 	"github.com/go-kratos/kratos/contrib/config/consul/v2"
@@ -15,13 +16,17 @@ import (
 // 首先：读取服务base配置
 // 然后：读取本服务配置
 // 最后：使用本服务配置 覆盖 base 配置
-func LoadingConfigFromConsul(consulClient *consulapi.Client, appConfig *configpb.App) (*configpb.Bootstrap, error) {
+func LoadingConfigFromConsul(consulClient *consulapi.Client, appConfig *configpb.App, loadingOpts ...Option) (*configpb.Bootstrap, error) {
 	var bootstrap = &configpb.Bootstrap{}
+	loadOpts := &options{}
+	for i := range loadingOpts {
+		loadingOpts[i](loadOpts)
+	}
 
 	// 通用配置
 	generalPath := appConfig.GetConfigPathForGeneral()
 	if generalPath != "" {
-		conf, err := loadingConfigFromConsul(consulClient, generalPath)
+		conf, err := loadingConfigFromConsul(consulClient, generalPath, loadOpts.configs...)
 		if err != nil {
 			return nil, err
 		}
@@ -33,11 +38,21 @@ func LoadingConfigFromConsul(consulClient *consulapi.Client, appConfig *configpb
 	// 服务配置 合并与覆盖
 	serverPath := appConfig.GetConfigPathForServer()
 	if serverPath != "" {
-		conf, err := loadingConfigFromConsul(consulClient, serverPath)
+		// new configs
+		newOtherConfigs := make([]proto.Message, 0, len(loadOpts.configs))
+		for i := range loadOpts.configs {
+			newOtherConfigs = append(newOtherConfigs, proto.Clone(loadOpts.configs[i]))
+		}
+		// scan
+		conf, err := loadingConfigFromConsul(consulClient, serverPath, newOtherConfigs...)
 		if err != nil {
 			return nil, err
 		}
+		// merge
 		MergeConfig(bootstrap, conf)
+		for i := range newOtherConfigs {
+			MergeConfig(loadOpts.configs[i], newOtherConfigs[i])
+		}
 	} else {
 		stdlog.Println("|*** INFO: this service configuration path is not configured")
 	}
@@ -45,7 +60,11 @@ func LoadingConfigFromConsul(consulClient *consulapi.Client, appConfig *configpb
 	return bootstrap, nil
 }
 
-func loadingConfigFromConsul(consulClient *consulapi.Client, consulConfigPath string) (*configpb.Bootstrap, error) {
+func mergeOtherConfig() {
+
+}
+
+func loadingConfigFromConsul(consulClient *consulapi.Client, consulConfigPath string, otherConfigs ...proto.Message) (*configpb.Bootstrap, error) {
 	stdlog.Println("|==================== LOADING CONSUL CONFIGURATION : START ====================|")
 	defer stdlog.Println()
 	defer stdlog.Println("|==================== LOADING CONSUL CONFIGURATION : END ====================|")
@@ -77,6 +96,15 @@ func loadingConfigFromConsul(consulClient *consulapi.Client, consulConfigPath st
 	if err = handler.Scan(conf); err != nil {
 		err = errorpkg.WithStack(errorpkg.ErrorInternalError(err.Error()))
 		return nil, err
+	}
+	for i := range otherConfigs {
+		if otherConfigs[i] == nil {
+			continue
+		}
+		if err = handler.Scan(otherConfigs[i]); err != nil {
+			err = errorpkg.WithStack(errorpkg.ErrorInternalError(err.Error()))
+			return nil, err
+		}
 	}
 	return conf, nil
 }

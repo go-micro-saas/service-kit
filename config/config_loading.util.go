@@ -1,6 +1,7 @@
 package configutil
 
 import (
+	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 	stdlog "log"
 	"path/filepath"
@@ -16,8 +17,8 @@ const (
 	CONFIG_METHOD_CONSUL = "consul"
 )
 
-func Loading(filePath string) (*configpb.Bootstrap, error) {
-	bootstrap, err := LoadingFile(filePath)
+func Loading(filePath string, loadingOpts ...Option) (*configpb.Bootstrap, error) {
+	bootstrap, err := LoadingFile(filePath, loadingOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -39,12 +40,12 @@ func Loading(filePath string) (*configpb.Bootstrap, error) {
 		if err != nil {
 			return nil, err
 		}
-		return LoadingConfigFromConsul(consulClient, bootstrap.GetApp())
+		return LoadingConfigFromConsul(consulClient, bootstrap.GetApp(), loadingOpts...)
 	}
 }
 
 // MergeConfig 合并配置；后面的覆盖前面的
-func MergeConfig(first, second *configpb.Bootstrap) {
+func MergeConfig(first, second proto.Message) {
 	stdlog.Println("|==================== MERGE CONFIGURATION : START ====================|")
 	defer stdlog.Println()
 	defer stdlog.Println("|==================== MERGE CONFIGURATION : END ====================|")

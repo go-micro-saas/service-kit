@@ -252,3 +252,8 @@ snowflake:
   with_http_basic_auth: false
   username:
   password:
+
+# testdata
+testdata:
+  key: testdata_key
+  value: testdata_value

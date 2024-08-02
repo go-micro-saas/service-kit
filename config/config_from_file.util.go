@@ -10,10 +10,14 @@ import (
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 )
 
-func LoadingFile(filePath string) (*configpb.Bootstrap, error) {
+func LoadingFile(filePath string, loadingOpts ...Option) (*configpb.Bootstrap, error) {
 	stdlog.Println("|==================== LOADING FILE CONFIGURATION : START ====================|")
 	defer stdlog.Println()
 	defer stdlog.Println("|==================== LOADING FILE CONFIGURATION : END ====================|")
+	loadOpts := &options{}
+	for i := range loadingOpts {
+		loadingOpts[i](loadOpts)
+	}
 
 	p, err := apputil.RuntimePath()
 	if err != nil {
@@ -21,11 +25,11 @@ func LoadingFile(filePath string) (*configpb.Bootstrap, error) {
 	}
 	stdlog.Println("|*** INFO: program running path: ", p)
 
-	var opts []config.Option
+	var configOpts []config.Option
 	stdlog.Println("|*** LOADING: file configuration path: ", filePath)
-	opts = append(opts, config.WithSource(file.NewSource(filePath)))
+	configOpts = append(configOpts, config.WithSource(file.NewSource(filePath)))
 
-	handler := config.New(opts...)
+	handler := config.New(configOpts...)
 	defer func() {
 		stdlog.Println("|*** LOADING: COMPLETE : file configuration path: ", filePath)
 		_ = handler.Close()
@@ -42,6 +46,15 @@ func LoadingFile(filePath string) (*configpb.Bootstrap, error) {
 	if err = handler.Scan(conf); err != nil {
 		err = errorpkg.WithStack(errorpkg.ErrorInternalError(err.Error()))
 		return nil, err
+	}
+	for i := range loadOpts.configs {
+		if loadOpts.configs[i] == nil {
+			continue
+		}
+		if err = handler.Scan(loadOpts.configs[i]); err != nil {
+			err = errorpkg.WithStack(errorpkg.ErrorInternalError(err.Error()))
+			return nil, err
+		}
 	}
 	return conf, nil
 }
