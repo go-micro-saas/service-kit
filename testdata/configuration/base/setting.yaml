@@ -1,11 +1,11 @@
 # setting 业务
 setting:
-  enable_auth_middleware: false
-  enable_jaeger_tracer: false
-  enable_consul_registry: false
-  enable_migrate_db: false
-  enable_schedule_task: false
-  enable_snowflake_worker: false
+  enable_auth_middleware: true
+  enable_jaeger_tracer: true
+  enable_consul_registry: true
+  enable_migrate_db: true
+  enable_schedule_task: true
+  enable_snowflake_worker: true
   # captcha 验证码
   captcha:
     captcha_len: 4

@@ -1,6 +1,6 @@
 # mysql MySQL
 mysql:
-  enable: false
+  enable: true
   dsn: root:Mysql.123456@tcp(127.0.0.1:3306)/mysql?charset=utf8mb4&timeout=30s&parseTime=True&loc=Local
   # slow_threshold 慢查询时间
   slow_threshold: 0.1s

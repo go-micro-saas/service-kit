@@ -1,6 +1,6 @@
 # redis
 redis:
-  enable: false
+  enable: true
   addresses:
     - 127.0.0.1:6379
   username:

@@ -68,6 +68,10 @@ func NewLauncherManager(configFilePath string) (LauncherManager, error) {
 	if err != nil {
 		return nil, err
 	}
+	_, err = launcher.GetLogger()
+	if err != nil {
+		return nil, err
+	}
 
 	// redis
 	redisConfig := bootstrap.GetRedis()

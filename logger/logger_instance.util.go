@@ -140,7 +140,7 @@ func (s *loggerManager) loadingLoggerWithCallerSkip(skip int) (logger log.Logger
 			e := errorpkg.ErrorInternalError(err.Error())
 			return logger, closeFnSlice, errorpkg.WithStack(e)
 		}
-		closeFnSlice = append(closeFnSlice, stdLoggerImpl)
+		//closeFnSlice = append(closeFnSlice, stdLoggerImpl)
 		stdLogger = stdLoggerImpl
 	}
 	// 覆盖 stdLogger
