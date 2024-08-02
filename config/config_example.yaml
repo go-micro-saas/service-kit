@@ -65,7 +65,7 @@ log:
     # level 日志级别；值：DEBUG、INFO、WARN、ERROR、FATAL
     level: DEBUG
     dir: ./runtime/logs
-    filename: "${app.project_name}_${app.server_name}_${app.server_env}_${app.version}"
+    filename: "${app.project_name}_${app.server_name}_${app.server_env}_${app.server_version}"
     # rotate_time 轮询规则：n久(默认：86400s # 86400s = 1天)
     # 轮询规则：默认为：RotateTime
     rotate_time: 86400s
@@ -194,7 +194,7 @@ encrypt:
     refresh_key: JZuD1Pq3lnNUi907MdFLyjY8VzrXcBK2
 
 # cluster_client_api 项目集群客户端api
-# registry_endpoint = ${app.project_name}/${app.server_name}/${app.server_env}/${app.version}
+# registry_endpoint = ${app.project_name}/${app.server_name}/${app.server_env}/${app.server_version}
 # 例子：registry_endpoint = go-micro-saas/DEVELOP/v1.0.0-xxx/user-service
 # registry_name = ${app.server_name}
 # http_scheme : 默认值 http

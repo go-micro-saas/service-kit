@@ -34,12 +34,12 @@ func (s *loggerManager) getWriter() (io.Writer, error) {
 
 	// rotate write
 	rotateConfig := &writerpkg.ConfigRotate{
-		Dir:            fileLoggerConfig.Dir,
-		Filename:       fileLoggerConfig.Filename,
-		RotateTime:     fileLoggerConfig.RotateTime.AsDuration(),
-		RotateSize:     fileLoggerConfig.RotateSize,
-		StorageCounter: uint(fileLoggerConfig.StorageCounter),
-		StorageAge:     fileLoggerConfig.StorageAge.AsDuration(),
+		Dir:            fileLoggerConfig.GetDir(),
+		Filename:       fileLoggerConfig.GetFilename(),
+		RotateTime:     fileLoggerConfig.GetRotateTime().AsDuration(),
+		RotateSize:     fileLoggerConfig.GetRotateSize(),
+		StorageCounter: uint(fileLoggerConfig.GetStorageCounter()),
+		StorageAge:     fileLoggerConfig.GetStorageAge().AsDuration(),
 	}
 	writer, err := writerpkg.NewRotateFile(rotateConfig)
 	if err != nil {

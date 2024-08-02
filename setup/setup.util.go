@@ -64,7 +64,7 @@ func NewLauncherManager(configFilePath string) (LauncherManager, error) {
 	}
 
 	// 初始化日志
-	_, err = launcher.getLoggerManager()
+	_, err = launcher.getSingletonLoggerManager()
 	if err != nil {
 		return nil, err
 	}
@@ -130,7 +130,7 @@ func NewLauncherManager(configFilePath string) (LauncherManager, error) {
 	// token
 	settingConfig := bootstrap.GetSetting()
 	if settingConfig.GetEnableAuthMiddleware() {
-		_, err = launcher.getAuthInstance()
+		_, err = launcher.getSingletonAuthInstance()
 		if err != nil {
 			return nil, err
 		}

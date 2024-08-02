@@ -19,19 +19,28 @@ import (
 	"go.opentelemetry.io/otel/exporters/jaeger"
 	"gorm.io/gorm"
 	stdlog "log"
+	"sync"
 )
 
 type launcherManager struct {
 	conf *configpb.Bootstrap
 
-	loggerManager   loggerutil.LoggerManager
-	redisManager    redisutil.RedisManager
-	mysqlManager    mysqlutil.MysqlManager
-	postgresManager postgresutil.PostgresManager
-	consulManager   consulutil.ConsulManager
-	jaegerManager   jaegerutil.JaegerManager
-	rabbitmqManager rabbitmqutil.RabbitmqManager
-	authInstance    authutil.AuthInstance
+	loggerManagerOnce   sync.Once
+	loggerManager       loggerutil.LoggerManager
+	redisManagerOnce    sync.Once
+	redisManager        redisutil.RedisManager
+	mysqlManagerOnce    sync.Once
+	mysqlManager        mysqlutil.MysqlManager
+	postgresManagerOnce sync.Once
+	postgresManager     postgresutil.PostgresManager
+	consulManagerOnce   sync.Once
+	consulManager       consulutil.ConsulManager
+	jaegerManagerOnce   sync.Once
+	jaegerManager       jaegerutil.JaegerManager
+	rabbitmqManagerOnce sync.Once
+	rabbitmqManager     rabbitmqutil.RabbitmqManager
+	authInstanceOnce    sync.Once
+	authInstance        authutil.AuthInstance
 }
 
 func (s *launcherManager) getLoggerManager() (loggerutil.LoggerManager, error) {
@@ -45,8 +54,19 @@ func (s *launcherManager) getLoggerManager() (loggerutil.LoggerManager, error) {
 	return loggerManager, nil
 }
 
+func (s *launcherManager) getSingletonLoggerManager() (loggerutil.LoggerManager, error) {
+	var err error
+	s.loggerManagerOnce.Do(func() {
+		s.loggerManager, err = s.getLoggerManager()
+	})
+	if err != nil {
+		s.loggerManagerOnce = sync.Once{}
+	}
+	return s.loggerManager, err
+}
+
 func (s *launcherManager) GetLogger() (log.Logger, error) {
-	loggerManager, err := s.getLoggerManager()
+	loggerManager, err := s.getSingletonLoggerManager()
 	if err != nil {
 		return nil, err
 	}
@@ -54,7 +74,7 @@ func (s *launcherManager) GetLogger() (log.Logger, error) {
 }
 
 func (s *launcherManager) GetLoggerForMiddleware() (log.Logger, error) {
-	loggerManager, err := s.getLoggerManager()
+	loggerManager, err := s.getSingletonLoggerManager()
 	if err != nil {
 		return nil, err
 	}
@@ -62,7 +82,7 @@ func (s *launcherManager) GetLoggerForMiddleware() (log.Logger, error) {
 }
 
 func (s *launcherManager) GetLoggerForHelper() (log.Logger, error) {
-	loggerManager, err := s.getLoggerManager()
+	loggerManager, err := s.getSingletonLoggerManager()
 	if err != nil {
 		return nil, err
 	}
@@ -79,8 +99,19 @@ func (s *launcherManager) getRedisManager() (redisutil.RedisManager, error) {
 	return redisManager, nil
 }
 
+func (s *launcherManager) getSingletonRedisManager() (redisutil.RedisManager, error) {
+	var err error
+	s.redisManagerOnce.Do(func() {
+		s.redisManager, err = s.getRedisManager()
+	})
+	if err != nil {
+		s.redisManagerOnce = sync.Once{}
+	}
+	return s.redisManager, err
+}
+
 func (s *launcherManager) GetRedisClient() (redis.UniversalClient, error) {
-	redisManager, err := s.getRedisManager()
+	redisManager, err := s.getSingletonRedisManager()
 	if err != nil {
 		return nil, err
 	}
@@ -88,7 +119,7 @@ func (s *launcherManager) GetRedisClient() (redis.UniversalClient, error) {
 }
 
 func (s *launcherManager) getMysqlManager() (mysqlutil.MysqlManager, error) {
-	loggerManager, err := s.getLoggerManager()
+	loggerManager, err := s.getSingletonLoggerManager()
 	if err != nil {
 		return nil, err
 	}
@@ -101,8 +132,19 @@ func (s *launcherManager) getMysqlManager() (mysqlutil.MysqlManager, error) {
 	return mysqlManager, nil
 }
 
+func (s *launcherManager) getSingletonMysqlManager() (mysqlutil.MysqlManager, error) {
+	var err error
+	s.mysqlManagerOnce.Do(func() {
+		s.mysqlManager, err = s.getMysqlManager()
+	})
+	if err != nil {
+		s.mysqlManagerOnce = sync.Once{}
+	}
+	return s.mysqlManager, err
+}
+
 func (s *launcherManager) GetMysqlDBConn() (*gorm.DB, error) {
-	mysqlManager, err := s.getMysqlManager()
+	mysqlManager, err := s.getSingletonMysqlManager()
 	if err != nil {
 		return nil, err
 	}
@@ -110,7 +152,7 @@ func (s *launcherManager) GetMysqlDBConn() (*gorm.DB, error) {
 }
 
 func (s *launcherManager) getPostgresManager() (postgresutil.PostgresManager, error) {
-	loggerManager, err := s.getLoggerManager()
+	loggerManager, err := s.getSingletonLoggerManager()
 	if err != nil {
 		return nil, err
 	}
@@ -123,8 +165,19 @@ func (s *launcherManager) getPostgresManager() (postgresutil.PostgresManager, er
 	return postgresManager, nil
 }
 
+func (s *launcherManager) getSingletonPostgresManager() (postgresutil.PostgresManager, error) {
+	var err error
+	s.postgresManagerOnce.Do(func() {
+		s.postgresManager, err = s.getPostgresManager()
+	})
+	if err != nil {
+		s.postgresManagerOnce = sync.Once{}
+	}
+	return s.postgresManager, err
+}
+
 func (s *launcherManager) GetPostgresDBConn() (*gorm.DB, error) {
-	postgresManager, err := s.getPostgresManager()
+	postgresManager, err := s.getSingletonPostgresManager()
 	if err != nil {
 		return nil, err
 	}
@@ -141,8 +194,19 @@ func (s *launcherManager) getConsulManager() (consulutil.ConsulManager, error) {
 	return consulManager, nil
 }
 
+func (s *launcherManager) getSingletonConsulManager() (consulutil.ConsulManager, error) {
+	var err error
+	s.consulManagerOnce.Do(func() {
+		s.consulManager, err = s.getConsulManager()
+	})
+	if err != nil {
+		s.consulManagerOnce = sync.Once{}
+	}
+	return s.consulManager, err
+}
+
 func (s *launcherManager) GetConsulClient() (*consulapi.Client, error) {
-	consulManager, err := s.getConsulManager()
+	consulManager, err := s.getSingletonConsulManager()
 	if err != nil {
 		return nil, err
 	}
@@ -159,8 +223,19 @@ func (s *launcherManager) getJaegerManager() (jaegerutil.JaegerManager, error) {
 	return jaegerManager, nil
 }
 
+func (s *launcherManager) getSingletonJaegerManager() (jaegerutil.JaegerManager, error) {
+	var err error
+	s.jaegerManagerOnce.Do(func() {
+		s.jaegerManager, err = s.getJaegerManager()
+	})
+	if err != nil {
+		s.jaegerManagerOnce = sync.Once{}
+	}
+	return s.jaegerManager, err
+}
+
 func (s *launcherManager) GetJaegerExporter() (*jaeger.Exporter, error) {
-	jaegerManager, err := s.getJaegerManager()
+	jaegerManager, err := s.getSingletonJaegerManager()
 	if err != nil {
 		return nil, err
 	}
@@ -168,7 +243,7 @@ func (s *launcherManager) GetJaegerExporter() (*jaeger.Exporter, error) {
 }
 
 func (s *launcherManager) getRabbitmqManager() (rabbitmqutil.RabbitmqManager, error) {
-	loggerManager, err := s.getLoggerManager()
+	loggerManager, err := s.getSingletonLoggerManager()
 	if err != nil {
 		return nil, err
 	}
@@ -181,8 +256,19 @@ func (s *launcherManager) getRabbitmqManager() (rabbitmqutil.RabbitmqManager, er
 	return rabbitmqManager, nil
 }
 
+func (s *launcherManager) getSingletonRabbitmqManager() (rabbitmqutil.RabbitmqManager, error) {
+	var err error
+	s.rabbitmqManagerOnce.Do(func() {
+		s.rabbitmqManager, err = s.getRabbitmqManager()
+	})
+	if err != nil {
+		s.rabbitmqManagerOnce = sync.Once{}
+	}
+	return s.rabbitmqManager, err
+}
+
 func (s *launcherManager) GetRabbitmqConn() (*amqp.ConnectionWrapper, error) {
-	rabbitmqManager, err := s.getRabbitmqManager()
+	rabbitmqManager, err := s.getSingletonRabbitmqManager()
 	if err != nil {
 		return nil, err
 	}
@@ -191,7 +277,7 @@ func (s *launcherManager) GetRabbitmqConn() (*amqp.ConnectionWrapper, error) {
 
 func (s *launcherManager) getAuthInstance() (authutil.AuthInstance, error) {
 	// logger
-	loggerManager, err := s.getLoggerManager()
+	loggerManager, err := s.getSingletonLoggerManager()
 	if err != nil {
 		return nil, err
 	}
@@ -210,8 +296,19 @@ func (s *launcherManager) getAuthInstance() (authutil.AuthInstance, error) {
 	return authInstance, err
 }
 
+func (s *launcherManager) getSingletonAuthInstance() (authutil.AuthInstance, error) {
+	var err error
+	s.authInstanceOnce.Do(func() {
+		s.authInstance, err = s.getAuthInstance()
+	})
+	if err != nil {
+		s.authInstanceOnce = sync.Once{}
+	}
+	return s.authInstance, err
+}
+
 func (s *launcherManager) GetTokenManager() (authpkg.TokenManger, error) {
-	authInstance, err := s.getAuthInstance()
+	authInstance, err := s.getSingletonAuthInstance()
 	if err != nil {
 		return nil, err
 	}
@@ -219,7 +316,7 @@ func (s *launcherManager) GetTokenManager() (authpkg.TokenManger, error) {
 }
 
 func (s *launcherManager) GetAuthManager() (authpkg.AuthRepo, error) {
-	authInstance, err := s.getAuthInstance()
+	authInstance, err := s.getSingletonAuthInstance()
 	if err != nil {
 		return nil, err
 	}

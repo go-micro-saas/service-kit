@@ -1,5 +1,5 @@
 # cluster_client_api 项目集群客户端api
-# registry_endpoint = ${app.project_name}/${app.server_name}/${app.server_env}/${app.version}
+# registry_endpoint = ${app.project_name}/${app.server_name}/${app.server_env}/${app.server_version}
 # 例子：registry_endpoint = go-micro-saas/DEVELOP/v1.0.0-xxx/user-service
 # registry_name = ${app.server_name}
 # http_scheme : 默认值 http
