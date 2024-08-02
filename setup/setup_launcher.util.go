@@ -1,6 +1,7 @@
 package setuputil
 
 import (
+	stderrors "errors"
 	"github.com/ThreeDotsLabs/watermill-amqp/v2/pkg/amqp"
 	"github.com/go-kratos/kratos/v2/log"
 	configpb "github.com/go-micro-saas/service-kit/api/config"
@@ -21,12 +22,26 @@ import (
 
 type launcherManager struct {
 	conf *configpb.Bootstrap
+
+	loggerManager   loggerutil.LoggerManager
+	redisManager    redisutil.RedisManager
+	mysqlManager    mysqlutil.MysqlManager
+	postgresManager postgresutil.PostgresManager
+	consulManager   consulutil.ConsulManager
+	jaegerManager   jaegerutil.JaegerManager
+	rabbitmqManager rabbitmqutil.RabbitmqManager
+	authInstance    authutil.AuthInstance
 }
 
 func (s *launcherManager) getLoggerManager() (loggerutil.LoggerManager, error) {
 	logConfig := s.conf.GetLog()
 	appConfig := s.conf.GetApp()
-	return loggerutil.NewSingletonLoggerManager(logConfig, appConfig)
+	var err error
+	s.loggerManager, err = loggerutil.NewSingletonLoggerManager(logConfig, appConfig)
+	if err != nil {
+		return nil, err
+	}
+	return s.loggerManager, nil
 }
 
 func (s *launcherManager) GetLogger() (log.Logger, error) {
@@ -59,6 +74,7 @@ func (s *launcherManager) GetRedisClient() (redis.UniversalClient, error) {
 	if err != nil {
 		return nil, err
 	}
+	s.redisManager = redisManager
 	return redisManager.GetClient()
 }
 
@@ -72,6 +88,7 @@ func (s *launcherManager) GetMysqlDBConn() (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
+	s.mysqlManager = mysqlManager
 	return mysqlManager.GetDB()
 }
 
@@ -85,6 +102,7 @@ func (s *launcherManager) GetPostgresDBConn() (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
+	s.postgresManager = postgresManager
 	return postgresManager.GetDB()
 }
 
@@ -94,6 +112,7 @@ func (s *launcherManager) GetConsulClient() (*consulapi.Client, error) {
 	if err != nil {
 		return nil, err
 	}
+	s.consulManager = consulManager
 	return consulManager.GetClient()
 }
 
@@ -103,6 +122,7 @@ func (s *launcherManager) GetJaegerExporter() (*jaeger.Exporter, error) {
 	if err != nil {
 		return nil, err
 	}
+	s.jaegerManager = jaegerManager
 	return jaegerManager.GetExporter()
 }
 
@@ -116,6 +136,7 @@ func (s *launcherManager) GetRabbitmqConn() (*amqp.ConnectionWrapper, error) {
 	if err != nil {
 		return nil, err
 	}
+	s.rabbitmqManager = rabbitmqManager
 	return rabbitmqManager.GetClient()
 }
 
@@ -136,6 +157,7 @@ func (s *launcherManager) getAuthInstance() (authutil.AuthInstance, error) {
 	if err != nil {
 		return nil, err
 	}
+	s.authInstance = authInstance
 	return authInstance, err
 }
 
@@ -156,5 +178,14 @@ func (s *launcherManager) GetAuthManager() (authpkg.AuthRepo, error) {
 }
 
 func (s *launcherManager) Close() error {
+	var errs []error
+	if s.loggerManager != nil {
+		if err := s.loggerManager.Close(); err != nil {
+			errs = append(errs, err)
+		}
+	}
+	if len(errs) > 0 {
+		return stderrors.Join(errs...)
+	}
 	return nil
 }
