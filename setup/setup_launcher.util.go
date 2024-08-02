@@ -18,6 +18,7 @@ import (
 	"github.com/redis/go-redis/v9"
 	"go.opentelemetry.io/otel/exporters/jaeger"
 	"gorm.io/gorm"
+	stdlog "log"
 )
 
 type launcherManager struct {
@@ -36,12 +37,12 @@ type launcherManager struct {
 func (s *launcherManager) getLoggerManager() (loggerutil.LoggerManager, error) {
 	logConfig := s.conf.GetLog()
 	appConfig := s.conf.GetApp()
-	var err error
-	s.loggerManager, err = loggerutil.NewSingletonLoggerManager(logConfig, appConfig)
+	loggerManager, err := loggerutil.NewSingletonLoggerManager(logConfig, appConfig)
 	if err != nil {
 		return nil, err
 	}
-	return s.loggerManager, nil
+	s.loggerManager = loggerManager
+	return loggerManager, nil
 }
 
 func (s *launcherManager) GetLogger() (log.Logger, error) {
@@ -68,17 +69,25 @@ func (s *launcherManager) GetLoggerForHelper() (log.Logger, error) {
 	return loggerManager.GetLoggerForHelper()
 }
 
-func (s *launcherManager) GetRedisClient() (redis.UniversalClient, error) {
+func (s *launcherManager) getRedisManager() (redisutil.RedisManager, error) {
 	redisConfig := s.conf.GetRedis()
 	redisManager, err := redisutil.NewSingletonRedisManager(redisConfig)
 	if err != nil {
 		return nil, err
 	}
 	s.redisManager = redisManager
+	return redisManager, nil
+}
+
+func (s *launcherManager) GetRedisClient() (redis.UniversalClient, error) {
+	redisManager, err := s.getRedisManager()
+	if err != nil {
+		return nil, err
+	}
 	return redisManager.GetClient()
 }
 
-func (s *launcherManager) GetMysqlDBConn() (*gorm.DB, error) {
+func (s *launcherManager) getMysqlManager() (mysqlutil.MysqlManager, error) {
 	loggerManager, err := s.getLoggerManager()
 	if err != nil {
 		return nil, err
@@ -89,10 +98,18 @@ func (s *launcherManager) GetMysqlDBConn() (*gorm.DB, error) {
 		return nil, err
 	}
 	s.mysqlManager = mysqlManager
+	return mysqlManager, nil
+}
+
+func (s *launcherManager) GetMysqlDBConn() (*gorm.DB, error) {
+	mysqlManager, err := s.getMysqlManager()
+	if err != nil {
+		return nil, err
+	}
 	return mysqlManager.GetDB()
 }
 
-func (s *launcherManager) GetPostgresDBConn() (*gorm.DB, error) {
+func (s *launcherManager) getPostgresManager() (postgresutil.PostgresManager, error) {
 	loggerManager, err := s.getLoggerManager()
 	if err != nil {
 		return nil, err
@@ -103,30 +120,54 @@ func (s *launcherManager) GetPostgresDBConn() (*gorm.DB, error) {
 		return nil, err
 	}
 	s.postgresManager = postgresManager
+	return postgresManager, nil
+}
+
+func (s *launcherManager) GetPostgresDBConn() (*gorm.DB, error) {
+	postgresManager, err := s.getPostgresManager()
+	if err != nil {
+		return nil, err
+	}
 	return postgresManager.GetDB()
 }
 
-func (s *launcherManager) GetConsulClient() (*consulapi.Client, error) {
+func (s *launcherManager) getConsulManager() (consulutil.ConsulManager, error) {
 	consulConfig := s.conf.GetConsul()
 	consulManager, err := consulutil.NewSingletonConsulManager(consulConfig)
 	if err != nil {
 		return nil, err
 	}
 	s.consulManager = consulManager
+	return consulManager, nil
+}
+
+func (s *launcherManager) GetConsulClient() (*consulapi.Client, error) {
+	consulManager, err := s.getConsulManager()
+	if err != nil {
+		return nil, err
+	}
 	return consulManager.GetClient()
 }
 
-func (s *launcherManager) GetJaegerExporter() (*jaeger.Exporter, error) {
+func (s *launcherManager) getJaegerManager() (jaegerutil.JaegerManager, error) {
 	jaegerConfig := s.conf.GetJaeger()
 	jaegerManager, err := jaegerutil.NewSingletonJaegerManager(jaegerConfig)
 	if err != nil {
 		return nil, err
 	}
 	s.jaegerManager = jaegerManager
+	return jaegerManager, nil
+}
+
+func (s *launcherManager) GetJaegerExporter() (*jaeger.Exporter, error) {
+	jaegerManager, err := s.getJaegerManager()
+	if err != nil {
+		return nil, err
+	}
 	return jaegerManager.GetExporter()
 }
 
-func (s *launcherManager) GetRabbitmqConn() (*amqp.ConnectionWrapper, error) {
+func (s *launcherManager) getRabbitmqManager() (rabbitmqutil.RabbitmqManager, error) {
 	loggerManager, err := s.getLoggerManager()
 	if err != nil {
 		return nil, err
@@ -137,6 +178,14 @@ func (s *launcherManager) GetRabbitmqConn() (*amqp.ConnectionWrapper, error) {
 		return nil, err
 	}
 	s.rabbitmqManager = rabbitmqManager
+	return rabbitmqManager, nil
+}
+
+func (s *launcherManager) GetRabbitmqConn() (*amqp.ConnectionWrapper, error) {
+	rabbitmqManager, err := s.getRabbitmqManager()
+	if err != nil {
+		return nil, err
+	}
 	return rabbitmqManager.GetClient()
 }
 
@@ -178,12 +227,60 @@ func (s *launcherManager) GetAuthManager() (authpkg.AuthRepo, error) {
 }
 
 func (s *launcherManager) Close() error {
+	// 退出程序
+	stdlog.Println("|==================== EXIT PROGRAM : START ====================|")
+	defer stdlog.Println("|==================== EXIT PROGRAM : END ====================|")
 	var errs []error
+
+	// redis
+	if s.redisManager != nil {
+		if err := s.redisManager.Close(); err != nil {
+			errs = append(errs, err)
+		}
+	}
+
+	// mysql
+	if s.mysqlManager != nil {
+		if err := s.mysqlManager.Close(); err != nil {
+			errs = append(errs, err)
+		}
+	}
+
+	// postgres
+	if s.postgresManager != nil {
+		if err := s.postgresManager.Close(); err != nil {
+			errs = append(errs, err)
+		}
+	}
+
+	// consul
+	if s.consulManager != nil {
+		if err := s.consulManager.Close(); err != nil {
+			errs = append(errs, err)
+		}
+	}
+
+	// jaeger
+	if s.jaegerManager != nil {
+		if err := s.jaegerManager.Close(); err != nil {
+			errs = append(errs, err)
+		}
+	}
+
+	// rabbitmq
+	if s.rabbitmqManager != nil {
+		if err := s.rabbitmqManager.Close(); err != nil {
+			errs = append(errs, err)
+		}
+	}
+
+	// logger
 	if s.loggerManager != nil {
 		if err := s.loggerManager.Close(); err != nil {
 			errs = append(errs, err)
 		}
 	}
+
 	if len(errs) > 0 {
 		return stderrors.Join(errs...)
 	}
