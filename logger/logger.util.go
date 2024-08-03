@@ -51,10 +51,15 @@ func NewLoggerManager(conf *configpb.Log, appConfig *configpb.App) (LoggerManage
 		e := errorpkg.ErrorBadRequest("[CONFIGURATION] config error, key = log")
 		return nil, errorpkg.WithStack(e)
 	}
-	return &loggerManager{
+	manager := &loggerManager{
 		appConfig: appConfig,
 		conf:      conf,
-	}, nil
+	}
+	_, err := manager.GetLogger()
+	if err != nil {
+		return nil, err
+	}
+	return manager, nil
 }
 
 func (s *loggerManager) EnableConsole() bool {

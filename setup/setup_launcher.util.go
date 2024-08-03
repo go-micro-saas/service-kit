@@ -46,7 +46,7 @@ type launcherManager struct {
 func (s *launcherManager) getLoggerManager() (loggerutil.LoggerManager, error) {
 	logConfig := s.conf.GetLog()
 	appConfig := s.conf.GetApp()
-	loggerManager, err := loggerutil.NewSingletonLoggerManager(logConfig, appConfig)
+	loggerManager, err := loggerutil.NewLoggerManager(logConfig, appConfig)
 	if err != nil {
 		return nil, err
 	}
@@ -91,7 +91,7 @@ func (s *launcherManager) GetLoggerForHelper() (log.Logger, error) {
 
 func (s *launcherManager) getRedisManager() (redisutil.RedisManager, error) {
 	redisConfig := s.conf.GetRedis()
-	redisManager, err := redisutil.NewSingletonRedisManager(redisConfig)
+	redisManager, err := redisutil.NewRedisManager(redisConfig)
 	if err != nil {
 		return nil, err
 	}
@@ -124,7 +124,7 @@ func (s *launcherManager) getMysqlManager() (mysqlutil.MysqlManager, error) {
 		return nil, err
 	}
 	mysqlConfig := s.conf.GetMysql()
-	mysqlManager, err := mysqlutil.NewSingletonMysqlManager(mysqlConfig, loggerManager)
+	mysqlManager, err := mysqlutil.NewMysqlManager(mysqlConfig, loggerManager)
 	if err != nil {
 		return nil, err
 	}
@@ -157,7 +157,7 @@ func (s *launcherManager) getPostgresManager() (postgresutil.PostgresManager, er
 		return nil, err
 	}
 	psqlConfig := s.conf.GetPsql()
-	postgresManager, err := postgresutil.NewSingletonPostgresManager(psqlConfig, loggerManager)
+	postgresManager, err := postgresutil.NewPostgresManager(psqlConfig, loggerManager)
 	if err != nil {
 		return nil, err
 	}
@@ -186,7 +186,7 @@ func (s *launcherManager) GetPostgresDBConn() (*gorm.DB, error) {
 
 func (s *launcherManager) getConsulManager() (consulutil.ConsulManager, error) {
 	consulConfig := s.conf.GetConsul()
-	consulManager, err := consulutil.NewSingletonConsulManager(consulConfig)
+	consulManager, err := consulutil.NewConsulManager(consulConfig)
 	if err != nil {
 		return nil, err
 	}
@@ -215,7 +215,7 @@ func (s *launcherManager) GetConsulClient() (*consulapi.Client, error) {
 
 func (s *launcherManager) getJaegerManager() (jaegerutil.JaegerManager, error) {
 	jaegerConfig := s.conf.GetJaeger()
-	jaegerManager, err := jaegerutil.NewSingletonJaegerManager(jaegerConfig)
+	jaegerManager, err := jaegerutil.NewJaegerManager(jaegerConfig)
 	if err != nil {
 		return nil, err
 	}
@@ -248,7 +248,7 @@ func (s *launcherManager) getRabbitmqManager() (rabbitmqutil.RabbitmqManager, er
 		return nil, err
 	}
 	rabbitmqConfig := s.conf.GetRabbitmq()
-	rabbitmqManager, err := rabbitmqutil.NewSingletonRabbitmqManager(rabbitmqConfig, loggerManager)
+	rabbitmqManager, err := rabbitmqutil.NewRabbitmqManager(rabbitmqConfig, loggerManager)
 	if err != nil {
 		return nil, err
 	}
@@ -288,7 +288,7 @@ func (s *launcherManager) getAuthInstance() (authutil.AuthInstance, error) {
 	}
 	// auth
 	encryptTokenEncrypt := s.conf.GetEncrypt().GetTokenEncrypt()
-	authInstance, err := authutil.NewSingletonAuthInstance(encryptTokenEncrypt, universalClient, loggerManager)
+	authInstance, err := authutil.NewAuthInstance(encryptTokenEncrypt, universalClient, loggerManager)
 	if err != nil {
 		return nil, err
 	}
