@@ -164,6 +164,8 @@ github.com/hashicorp/serf v0.10.1 h1:Z1H2J60yRKvfDYAOZLd2MU0ND4AH/WDz7xYHDWQsIPY
 github.com/hashicorp/serf v0.10.1/go.mod h1:yL2t6BqATOLGc5HF7qbFkTfXoPIY0WZdWHfEvMqbG+4=
 github.com/ikaiguang/go-srv-kit v0.2.22 h1:VAZgwXlkFJXLUSLVAcUeIibo0uibxeP8PBrNOe9QPGQ=
 github.com/ikaiguang/go-srv-kit v0.2.22/go.mod h1:o5btnGmb2I51M0wln0Yp9TplZHJtL/YazgQCUBnZkMY=
+github.com/ikaiguang/go-srv-kit v0.2.23 h1:xRMwTvbmEosmgfWornENy3owoxTzRLu7JW2jYq7lHN4=
+github.com/ikaiguang/go-srv-kit v0.2.23/go.mod h1:6HVxPWaoAsT5t7dKML4mAEgh5PuurNHmKeA9r9sWIPU=
 github.com/imdario/mergo v0.3.16 h1:wwQJbIsHYGMUyLSPrEq1CT16AhnhNJQ51+4fdHUnCl4=
 github.com/imdario/mergo v0.3.16/go.mod h1:WBLT9ZmE3lPoWsEzCh9LPo3TiwVN+ZKEjmz+hD27ysY=
 github.com/jackc/pgpassfile v1.0.0 h1:/6Hmqy13Ss2zCq62VdNG8tM1wchn8zjSGOBJ6icpsIM=
