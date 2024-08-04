@@ -18,8 +18,8 @@ func (p *pingDTO) ToBoGetPingMessageParam(req *resourcev1.PingReq) *bo.GetPingMe
 	return res
 }
 
-func (p *pingDTO) ToPbPingResp(dataModel *bo.GetPingMessageResult) *resourcev1.PingResp {
-	res := &resourcev1.PingResp{
+func (p *pingDTO) ToPbPingRespData(dataModel *bo.GetPingMessageResult) *resourcev1.PingRespData {
+	res := &resourcev1.PingRespData{
 		Message: dataModel.Message,
 	}
 	return res

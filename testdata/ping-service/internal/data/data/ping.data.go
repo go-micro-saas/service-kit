@@ -2,14 +2,21 @@ package data
 
 import (
 	"context"
+	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-micro-saas/service-kit/testdata/ping-service/internal/data/po"
 	datarepo "github.com/go-micro-saas/service-kit/testdata/ping-service/internal/data/repo"
 )
 
-type pingData struct{}
+type pingData struct {
+	log *log.Helper
+}
 
-func NewPingData() datarepo.PingDataRepo {
-	return &pingData{}
+func NewPingData(logger log.Logger) datarepo.PingDataRepo {
+	logHelper := log.NewHelper(log.With(logger, "module", "ping/data/ping"))
+
+	return &pingData{
+		log: logHelper,
+	}
 }
 
 func (p *pingData) GetMockPingMessage(ctx context.Context, param *po.MockPingMessageParam) (*po.MockPingMessageReply, error) {
