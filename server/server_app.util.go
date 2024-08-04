@@ -2,45 +2,33 @@ package serverutil
 
 import (
 	"github.com/go-kratos/kratos/v2"
-	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport"
 	configpb "github.com/go-micro-saas/service-kit/api/config"
 	apputil "github.com/go-micro-saas/service-kit/app"
 	consulutil "github.com/go-micro-saas/service-kit/consul"
 	jaegerutil "github.com/go-micro-saas/service-kit/jaeger"
 	middlewareutil "github.com/go-micro-saas/service-kit/middleware"
+	setuputil "github.com/go-micro-saas/service-kit/setup"
 	tracerutil "github.com/go-micro-saas/service-kit/tracer"
-	authpkg "github.com/ikaiguang/go-srv-kit/kratos/auth"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 	registrypkg "github.com/ikaiguang/go-srv-kit/kratos/registry"
 	stdlog "log"
 )
 
-func InitTracer(conf *configpb.Bootstrap) error {
-	if conf.GetSetting().GetEnableJaegerTracer() {
-		jaegerManager, err := jaegerutil.NewSingletonJaegerManager(conf.GetJaeger())
-		if err != nil {
-			return err
-		}
-		jaegerExporter, err := jaegerManager.GetExporter()
-		if err != nil {
-			return err
-		}
-		return tracerutil.InitTracerWithJaegerExporter(conf.GetApp(), jaegerExporter)
-	}
-	return tracerutil.InitTracer(conf.GetApp())
-}
-
 // NewApp .
 func NewApp(
-	conf *configpb.Bootstrap,
-	logger log.Logger,
-	loggerForMiddleware log.Logger,
-	authManager authpkg.AuthRepo,
+	launcherManager setuputil.LauncherManager,
 	authWhiteList map[string]middlewareutil.TransportServiceKind,
-) (app *kratos.App, err error) {
+) (*kratos.App, error) {
+	conf := launcherManager.GetConfig()
 	if err := InitTracer(conf); err != nil {
-		return app, err
+		return nil, err
+	}
+
+	// logger
+	logger, err := launcherManager.GetLogger()
+	if err != nil {
+		return nil, err
 	}
 
 	// 服务
@@ -49,9 +37,9 @@ func NewApp(
 	// http
 	httpConfig := conf.GetServer().GetHttp()
 	if httpConfig.GetEnable() {
-		hs, err := NewHTTPServer(httpConfig, loggerForMiddleware, authManager, authWhiteList)
+		hs, err := NewHTTPServer(launcherManager, authWhiteList)
 		if err != nil {
-			return app, err
+			return nil, err
 		}
 		servers = append(servers, hs)
 	}
@@ -59,15 +47,15 @@ func NewApp(
 	// grpc
 	grpcConfig := conf.GetServer().GetGrpc()
 	if grpcConfig.GetEnable() {
-		gs, err := NewGRPCServer(grpcConfig, loggerForMiddleware, authManager, authWhiteList)
+		gs, err := NewGRPCServer(launcherManager, authWhiteList)
 		if err != nil {
-			return app, err
+			return nil, err
 		}
 		servers = append(servers, gs)
 	}
 	if len(servers) == 0 {
 		e := errorpkg.ErrorInvalidParameter("服务列表为空")
-		return app, errorpkg.WithStack(e)
+		return nil, errorpkg.WithStack(e)
 	}
 
 	// appid
@@ -96,19 +84,33 @@ func NewApp(
 		stdlog.Println("|*** 加载：服务注册与发现")
 		consulManager, err := consulutil.NewSingletonConsulManager(conf.GetConsul())
 		if err != nil {
-			return app, err
+			return nil, err
 		}
 		consulClient, err := consulManager.GetClient()
 		if err != nil {
-			return app, err
+			return nil, err
 		}
 		r, err := registrypkg.NewConsulRegistry(consulClient)
 		if err != nil {
-			return app, err
+			return nil, err
 		}
 		appOptions = append(appOptions, kratos.Registrar(r))
 	}
 
-	app = kratos.New(appOptions...)
-	return app, err
+	return kratos.New(appOptions...), err
+}
+
+func InitTracer(conf *configpb.Bootstrap) error {
+	if conf.GetSetting().GetEnableJaegerTracer() {
+		jaegerManager, err := jaegerutil.NewSingletonJaegerManager(conf.GetJaeger())
+		if err != nil {
+			return err
+		}
+		jaegerExporter, err := jaegerManager.GetExporter()
+		if err != nil {
+			return err
+		}
+		return tracerutil.InitTracerWithJaegerExporter(conf.GetApp(), jaegerExporter)
+	}
+	return tracerutil.InitTracer(conf.GetApp())
 }

@@ -45,11 +45,13 @@ func Loading(filePath string, loadingOpts ...Option) (*configpb.Bootstrap, error
 }
 
 // MergeConfig 合并配置；后面的覆盖前面的
+// Merge merges src into dst, which must be a message with the same descriptor.
 func MergeConfig(first, second proto.Message) {
 	stdlog.Println("|==================== MERGE CONFIGURATION : START ====================|")
 	defer stdlog.Println()
 	defer stdlog.Println("|==================== MERGE CONFIGURATION : END ====================|")
 
+	// not proto.Merge
 	firstMessage := first.ProtoReflect()
 	secondMessage := second.ProtoReflect()
 	var rangeFn = func(fd protoreflect.FieldDescriptor, v protoreflect.Value) bool {

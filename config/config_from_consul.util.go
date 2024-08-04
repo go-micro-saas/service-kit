@@ -60,10 +60,6 @@ func LoadingConfigFromConsul(consulClient *consulapi.Client, appConfig *configpb
 	return bootstrap, nil
 }
 
-func mergeOtherConfig() {
-
-}
-
 func loadingConfigFromConsul(consulClient *consulapi.Client, consulConfigPath string, otherConfigs ...proto.Message) (*configpb.Bootstrap, error) {
 	stdlog.Println("|==================== LOADING CONSUL CONFIGURATION : START ====================|")
 	defer stdlog.Println()

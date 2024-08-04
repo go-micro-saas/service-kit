@@ -23,6 +23,8 @@ import (
 )
 
 type LauncherManager interface {
+	GetConfig() *configpb.Bootstrap
+
 	GetLogger() (log.Logger, error)
 	GetLoggerForMiddleware() (log.Logger, error)
 	GetLoggerForHelper() (log.Logger, error)

@@ -43,6 +43,10 @@ type launcherManager struct {
 	authInstance        authutil.AuthInstance
 }
 
+func (s *launcherManager) GetConfig() *configpb.Bootstrap {
+	return s.conf
+}
+
 func (s *launcherManager) getLoggerManager() (loggerutil.LoggerManager, error) {
 	logConfig := s.conf.GetLog()
 	appConfig := s.conf.GetApp()
