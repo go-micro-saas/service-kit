@@ -1,15 +1,22 @@
 package service
 
 import (
+	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	resourcev1 "github.com/ikaiguang/go-srv-kit/api/ping/v1/resources"
 	apppkg "github.com/ikaiguang/go-srv-kit/kratos/app"
 )
 
-type HomeService struct{}
+type HomeService struct {
+	log *log.Helper
+}
 
-func NewRootPath() *HomeService {
-	return &HomeService{}
+func NewHomeService(logger log.Logger) *HomeService {
+	logHelper := log.NewHelper(log.With(logger, "module", "ping/service/home"))
+
+	return &HomeService{
+		log: logHelper,
+	}
 }
 
 func (s *HomeService) Homepage(w http.ResponseWriter, r *http.Request) {

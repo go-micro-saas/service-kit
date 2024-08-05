@@ -1,4 +1,4 @@
-package serverutil
+package api
 
 import (
 	middlewareutil "github.com/go-micro-saas/service-kit/middleware"
