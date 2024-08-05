@@ -2,6 +2,8 @@ package main
 
 import (
 	"flag"
+	setuputil "github.com/go-micro-saas/service-kit/setup"
+	stdlog "log"
 )
 
 // go build -ldflags "-X main.Version=x.y.z"
@@ -18,5 +20,9 @@ func init() {
 }
 
 func main() {
-
+	launcher, err := setuputil.NewLauncherManager(flagconf)
+	if err != nil {
+		stdlog.Fatalf("setuputil.NewLauncherManager faild, error: %+v", err)
+	}
+	_ = launcher
 }

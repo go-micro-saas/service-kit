@@ -16,8 +16,11 @@ var _ metadata.Option
 func NewGRPCServer(
 	launcherManager setuputil.LauncherManager,
 	authWhiteList map[string]middlewareutil.TransportServiceKind,
-) (srv *grpc.Server, err error) {
+) (*grpc.Server, error) {
 	grpcConfig := configutil.GRPCConfig(launcherManager.GetConfig())
+	if !grpcConfig.GetEnable() {
+		return nil, nil
+	}
 	stdlog.Printf("|*** 加载：GRPC服务：%s\n", grpcConfig.GetAddr())
 
 	// loggerForMiddleware
@@ -56,7 +59,7 @@ func NewGRPCServer(
 		stdlog.Println("|*** 加载：验证中间件：GRPC")
 		jwtMiddleware, err := middlewareutil.NewAuthMiddleware(authManager, authWhiteList)
 		if err != nil {
-			return srv, err
+			return nil, err
 		}
 		middlewareSlice = append(middlewareSlice, jwtMiddleware)
 	}
@@ -64,11 +67,8 @@ func NewGRPCServer(
 	// 中间件选项
 	opts = append(opts, grpc.Middleware(middlewareSlice...))
 
-	// 服务
-	srv = grpc.NewServer(opts...)
 	//v1.RegisterGreeterServer(srv, greeter)
-
-	return srv, err
+	return grpc.NewServer(opts...), err
 }
 
 // RegisterGRPCRoute 注册路由

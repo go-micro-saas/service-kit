@@ -17,8 +17,11 @@ var _ metadata.Option
 func NewHTTPServer(
 	launcherManager setuputil.LauncherManager,
 	authWhiteList map[string]middlewareutil.TransportServiceKind,
-) (srv *http.Server, err error) {
+) (*http.Server, error) {
 	httpConfig := configutil.HTTPConfig(launcherManager.GetConfig())
+	if !httpConfig.GetEnable() {
+		return nil, nil
+	}
 	stdlog.Printf("|*** 加载：HTTP服务：%s\n", httpConfig.GetAddr())
 
 	// loggerForMiddleware
@@ -63,7 +66,7 @@ func NewHTTPServer(
 		stdlog.Println("|*** 加载：验证中间件：HTTP")
 		jwtMiddleware, err := middlewareutil.NewAuthMiddleware(authManager, authWhiteList)
 		if err != nil {
-			return srv, err
+			return nil, err
 		}
 		middlewareSlice = append(middlewareSlice, jwtMiddleware)
 	}
@@ -71,11 +74,8 @@ func NewHTTPServer(
 	// 中间件选项
 	opts = append(opts, http.Middleware(middlewareSlice...))
 
-	// 服务
-	srv = http.NewServer(opts...)
 	//v1.RegisterGreeterHTTPServer(srv, greeter)
-
-	return srv, err
+	return http.NewServer(opts...), err
 }
 
 // RegisterHTTPRoute 注册路由

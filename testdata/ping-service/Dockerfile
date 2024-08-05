@@ -51,7 +51,9 @@ RUN apt-get update && \
 COPY --from=builder ${WORK_DIR}/bin/main ./main
 COPY --from=builder ${WORK_DIR}/app/${SERVICE_NAME}/configs ./configs
 
+# http
 EXPOSE 10001
+# grpc
 EXPOSE 10002
 
 ENTRYPOINT ./main -conf=./configs
