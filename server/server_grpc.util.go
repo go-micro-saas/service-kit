@@ -53,9 +53,8 @@ func NewGRPCServer(
 	// setting
 	settingConfig := configutil.SettingConfig(launcherManager.GetConfig())
 	if settingConfig.GetEnableAuthMiddleware() {
-		// jwt
-		stdlog.Println("|*** 加载：JWT中间件：GRPC")
-		jwtMiddleware, err := middlewareutil.NewJWTMiddleware(authManager, authWhiteList)
+		stdlog.Println("|*** 加载：验证中间件：GRPC")
+		jwtMiddleware, err := middlewareutil.NewAuthMiddleware(authManager, authWhiteList)
 		if err != nil {
 			return srv, err
 		}

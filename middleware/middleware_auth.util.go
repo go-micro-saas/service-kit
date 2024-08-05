@@ -6,15 +6,25 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/selector"
 	"github.com/go-kratos/kratos/v2/transport"
 	authpkg "github.com/ikaiguang/go-srv-kit/kratos/auth"
+	contextpkg "github.com/ikaiguang/go-srv-kit/kratos/context"
 )
 
 // TransportServiceKind 通行类型
-type TransportServiceKind int32
+type TransportServiceKind string
 
 const (
-	TransportServiceKindALL  = 0
-	TransportServiceKindHTTP = 1
-	TransportServiceKindGRPC = 2
+	TransportServiceKindALL           = "ALL"
+	TransportServiceKindHTTP          = "HTTP"
+	TransportServiceKindGRPC          = "GRPC"
+	TransportServiceKindMethodGet     = "GET"
+	TransportServiceKindMethodHead    = "HEAD"
+	TransportServiceKindMethodPost    = "POST"
+	TransportServiceKindMethodPut     = "PUT"
+	TransportServiceKindMethodPatch   = "PATCH"
+	TransportServiceKindMethodDelete  = "DELETE"
+	TransportServiceKindMethodConnect = "CONNECT"
+	TransportServiceKindMethodOptions = "OPTIONS"
+	TransportServiceKindMethodTrace   = "TRACE"
 )
 
 func (s TransportServiceKind) MatchServiceKind(ctx context.Context) bool {
@@ -36,25 +46,26 @@ func (s TransportServiceKind) MatchServiceKind(ctx context.Context) bool {
 // NewWhiteListMatcher 路由白名单
 func NewWhiteListMatcher(whiteList map[string]TransportServiceKind) selector.MatchFunc {
 	return func(ctx context.Context, operation string) bool {
-		//if tr, ok := contextutil.MatchHTTPServerContext(ctx); ok {
-		//	if _, ok := whiteList[tr.Request().URL.Path]; ok {
-		//		return false
-		//	}
-		//}
-
-		tsk, ok := whiteList[operation]
-		if !ok {
-			return true
-		}
-		if tsk.MatchServiceKind(ctx) {
+		// operation
+		if tsk, ok := whiteList[operation]; ok && tsk.MatchServiceKind(ctx) {
 			return false
 		}
+
+		// http path
+		if tr, ok := contextpkg.MatchHTTPServerContext(ctx); ok {
+			if sk, ok := whiteList[tr.Request().URL.Path]; ok {
+				if sk == TransportServiceKindALL || sk == "" || string(sk) == tr.Request().Method {
+					return false
+				}
+			}
+		}
+
 		return true
 	}
 }
 
-// NewJWTMiddleware jwt中间
-func NewJWTMiddleware(authTokenRepo authpkg.AuthRepo, whiteList map[string]TransportServiceKind) (m middleware.Middleware, err error) {
+// NewAuthMiddleware 验证中间
+func NewAuthMiddleware(authTokenRepo authpkg.AuthRepo, whiteList map[string]TransportServiceKind) (m middleware.Middleware, err error) {
 	m = selector.Server(
 		authpkg.Server(
 			authTokenRepo.JWTSigningKeyFunc,

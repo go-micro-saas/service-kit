@@ -9,7 +9,7 @@ require (
 	github.com/go-kratos/kratos/v2 v2.7.3
 	github.com/google/wire v0.6.0
 	github.com/hashicorp/consul/api v1.26.1
-	github.com/ikaiguang/go-srv-kit v0.2.26
+	github.com/ikaiguang/go-srv-kit v0.2.27
 	github.com/redis/go-redis/v9 v9.4.0
 	go.opentelemetry.io/otel/exporters/jaeger v1.14.0
 	go.opentelemetry.io/otel/trace v1.16.0
