@@ -80,7 +80,9 @@ func (s *loggerManager) setupLogger() error {
 	}
 
 	// for middleware
-	middlewareSkip := logpkg.CallerSkipForMiddleware
+	// 20240806 等同与 logger
+	//middlewareSkip := logpkg.CallerSkipForMiddleware + 1
+	middlewareSkip := logpkg.CallerSkipForLogger
 	loggerForMiddleware, loggerClosers, err := s.loadingLoggerWithCallerSkip(middlewareSkip)
 	if err != nil {
 		return err
