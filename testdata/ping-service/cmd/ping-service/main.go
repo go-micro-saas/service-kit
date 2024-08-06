@@ -20,6 +20,9 @@ func init() {
 }
 
 func main() {
+	if !flag.Parsed() {
+		flag.Parse()
+	}
 	app, cleanup, err := runservices.GetServerApp(flagconf)
 	if err != nil {
 		stdlog.Fatalf("==> runservices.GetServerApp failed: %+v\n", err)

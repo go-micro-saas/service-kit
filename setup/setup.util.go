@@ -15,7 +15,9 @@ import (
 	rabbitmqutil "github.com/go-micro-saas/service-kit/rabbitmq"
 	redisutil "github.com/go-micro-saas/service-kit/redis"
 	consulapi "github.com/hashicorp/consul/api"
+	debugpkg "github.com/ikaiguang/go-srv-kit/debug"
 	authpkg "github.com/ikaiguang/go-srv-kit/kratos/auth"
+	logpkg "github.com/ikaiguang/go-srv-kit/kratos/log"
 	"github.com/redis/go-redis/v9"
 	"go.opentelemetry.io/otel/exporters/jaeger"
 	"gorm.io/gorm"
@@ -81,10 +83,16 @@ func NewLauncherManager(configFilePath string, configOpts ...configutil.Option) 
 	}
 
 	// 初始化日志
-	_, err = launcher.getSingletonLoggerManager()
+	loggerManager, err := launcher.getSingletonLoggerManager()
 	if err != nil {
 		return nil, err
 	}
+	loggerForHelper, err := loggerManager.GetLoggerForHelper()
+	if err != nil {
+		return nil, err
+	}
+	logpkg.Setup(loggerForHelper)
+	debugpkg.Setup(loggerForHelper)
 
 	// redis
 	redisConfig := bootstrap.GetRedis()

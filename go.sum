@@ -230,6 +230,16 @@ github.com/hashicorp/serf v0.10.1 h1:Z1H2J60yRKvfDYAOZLd2MU0ND4AH/WDz7xYHDWQsIPY
 github.com/hashicorp/serf v0.10.1/go.mod h1:yL2t6BqATOLGc5HF7qbFkTfXoPIY0WZdWHfEvMqbG+4=
 github.com/ikaiguang/go-srv-kit v0.2.27 h1:WvFR0MLJZ+pOQPsy0AnuNDcV2P1BlnKSlNzLASGln50=
 github.com/ikaiguang/go-srv-kit v0.2.27/go.mod h1:6HVxPWaoAsT5t7dKML4mAEgh5PuurNHmKeA9r9sWIPU=
+github.com/ikaiguang/go-srv-kit v0.2.28 h1:6uCrNYjSx5bMcOY2ISNTkF6FJ7JwBzqIMG24U66MkQc=
+github.com/ikaiguang/go-srv-kit v0.2.28/go.mod h1:6HVxPWaoAsT5t7dKML4mAEgh5PuurNHmKeA9r9sWIPU=
+github.com/ikaiguang/go-srv-kit v0.2.29 h1:NYNs5Ou9O2NpgvfCrMxv8MOP3GyxgJdih7JUuSMeZJc=
+github.com/ikaiguang/go-srv-kit v0.2.29/go.mod h1:6HVxPWaoAsT5t7dKML4mAEgh5PuurNHmKeA9r9sWIPU=
+github.com/ikaiguang/go-srv-kit v0.2.30 h1:Wa3JIIPzB1BIeyW5Yx67PbRNNfaaH2EtmbmXg1s52Vs=
+github.com/ikaiguang/go-srv-kit v0.2.30/go.mod h1:6HVxPWaoAsT5t7dKML4mAEgh5PuurNHmKeA9r9sWIPU=
+github.com/ikaiguang/go-srv-kit v0.2.31 h1:o0tzG4ng0VG2ccrea4maMnXyvD8VpM91MlciFdKnaiE=
+github.com/ikaiguang/go-srv-kit v0.2.31/go.mod h1:6HVxPWaoAsT5t7dKML4mAEgh5PuurNHmKeA9r9sWIPU=
+github.com/ikaiguang/go-srv-kit v0.2.32 h1:BtcUg2+2d5R6OMX5yIyZMe+yrk1gz6lm3Kl4DMMgE8I=
+github.com/ikaiguang/go-srv-kit v0.2.32/go.mod h1:6HVxPWaoAsT5t7dKML4mAEgh5PuurNHmKeA9r9sWIPU=
 github.com/imdario/mergo v0.3.12/go.mod h1:jmQim1M+e3UYxmgPu/WyfjB3N3VflVyUjjjwH0dnCYA=
 github.com/imdario/mergo v0.3.16 h1:wwQJbIsHYGMUyLSPrEq1CT16AhnhNJQ51+4fdHUnCl4=
 github.com/imdario/mergo v0.3.16/go.mod h1:WBLT9ZmE3lPoWsEzCh9LPo3TiwVN+ZKEjmz+hD27ysY=
