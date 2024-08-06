@@ -44,6 +44,11 @@ func (s *pingService) Ping(ctx context.Context, req *resourcev1.PingReq) (*resou
 		return nil, errorpkg.WithStack(e)
 	}
 
+	// panic
+	if req.GetMessage() == "panic" {
+		panic("testdata panic")
+	}
+
 	param := dto.PingDTO.ToBoGetPingMessageParam(req)
 	reply, err := s.pingBiz.GetPingMessage(ctx, param)
 	if err != nil {
