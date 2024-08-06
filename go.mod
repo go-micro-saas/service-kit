@@ -7,7 +7,7 @@ require (
 	github.com/envoyproxy/protoc-gen-validate v0.10.1
 	github.com/go-kratos/kratos/contrib/config/consul/v2 v2.0.0-20240401040316-f715eb0bd808
 	github.com/go-kratos/kratos/v2 v2.7.3
-	github.com/google/wire v0.6.0
+	github.com/gorilla/websocket v1.5.1
 	github.com/hashicorp/consul/api v1.26.1
 	github.com/ikaiguang/go-srv-kit v0.2.27
 	github.com/redis/go-redis/v9 v9.4.0
@@ -23,16 +23,21 @@ require (
 	github.com/armon/go-metrics v0.4.1 // indirect
 	github.com/cenkalti/backoff/v3 v3.2.2 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
+	github.com/coreos/go-semver v0.3.0 // indirect
+	github.com/coreos/go-systemd/v22 v22.3.2 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/fatih/color v1.14.1 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/go-kratos/aegis v0.2.0 // indirect
+	github.com/go-kratos/kratos/contrib/registry/consul/v2 v2.0.0-20230424154814-520b321fe99b // indirect
+	github.com/go-kratos/kratos/contrib/registry/etcd/v2 v2.0.0-20231023125239-6cdd81811e10 // indirect
 	github.com/go-logr/logr v1.2.4 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-playground/form/v4 v4.2.1 // indirect
 	github.com/go-redsync/redsync/v4 v4.12.1 // indirect
 	github.com/go-sql-driver/mysql v1.8.1 // indirect
+	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang-jwt/jwt/v5 v5.2.1 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/google/uuid v1.6.0 // indirect
@@ -70,6 +75,9 @@ require (
 	github.com/tidwall/pretty v1.2.0 // indirect
 	github.com/tidwall/sjson v1.2.5 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
+	go.etcd.io/etcd/api/v3 v3.5.8 // indirect
+	go.etcd.io/etcd/client/pkg/v3 v3.5.8 // indirect
+	go.etcd.io/etcd/client/v3 v3.5.8 // indirect
 	go.opentelemetry.io/otel v1.16.0 // indirect
 	go.opentelemetry.io/otel/metric v1.16.0 // indirect
 	go.opentelemetry.io/otel/sdk v1.16.0 // indirect
