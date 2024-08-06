@@ -4,24 +4,26 @@
 package pingexport
 
 import (
+	"github.com/go-kratos/kratos/v2/transport/grpc"
+	"github.com/go-kratos/kratos/v2/transport/http"
 	serverutil "github.com/go-micro-saas/service-kit/server"
 	setuputil "github.com/go-micro-saas/service-kit/setup"
-	"github.com/go-micro-saas/service-kit/testdata/ping-service/api"
+	"github.com/go-micro-saas/service-kit/testdata/ping-service/internal/biz/biz"
+	"github.com/go-micro-saas/service-kit/testdata/ping-service/internal/data/data"
+	"github.com/go-micro-saas/service-kit/testdata/ping-service/internal/service/service"
 	"github.com/google/wire"
 )
 
-//var (
-//	HomeService      = wire.NewSet(setuputil.GetLogger, service.NewHomeService)
-//	WebsocketService = wire.NewSet(setuputil.GetLogger, biz.NewWebsocketBiz, service.NewWebsocketService)
-//	PingService      = wire.NewSet(setuputil.GetLogger, biz.NewPingBiz, service.NewPingService)
-//	TestdataService  = wire.NewSet(setuputil.GetLogger, biz.NewWebsocketBiz, service.NewTestdataService)
-//)
-
-func initServices(launcherManager setuputil.LauncherManager) (*Services, error) {
+func initServices(launcherManager setuputil.LauncherManager, hs *http.Server, gs *grpc.Server) (*serverutil.Services, func(), error) {
 	panic(wire.Build(
-		api.GetAuthWhiteList,
-		serverutil.NewGRPCServer, serverutil.NewHTTPServer,
-		NewServices,
+		// service
+		setuputil.GetLogger,
+		data.NewPingData,
+		biz.NewWebsocketBiz, biz.NewPingBiz,
+		service.NewHomeService, service.NewWebsocketService,
+		service.NewPingService, service.NewTestdataService,
+		// register services
+		service.RegisterServices,
 	))
-	return nil, nil
+	return &serverutil.Services{}, func() {}, nil
 }

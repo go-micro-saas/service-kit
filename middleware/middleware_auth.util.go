@@ -27,6 +27,16 @@ const (
 	TransportServiceKindMethodTrace   = "TRACE"
 )
 
+func MergeWhitelist(whitelist ...map[string]TransportServiceKind) map[string]TransportServiceKind {
+	list := make(map[string]TransportServiceKind)
+	for _, item := range whitelist {
+		for k, v := range item {
+			list[k] = v
+		}
+	}
+	return list
+}
+
 func (s TransportServiceKind) MatchServiceKind(ctx context.Context) bool {
 	switch s {
 	default:
