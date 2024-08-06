@@ -86,6 +86,8 @@ init:
 generate:
 	#go mod tidy
 	go generate ./...
+	wire ./testdata/ping-service/cmd/ping-service/export
+	wire ./testdata/ping-service/cmd/ping-service/run
 
 # ===== include =====
 # ===== include =====
@@ -94,6 +96,12 @@ generate:
 # api
 include api/makefile_protoc.mk
 include api/config/makefile_protoc.mk
+
+# run
+#.PHONY: run
+## run service :-->: make run service=ping-service
+#run:
+#	go run ./app/${service}/cmd/${service}/... -conf=./app/${service}/configs
 
 # ===== include =====
 # ===== include =====

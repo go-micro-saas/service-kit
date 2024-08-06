@@ -51,6 +51,21 @@ func LoadingConfig(configFilePath string, configOpts ...configutil.Option) (*con
 	return conf, nil
 }
 
+func NewLauncherManagerWithCleanup(configFilePath string, configOpts ...configutil.Option) (LauncherManager, func(), error) {
+	launcherManager, err := NewLauncherManager(configFilePath, configOpts...)
+	if err != nil {
+		return nil, nil, err
+	}
+	cleanup := func() {
+		closeErr := launcherManager.Close()
+		if closeErr != nil {
+			stdlog.Printf("==> launcherManager.Close failed: %+v\n", closeErr)
+		}
+	}
+	return launcherManager, cleanup, nil
+
+}
+
 func NewLauncherManager(configFilePath string, configOpts ...configutil.Option) (LauncherManager, error) {
 	// 开始配置
 	stdlog.Println("|==================== LOADING PROGRAM : START ====================|")

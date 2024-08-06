@@ -22,7 +22,7 @@ func NewHTTPServer(
 	if !httpConfig.GetEnable() {
 		return nil, nil
 	}
-	stdlog.Printf("|*** 加载：HTTP服务：%s\n", httpConfig.GetAddr())
+	stdlog.Printf("|*** LOADING：HTTP Server：%s\n", httpConfig.GetAddr())
 
 	// loggerForMiddleware
 	loggerForMiddleware, err := launcherManager.GetLoggerForMiddleware()
@@ -63,7 +63,7 @@ func NewHTTPServer(
 	// setting
 	settingConfig := configutil.SettingConfig(launcherManager.GetConfig())
 	if settingConfig.GetEnableAuthMiddleware() {
-		stdlog.Println("|*** 加载：验证中间件：HTTP")
+		stdlog.Println("|*** LOADING：AuthMiddleware：HTTP")
 		jwtMiddleware, err := middlewareutil.NewAuthMiddleware(authManager, authWhiteList)
 		if err != nil {
 			return nil, err
@@ -76,10 +76,4 @@ func NewHTTPServer(
 
 	//v1.RegisterGreeterHTTPServer(srv, greeter)
 	return http.NewServer(opts...), err
-}
-
-// RegisterHTTPRoute 注册路由
-func RegisterHTTPRoute(srv *http.Server) (err error) {
-	stdlog.Println("|*** 注册HTTP路由：...")
-	return err
 }

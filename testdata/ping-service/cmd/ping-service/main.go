@@ -2,7 +2,7 @@ package main
 
 import (
 	"flag"
-	setuputil "github.com/go-micro-saas/service-kit/setup"
+	runservices "github.com/go-micro-saas/service-kit/testdata/ping-service/cmd/ping-service/run"
 	stdlog "log"
 )
 
@@ -20,9 +20,17 @@ func init() {
 }
 
 func main() {
-	launcher, err := setuputil.NewLauncherManager(flagconf)
+	app, cleanup, err := runservices.GetServerApp(flagconf)
 	if err != nil {
-		stdlog.Fatalf("setuputil.NewLauncherManager faild, error: %+v", err)
+		stdlog.Fatalf("==> runservices.GetServerApp failed: %+v\n", err)
 	}
-	_ = launcher
+	defer func() {
+		if cleanup != nil {
+			cleanup()
+		}
+	}()
+	// start
+	if err := app.Run(); err != nil {
+		stdlog.Fatalf("==> app.Run failed: %+v\n", err)
+	}
 }

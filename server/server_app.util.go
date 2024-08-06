@@ -3,11 +3,12 @@ package serverutil
 import (
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/transport"
+	"github.com/go-kratos/kratos/v2/transport/grpc"
+	"github.com/go-kratos/kratos/v2/transport/http"
 	configpb "github.com/go-micro-saas/service-kit/api/config"
 	apputil "github.com/go-micro-saas/service-kit/app"
 	consulutil "github.com/go-micro-saas/service-kit/consul"
 	jaegerutil "github.com/go-micro-saas/service-kit/jaeger"
-	middlewareutil "github.com/go-micro-saas/service-kit/middleware"
 	setuputil "github.com/go-micro-saas/service-kit/setup"
 	tracerutil "github.com/go-micro-saas/service-kit/tracer"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
@@ -15,11 +16,12 @@ import (
 	stdlog "log"
 )
 
+// Services 各个服务注册结果
+type Services struct {
+}
+
 // NewApp .
-func NewApp(
-	launcherManager setuputil.LauncherManager,
-	authWhiteList map[string]middlewareutil.TransportServiceKind,
-) (*kratos.App, error) {
+func NewApp(launcherManager setuputil.LauncherManager, hs *http.Server, gs *grpc.Server) (*kratos.App, error) {
 	conf := launcherManager.GetConfig()
 	if err := InitTracer(conf); err != nil {
 		return nil, err
@@ -37,24 +39,16 @@ func NewApp(
 	// http
 	httpConfig := conf.GetServer().GetHttp()
 	if httpConfig.GetEnable() {
-		hs, err := NewHTTPServer(launcherManager, authWhiteList)
-		if err != nil {
-			return nil, err
-		}
 		servers = append(servers, hs)
 	}
 
 	// grpc
 	grpcConfig := conf.GetServer().GetGrpc()
 	if grpcConfig.GetEnable() {
-		gs, err := NewGRPCServer(launcherManager, authWhiteList)
-		if err != nil {
-			return nil, err
-		}
 		servers = append(servers, gs)
 	}
 	if len(servers) == 0 {
-		e := errorpkg.ErrorInvalidParameter("服务列表为空")
+		e := errorpkg.ErrorInvalidParameter("server list cannot be empty")
 		return nil, errorpkg.WithStack(e)
 	}
 
@@ -81,7 +75,7 @@ func NewApp(
 
 	// 启用服务注册中心
 	if conf.GetSetting().GetEnableConsulRegistry() {
-		stdlog.Println("|*** 加载：服务注册与发现")
+		stdlog.Println("|*** LOADING: ServiceRegistry: ...")
 		consulManager, err := consulutil.NewSingletonConsulManager(conf.GetConsul())
 		if err != nil {
 			return nil, err
@@ -113,4 +107,18 @@ func InitTracer(conf *configpb.Bootstrap) error {
 		return tracerutil.InitTracerWithJaegerExporter(conf.GetApp(), jaegerExporter)
 	}
 	return tracerutil.InitTracer(conf.GetApp())
+}
+
+func TODOAppServices(serverManager ServerManager, services *Services) (*kratos.App, func(), error) {
+	app, err := serverManager.GetApp()
+	if err != nil {
+		return nil, nil, err
+	}
+	cleanup := func() {
+		closeErr := app.Stop()
+		if closeErr != nil {
+			stdlog.Printf("==> app.Stop failed: %+v\n", closeErr)
+		}
+	}
+	return app, cleanup, nil
 }

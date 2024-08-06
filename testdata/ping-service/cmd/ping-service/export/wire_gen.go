@@ -4,7 +4,7 @@
 //go:build !wireinject
 // +build !wireinject
 
-package pingexport
+package exportservices
 
 import (
 	"github.com/go-kratos/kratos/v2/transport/grpc"
