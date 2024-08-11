@@ -8,8 +8,8 @@ ifneq ($(SAAS_CONFIGS_INTERNAL_PROTO), "")
 else
 	SAAS_CONFIGS_PROTO_FILES=$(SAAS_CONFIGS_API_PROTO)
 endif
-.PHONY: protoc-api-config
+.PHONY: protoc-config-protobuf
 # protoc :-->: generate configs protobuf
-protoc-api-config:
+protoc-config-protobuf:
 	@echo "# generate ${service} protobuf"
 	$(call protoc_protobuf,$(SAAS_CONFIGS_PROTO_FILES))
