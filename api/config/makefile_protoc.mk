@@ -9,7 +9,7 @@ else
 	SAAS_CONFIGS_PROTO_FILES=$(SAAS_CONFIGS_API_PROTO)
 endif
 .PHONY: protoc-config-protobuf
-# protoc :-->: generate configs protobuf
+# protoc :-->: generate config api protobuf
 protoc-config-protobuf:
-	@echo "# generate ${service} protobuf"
+	@echo "# generate config api protobuf"
 	$(call protoc_protobuf,$(SAAS_CONFIGS_PROTO_FILES))
