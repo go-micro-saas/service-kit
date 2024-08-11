@@ -38,10 +38,10 @@ func (s *pingService) Ping(ctx context.Context, req *resourcev1.PingReq) (*resou
 	// error
 	if req.GetMessage() == "error" {
 		e := errorv1.ErrorContentError(req.GetMessage())
-		e.Metadata = map[string]string{
+		md := map[string]string{
 			"testdata": "testdata",
 		}
-		return nil, errorpkg.WithStack(e)
+		return nil, errorpkg.WrapWithMetadata(e, md)
 	}
 
 	// panic
