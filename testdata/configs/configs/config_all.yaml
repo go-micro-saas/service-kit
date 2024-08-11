@@ -246,14 +246,3 @@ third_party_api:
     access_secret:
     encrypt_id:
     encrypt_secret:
-
-# snowflake 雪花算法
-snowflake:
-  enable: true
-  endpoint: http://127.0.0.1:50627
-  # with_discovery 服务注册与发现；调用 apputil.ID 可获取 discovery.endpoint
-  #with_discovery: false
-  #endpoint: "discovery:///snowflake-node-id:PRODUCTION:ckgmac:v1.0.0"
-  with_http_basic_auth: false
-  username:
-  password:
