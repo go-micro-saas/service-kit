@@ -7,6 +7,7 @@ require (
 	github.com/envoyproxy/protoc-gen-validate v1.0.2
 	github.com/go-kratos/kratos/contrib/config/consul/v2 v2.0.0-20240401040316-f715eb0bd808
 	github.com/go-kratos/kratos/v2 v2.8.0
+	github.com/gorilla/websocket v1.5.1
 	github.com/hashicorp/consul/api v1.26.1
 	github.com/ikaiguang/go-srv-kit v0.2.33
 	github.com/redis/go-redis/v9 v9.4.0
