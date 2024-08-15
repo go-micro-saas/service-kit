@@ -3,7 +3,6 @@ package consulutil
 import (
 	consulapi "github.com/hashicorp/consul/api"
 	"sync"
-
 	configpb "github.com/go-micro-saas/service-kit/api/config"
 )
 
