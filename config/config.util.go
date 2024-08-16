@@ -41,6 +41,9 @@ func MysqlConfig(bootstrap *configpb.Bootstrap) *configpb.MySQL {
 func PostgresConfig(bootstrap *configpb.Bootstrap) *configpb.PSQL {
 	return bootstrap.GetPsql()
 }
+func MongoConfig(bootstrap *configpb.Bootstrap) *configpb.Mongo {
+	return bootstrap.GetMongo()
+}
 func RedisConfig(bootstrap *configpb.Bootstrap) *configpb.Redis {
 	return bootstrap.GetRedis()
 }

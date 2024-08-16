@@ -13,5 +13,9 @@
 127.0.0.1 my-postgres-hostname
 127.0.0.1 my-rabbitmq-hostname
 127.0.0.1 my-redis-hostname
+127.0.0.1 my-mongo-hostname
+127.0.0.1 my-mongo1
+127.0.0.1 my-mongo2
+127.0.0.1 my-mongo3
 
 ```
