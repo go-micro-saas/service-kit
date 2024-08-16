@@ -72,6 +72,17 @@ func loadingConfigFromConsul(consulClient *consulapi.Client, consulConfigPath st
 		e := errorpkg.ErrorInternalError(err.Error())
 		return nil, errorpkg.WithStack(e)
 	}
+	kvs, err := cs.Load()
+	if err != nil {
+		e := errorpkg.ErrorInternalError(err.Error())
+		return nil, errorpkg.WithStack(e)
+	}
+	if len(kvs) == 0 {
+		e := errorpkg.ErrorRecordNotFound("consul configuration not found; path: %s", consulConfigPath)
+		return nil, errorpkg.WithStack(e)
+	}
+
+	// options
 	var opts []config.Option
 	opts = append(opts, config.WithSource(cs))
 
