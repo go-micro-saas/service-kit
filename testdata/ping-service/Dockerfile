@@ -1,21 +1,29 @@
 ARG GOPATH=/myworkspace/golang
 ARG WORK_DIR=/myworkspace/golang/src/workspace
 ARG GOPROXY=https://goproxy.io,direct
+ARG GOMODCACHE=/myworkspace/golang/pkg/mod
+ARG GOCACHE=/myworkspace/golang/build_cache
+
+# service name
 ARG SERVICE_NAME=ping-service
 
-FROM golang:1.21.12 AS builder
+FROM golang:1.22.6 AS builder
 
 # arg
 ARG WORK_DIR
 ARG GOPATH
 ARG GOPROXY
+ARG GOMODCACHE
+ARG GOCACHE
 ARG SERVICE_NAME
 ARG VERSION
 
 # env
-ENV GO111MODULE=on
 ENV GOPATH=${GOPATH}
 ENV GOPROXY=${GOPROXY}
+ENV GOMODCACHE=${GOMODCACHE}
+ENV GOCACHE=${GOCACHE}
+ENV GO111MODULE=on
 ENV CGO_ENABLED=0
 
 WORKDIR ${WORK_DIR}
@@ -42,7 +50,7 @@ ENV TZ=Asia/Shanghai
 WORKDIR ${WORK_DIR}
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends -y tzdata ca-certificates curl telnet && \
+    apt-get install -y --no-install-recommends -y tzdata ca-certificates netbase telnet curl  less && \
     ln -sf /usr/share/zoneinfo/${TZ} /etc/localtime && \
     echo ${TZ} > /etc/timezone && \
     apt-get autoremove -y && apt-get autoclean -y && apt-get clean -y && \
