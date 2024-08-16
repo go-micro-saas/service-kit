@@ -1,7 +1,8 @@
 # jaeger 服务追踪
 jaeger:
   enable: true
-  endpoint: http://127.0.0.1:14268/api/traces
+  #endpoint: http://127.0.0.1:14268/api/traces
+  endpoint: http://my-jaeger-hostname:14268/api/traces
   with_http_basic_auth: false
   username:
   password:
