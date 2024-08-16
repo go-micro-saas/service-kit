@@ -151,7 +151,7 @@ message Mongo {
   google.protobuf.Duration connect_timeout    = 9;
   google.protobuf.Duration timeout            = 10;
   google.protobuf.Duration heartbeat_interval = 11;
-  google.protobuf.Duration mac_conn_idle_time = 12;
+  google.protobuf.Duration max_conn_idle_time = 12;
   google.protobuf.Duration local_threshold    = 13;
 }
 
