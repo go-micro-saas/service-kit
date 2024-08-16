@@ -1469,6 +1469,8 @@ func (m *Mongo) validate(all bool) error {
 
 	var errors []error
 
+	// no validation rules for Enable
+
 	// no validation rules for Debug
 
 	// no validation rules for AppName
@@ -1600,11 +1602,11 @@ func (m *Mongo) validate(all bool) error {
 	}
 
 	if all {
-		switch v := interface{}(m.GetLocalThreshold()).(type) {
+		switch v := interface{}(m.GetSlowThreshold()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
 				errors = append(errors, MongoValidationError{
-					field:  "LocalThreshold",
+					field:  "SlowThreshold",
 					reason: "embedded message failed validation",
 					cause:  err,
 				})
@@ -1612,16 +1614,16 @@ func (m *Mongo) validate(all bool) error {
 		case interface{ Validate() error }:
 			if err := v.Validate(); err != nil {
 				errors = append(errors, MongoValidationError{
-					field:  "LocalThreshold",
+					field:  "SlowThreshold",
 					reason: "embedded message failed validation",
 					cause:  err,
 				})
 			}
 		}
-	} else if v, ok := interface{}(m.GetLocalThreshold()).(interface{ Validate() error }); ok {
+	} else if v, ok := interface{}(m.GetSlowThreshold()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return MongoValidationError{
-				field:  "LocalThreshold",
+				field:  "SlowThreshold",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}

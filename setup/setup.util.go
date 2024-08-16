@@ -5,20 +5,13 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	configpb "github.com/go-micro-saas/service-kit/api/config"
 	apputil "github.com/go-micro-saas/service-kit/app"
-	authutil "github.com/go-micro-saas/service-kit/auth"
 	configutil "github.com/go-micro-saas/service-kit/config"
-	consulutil "github.com/go-micro-saas/service-kit/consul"
-	jaegerutil "github.com/go-micro-saas/service-kit/jaeger"
-	loggerutil "github.com/go-micro-saas/service-kit/logger"
-	mysqlutil "github.com/go-micro-saas/service-kit/mysql"
-	postgresutil "github.com/go-micro-saas/service-kit/postgres"
-	rabbitmqutil "github.com/go-micro-saas/service-kit/rabbitmq"
-	redisutil "github.com/go-micro-saas/service-kit/redis"
 	consulapi "github.com/hashicorp/consul/api"
 	debugpkg "github.com/ikaiguang/go-srv-kit/debug"
 	authpkg "github.com/ikaiguang/go-srv-kit/kratos/auth"
 	logpkg "github.com/ikaiguang/go-srv-kit/kratos/log"
 	"github.com/redis/go-redis/v9"
+	"go.mongodb.org/mongo-driver/mongo"
 	"go.opentelemetry.io/otel/exporters/jaeger"
 	"gorm.io/gorm"
 	stdlog "log"
@@ -34,6 +27,7 @@ type LauncherManager interface {
 	GetRedisClient() (redis.UniversalClient, error)
 	GetMysqlDBConn() (*gorm.DB, error)
 	GetPostgresDBConn() (*gorm.DB, error)
+	GetMongoClient() (*mongo.Client, error)
 	GetConsulClient() (*consulapi.Client, error)
 	GetJaegerExporter() (*jaeger.Exporter, error)
 	GetRabbitmqConn() (*amqp.ConnectionWrapper, error)
@@ -121,6 +115,14 @@ func NewLauncherManager(configFilePath string, configOpts ...configutil.Option) 
 		}
 	}
 
+	mongoConfig := bootstrap.GetMongo()
+	if mongoConfig.GetEnable() {
+		_, err = launcher.GetMongoClient()
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	// consul
 	consulConfig := bootstrap.GetConsul()
 	if consulConfig.GetEnable() {
@@ -157,18 +159,4 @@ func NewLauncherManager(configFilePath string, configOpts ...configutil.Option) 
 		}
 	}
 	return launcher, nil
-}
-
-func testWireSetup(
-	conf *configpb.Bootstrap,
-	loggerManager loggerutil.LoggerManager,
-	mysqlManager mysqlutil.MysqlManager,
-	postgresManager postgresutil.PostgresManager,
-	redisManager redisutil.RedisManager,
-	authInstance authutil.AuthInstance,
-	consulManager consulutil.ConsulManager,
-	jaegerManager jaegerutil.JaegerManager,
-	rabbitmqManager rabbitmqutil.RabbitmqManager,
-) (LauncherManager, error) {
-	return nil, nil
 }

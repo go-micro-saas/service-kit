@@ -131,8 +131,8 @@ mongo:
   connect_timeout: 3s
   timeout: 3s
   heartbeat_interval: 3s
-  local_threshold: 3s
-  max_conn_idle_time: 600s
+  max_conn_idle_time: 60s
+  slow_threshold: 0.1s
 
 # redis
 redis:

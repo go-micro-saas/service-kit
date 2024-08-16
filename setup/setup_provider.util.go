@@ -6,6 +6,7 @@ import (
 	consulapi "github.com/hashicorp/consul/api"
 	authpkg "github.com/ikaiguang/go-srv-kit/kratos/auth"
 	"github.com/redis/go-redis/v9"
+	"go.mongodb.org/mongo-driver/mongo"
 	"go.opentelemetry.io/otel/exporters/jaeger"
 	"gorm.io/gorm"
 	"sync"
@@ -44,6 +45,9 @@ func GetMysqlDBConn(launcherManager LauncherManager) (*gorm.DB, error) {
 }
 func GetPostgresDBConn(launcherManager LauncherManager) (*gorm.DB, error) {
 	return launcherManager.GetPostgresDBConn()
+}
+func GetMongoClient(launcherManager LauncherManager) (*mongo.Client, error) {
+	return launcherManager.GetMongoClient()
 }
 func GetConsulClient(launcherManager LauncherManager) (*consulapi.Client, error) {
 	return launcherManager.GetConsulClient()

@@ -9,6 +9,7 @@ import (
 	consulutil "github.com/go-micro-saas/service-kit/consul"
 	jaegerutil "github.com/go-micro-saas/service-kit/jaeger"
 	loggerutil "github.com/go-micro-saas/service-kit/logger"
+	mongoutil "github.com/go-micro-saas/service-kit/mongo"
 	mysqlutil "github.com/go-micro-saas/service-kit/mysql"
 	postgresutil "github.com/go-micro-saas/service-kit/postgres"
 	rabbitmqutil "github.com/go-micro-saas/service-kit/rabbitmq"
@@ -16,6 +17,7 @@ import (
 	consulapi "github.com/hashicorp/consul/api"
 	authpkg "github.com/ikaiguang/go-srv-kit/kratos/auth"
 	"github.com/redis/go-redis/v9"
+	"go.mongodb.org/mongo-driver/mongo"
 	"go.opentelemetry.io/otel/exporters/jaeger"
 	"gorm.io/gorm"
 	stdlog "log"
@@ -33,6 +35,8 @@ type launcherManager struct {
 	mysqlManager        mysqlutil.MysqlManager
 	postgresManagerOnce sync.Once
 	postgresManager     postgresutil.PostgresManager
+	mongoManagerOnce    sync.Once
+	mongoManager        mongoutil.MongoManager
 	consulManagerOnce   sync.Once
 	consulManager       consulutil.ConsulManager
 	jaegerManagerOnce   sync.Once
@@ -186,6 +190,39 @@ func (s *launcherManager) GetPostgresDBConn() (*gorm.DB, error) {
 		return nil, err
 	}
 	return postgresManager.GetDB()
+}
+
+func (s *launcherManager) getMongoManager() (mongoutil.MongoManager, error) {
+	loggerManager, err := s.getSingletonLoggerManager()
+	if err != nil {
+		return nil, err
+	}
+	mongoConfig := s.conf.GetMongo()
+	mongoManager, err := mongoutil.NewMongoManager(mongoConfig, loggerManager)
+	if err != nil {
+		return nil, err
+	}
+	s.mongoManager = mongoManager
+	return mongoManager, nil
+}
+
+func (s *launcherManager) getSingletonMongoManager() (mongoutil.MongoManager, error) {
+	var err error
+	s.mongoManagerOnce.Do(func() {
+		s.mongoManager, err = s.getMongoManager()
+	})
+	if err != nil {
+		s.mongoManagerOnce = sync.Once{}
+	}
+	return s.mongoManager, err
+}
+
+func (s *launcherManager) GetMongoClient() (*mongo.Client, error) {
+	mongoManager, err := s.getSingletonMongoManager()
+	if err != nil {
+		return nil, err
+	}
+	return mongoManager.GetMongoClient()
 }
 
 func (s *launcherManager) getConsulManager() (consulutil.ConsulManager, error) {
@@ -350,6 +387,13 @@ func (s *launcherManager) Close() error {
 	// postgres
 	if s.postgresManager != nil {
 		if err := s.postgresManager.Close(); err != nil {
+			errs = append(errs, err)
+		}
+	}
+
+	// mongo
+	if s.mongoManager != nil {
+		if err := s.mongoManager.Close(); err != nil {
 			errs = append(errs, err)
 		}
 	}
