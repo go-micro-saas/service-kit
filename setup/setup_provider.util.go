@@ -7,7 +7,7 @@ import (
 	authpkg "github.com/ikaiguang/go-srv-kit/kratos/auth"
 	"github.com/redis/go-redis/v9"
 	"go.mongodb.org/mongo-driver/mongo"
-	"go.opentelemetry.io/otel/exporters/jaeger"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
 	"gorm.io/gorm"
 	"sync"
 )
@@ -52,7 +52,7 @@ func GetMongoClient(launcherManager LauncherManager) (*mongo.Client, error) {
 func GetConsulClient(launcherManager LauncherManager) (*consulapi.Client, error) {
 	return launcherManager.GetConsulClient()
 }
-func GetJaegerExporter(launcherManager LauncherManager) (*jaeger.Exporter, error) {
+func GetJaegerExporter(launcherManager LauncherManager) (*otlptrace.Exporter, error) {
 	return launcherManager.GetJaegerExporter()
 }
 func GetRabbitmqConn(launcherManager LauncherManager) (*amqp.ConnectionWrapper, error) {

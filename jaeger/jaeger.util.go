@@ -2,25 +2,25 @@ package jaegerutil
 
 import (
 	"context"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
 	stdlog "log"
 	"sync"
 
 	configpb "github.com/go-micro-saas/service-kit/api/config"
 	jaegerpkg "github.com/ikaiguang/go-srv-kit/data/jaeger"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
-	"go.opentelemetry.io/otel/exporters/jaeger"
 )
 
 type jaegerManager struct {
 	conf *configpb.Jaeger
 
 	jaegerOnce     sync.Once
-	jaegerExporter *jaeger.Exporter
+	jaegerExporter *otlptrace.Exporter
 }
 
 type JaegerManager interface {
 	Enable() bool
-	GetExporter() (*jaeger.Exporter, error)
+	GetExporter() (*otlptrace.Exporter, error)
 	Close() error
 }
 
@@ -34,7 +34,7 @@ func NewJaegerManager(conf *configpb.Jaeger) (JaegerManager, error) {
 	}, nil
 }
 
-func (s *jaegerManager) GetExporter() (*jaeger.Exporter, error) {
+func (s *jaegerManager) GetExporter() (*otlptrace.Exporter, error) {
 
 	var err error
 	s.jaegerOnce.Do(func() {
@@ -62,7 +62,7 @@ func (s *jaegerManager) Enable() bool {
 	return s.conf.GetEnable()
 }
 
-func (s *jaegerManager) loadingJaegerTraceExporter() (*jaeger.Exporter, error) {
+func (s *jaegerManager) loadingJaegerTraceExporter() (*otlptrace.Exporter, error) {
 	stdlog.Println("|*** LOADING: JaegerExporter: ...")
 	je, err := jaegerpkg.NewJaegerExporter(ToJaegerConfig(s.conf))
 	if err != nil {
@@ -75,9 +75,12 @@ func (s *jaegerManager) loadingJaegerTraceExporter() (*jaeger.Exporter, error) {
 // ToJaegerConfig ...
 func ToJaegerConfig(cfg *configpb.Jaeger) *jaegerpkg.Config {
 	return &jaegerpkg.Config{
-		Endpoint:          cfg.Endpoint,
-		WithHttpBasicAuth: cfg.WithHttpBasicAuth,
-		Username:          cfg.Username,
-		Password:          cfg.Password,
+		Kind:              jaegerpkg.Kind(cfg.GetKind()),
+		Addr:              cfg.GetAddr(),
+		IsInsecure:        cfg.GetIsInsecure(),
+		WithHttpBasicAuth: false,
+		Username:          "",
+		Password:          "",
+		Timeout:           cfg.GetTimeout(),
 	}
 }

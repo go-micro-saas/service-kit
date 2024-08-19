@@ -220,11 +220,14 @@ message Etcd {
 
 // Jaeger jaeger
 message Jaeger {
-  bool enable               = 100;
-  string endpoint           = 1;
-  bool with_http_basic_auth = 2;
-  string username           = 3;
-  string password           = 4;
+  bool enable                      = 100;
+  string kind                      = 1;  // value: grpc、http
+  string addr                      = 2;
+  bool is_insecure                 = 3;
+  google.protobuf.Duration timeout = 4;  // (s)
+  //  bool with_http_basic_auth        = 5;
+  //  string username                  = 6;
+  //  string password                  = 7;
 }
 
 // RabbitMQ rabbitmq

@@ -1,7 +1,7 @@
 package jaegerutil
 
 import (
-	"go.opentelemetry.io/otel/exporters/jaeger"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
 	"sync"
 
 	configpb "github.com/go-micro-saas/service-kit/api/config"
@@ -23,6 +23,6 @@ func NewSingletonJaegerManager(conf *configpb.Jaeger) (JaegerManager, error) {
 	return singletonJaegerManager, err
 }
 
-func GetJaegerExporter(jaegerManager JaegerManager) (*jaeger.Exporter, error) {
+func GetJaegerExporter(jaegerManager JaegerManager) (*otlptrace.Exporter, error) {
 	return jaegerManager.GetExporter()
 }

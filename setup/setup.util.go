@@ -12,7 +12,7 @@ import (
 	logpkg "github.com/ikaiguang/go-srv-kit/kratos/log"
 	"github.com/redis/go-redis/v9"
 	"go.mongodb.org/mongo-driver/mongo"
-	"go.opentelemetry.io/otel/exporters/jaeger"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
 	"gorm.io/gorm"
 	stdlog "log"
 )
@@ -29,7 +29,7 @@ type LauncherManager interface {
 	GetPostgresDBConn() (*gorm.DB, error)
 	GetMongoClient() (*mongo.Client, error)
 	GetConsulClient() (*consulapi.Client, error)
-	GetJaegerExporter() (*jaeger.Exporter, error)
+	GetJaegerExporter() (*otlptrace.Exporter, error)
 	GetRabbitmqConn() (*amqp.ConnectionWrapper, error)
 
 	GetTokenManager() (authpkg.TokenManger, error)

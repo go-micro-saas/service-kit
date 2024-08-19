@@ -18,7 +18,7 @@ import (
 	authpkg "github.com/ikaiguang/go-srv-kit/kratos/auth"
 	"github.com/redis/go-redis/v9"
 	"go.mongodb.org/mongo-driver/mongo"
-	"go.opentelemetry.io/otel/exporters/jaeger"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
 	"gorm.io/gorm"
 	stdlog "log"
 	"sync"
@@ -275,7 +275,7 @@ func (s *launcherManager) getSingletonJaegerManager() (jaegerutil.JaegerManager,
 	return s.jaegerManager, err
 }
 
-func (s *launcherManager) GetJaegerExporter() (*jaeger.Exporter, error) {
+func (s *launcherManager) GetJaegerExporter() (*otlptrace.Exporter, error) {
 	jaegerManager, err := s.getSingletonJaegerManager()
 	if err != nil {
 		return nil, err
