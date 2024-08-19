@@ -12,7 +12,6 @@ require (
 	github.com/ikaiguang/go-srv-kit v0.2.37
 	github.com/redis/go-redis/v9 v9.6.1
 	go.mongodb.org/mongo-driver v1.16.1
-	go.opentelemetry.io/otel/exporters/jaeger v1.14.0
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.28.0
 	go.opentelemetry.io/otel/trace v1.28.0
 	google.golang.org/protobuf v1.34.2
