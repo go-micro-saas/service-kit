@@ -1,7 +1,7 @@
 # 设置 hosts
 
 * 编辑 hosts 文件： `vim /etc/hosts`
-* `C:\Windows\System32\drivers\etc\hosts`
+* 编辑 hosts 文件： `C:\Windows\System32\drivers\etc\hosts`
 
 ```text
 
