@@ -9,7 +9,7 @@ require (
 	github.com/go-kratos/kratos/v2 v2.8.0
 	github.com/gorilla/websocket v1.5.3
 	github.com/hashicorp/consul/api v1.29.2
-	github.com/ikaiguang/go-srv-kit v0.2.37
+	github.com/ikaiguang/go-srv-kit v0.2.38
 	github.com/redis/go-redis/v9 v9.6.1
 	go.mongodb.org/mongo-driver v1.16.1
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.28.0
