@@ -30,12 +30,6 @@ func NewHTTPServer(
 		return nil, err
 	}
 
-	// authManager
-	authManager, err := launcherManager.GetAuthManager()
-	if err != nil {
-		return nil, err
-	}
-
 	// options
 	var opts []http.ServerOption
 	//var opts = []http.ServerOption{
@@ -64,6 +58,11 @@ func NewHTTPServer(
 	settingConfig := configutil.SettingConfig(launcherManager.GetConfig())
 	if settingConfig.GetEnableAuthMiddleware() {
 		stdlog.Println("|*** LOADING：AuthMiddleware：HTTP")
+		// authManager
+		authManager, err := launcherManager.GetAuthManager()
+		if err != nil {
+			return nil, err
+		}
 		jwtMiddleware, err := middlewareutil.NewAuthMiddleware(authManager, authWhiteList)
 		if err != nil {
 			return nil, err

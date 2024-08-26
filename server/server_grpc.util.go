@@ -29,12 +29,6 @@ func NewGRPCServer(
 		return nil, err
 	}
 
-	// authManager
-	authManager, err := launcherManager.GetAuthManager()
-	if err != nil {
-		return nil, err
-	}
-
 	// options
 	var opts []grpc.ServerOption
 	if grpcConfig.Network != "" {
@@ -57,6 +51,11 @@ func NewGRPCServer(
 	settingConfig := configutil.SettingConfig(launcherManager.GetConfig())
 	if settingConfig.GetEnableAuthMiddleware() {
 		stdlog.Println("|*** LOADING：AuthMiddleware：GRPC")
+		// authManager
+		authManager, err := launcherManager.GetAuthManager()
+		if err != nil {
+			return nil, err
+		}
 		jwtMiddleware, err := middlewareutil.NewAuthMiddleware(authManager, authWhiteList)
 		if err != nil {
 			return nil, err
