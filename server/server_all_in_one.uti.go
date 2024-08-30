@@ -10,6 +10,15 @@ import (
 	stdlog "log"
 )
 
+type ServiceExporter func(launcherManager setuputil.LauncherManager, serverManager ServerManager) (ServiceInterface, error)
+
+type ServiceInterface interface {
+	// GetServices 暂时没有想好应用场景
+	GetServices() []interface{}
+	// GetCleanup 关闭
+	GetCleanup() func()
+}
+
 func RunServer(app *kratos.App, cleanup func()) {
 	defer func() {
 		if cleanup != nil {
@@ -22,26 +31,7 @@ func RunServer(app *kratos.App, cleanup func()) {
 	}
 }
 
-type ServiceExporter func(launcherManager setuputil.LauncherManager, serverManager ServerManager) (ServiceInterface, error)
-
-type ServiceInterface interface {
-	// GetServices 暂时没有想好应用场景
-	GetServices() []interface{}
-	// GetCleanup 关闭
-	GetCleanup() func()
-}
-
-func NewServiceInterface(cleanup func(), services ...interface{}) ServiceInterface {
-	if cleanup == nil {
-		cleanup = func() {}
-	}
-	return &serviceInterface{
-		services: services,
-		cleanup:  cleanup,
-	}
-}
-
-func InitServiceApp(
+func AllInOneServer(
 	configFilePath string,
 	configOpts []configutil.Option,
 	services []ServiceExporter,
@@ -98,6 +88,16 @@ func InitServiceApp(
 	}
 	cleanupManager.Append(stopApp)
 	return app, cleanupManager.Cleanup, nil
+}
+
+func NewServiceInterface(cleanup func(), services ...interface{}) ServiceInterface {
+	if cleanup == nil {
+		cleanup = func() {}
+	}
+	return &serviceInterface{
+		services: services,
+		cleanup:  cleanup,
+	}
 }
 
 type serviceInterface struct {

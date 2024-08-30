@@ -28,7 +28,7 @@ func main() {
 	whitelist := serviceexporter.ExportAuthWhitelist()
 	services := []serverutil.ServiceExporter{serviceexporter.ExportServices}
 
-	app, cleanup, err := serverutil.InitServiceApp(flagconf, configOpts, services, whitelist)
+	app, cleanup, err := serverutil.AllInOneServer(flagconf, configOpts, services, whitelist)
 	if err != nil {
 		stdlog.Fatalf("==> runservices.GetServerApp failed: %+v\n", err)
 	}
