@@ -1,4 +1,4 @@
-package api
+package pingapi
 
 import (
 	middlewareutil "github.com/go-micro-saas/service-kit/middleware"

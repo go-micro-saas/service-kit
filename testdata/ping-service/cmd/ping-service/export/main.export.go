@@ -5,7 +5,7 @@ import (
 	middlewareutil "github.com/go-micro-saas/service-kit/middleware"
 	serverutil "github.com/go-micro-saas/service-kit/server"
 	setuputil "github.com/go-micro-saas/service-kit/setup"
-	"github.com/go-micro-saas/service-kit/testdata/ping-service/api"
+	pingapi "github.com/go-micro-saas/service-kit/testdata/ping-service/api"
 	"github.com/go-micro-saas/service-kit/testdata/ping-service/internal/conf"
 )
 
@@ -15,7 +15,7 @@ func ExportServiceConfig() []configutil.Option {
 
 func ExportAuthWhitelist() []map[string]middlewareutil.TransportServiceKind {
 	return []map[string]middlewareutil.TransportServiceKind{
-		api.GetAuthWhiteList(),
+		pingapi.GetAuthWhiteList(),
 	}
 }
 
