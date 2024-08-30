@@ -97,7 +97,6 @@ generate:
 	#go mod tidy
 	go generate ./...
 	wire ./testdata/ping-service/cmd/ping-service/export
-	wire ./testdata/ping-service/cmd/ping-service/run
 
 .PHONY: echo
 # echo test content

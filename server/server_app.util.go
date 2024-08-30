@@ -16,10 +16,6 @@ import (
 	stdlog "log"
 )
 
-// Services 各个服务注册结果
-type Services struct {
-}
-
 // NewApp .
 func NewApp(launcherManager setuputil.LauncherManager, hs *http.Server, gs *grpc.Server) (*kratos.App, error) {
 	conf := launcherManager.GetConfig()
@@ -107,18 +103,4 @@ func InitTracer(conf *configpb.Bootstrap) error {
 		return tracerutil.InitTracerWithJaegerExporter(conf.GetApp(), exp)
 	}
 	return tracerutil.InitTracer(conf.GetApp())
-}
-
-func TODOAppServices(serverManager ServerManager, services *Services) (*kratos.App, func(), error) {
-	app, err := serverManager.GetApp()
-	if err != nil {
-		return nil, nil, err
-	}
-	cleanup := func() {
-		closeErr := app.Stop()
-		if closeErr != nil {
-			stdlog.Printf("==> app.Stop failed: %+v\n", closeErr)
-		}
-	}
-	return app, cleanup, nil
 }

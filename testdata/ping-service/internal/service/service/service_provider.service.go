@@ -20,7 +20,7 @@ func RegisterServices(
 	websocketService *WebsocketService,
 	pingService pingservicev1.SrvPingServer,
 	testdataService testdataservicev1.SrvTestdataServer,
-) (*serverutil.Services, func(), error) {
+) (serverutil.ServiceInterface, error) {
 	// 先进后出
 	var cleanup = func() {}
 	// grpc
@@ -52,7 +52,7 @@ func RegisterServices(
 		//}
 	}
 
-	return &serverutil.Services{}, cleanup, nil
+	return serverutil.NewServiceInterface(cleanup), nil
 }
 
 func RegisterSpecialRouters(hs *http.Server, homeService *HomeService, websocketService *WebsocketService) {

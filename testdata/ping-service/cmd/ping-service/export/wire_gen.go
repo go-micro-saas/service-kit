@@ -4,7 +4,7 @@
 //go:build !wireinject
 // +build !wireinject
 
-package exportservices
+package serviceexporter
 
 import (
 	"github.com/go-kratos/kratos/v2/transport/grpc"
@@ -18,10 +18,10 @@ import (
 
 // Injectors from wire.go:
 
-func exportServices(launcherManager setuputil.LauncherManager, hs *http.Server, gs *grpc.Server) (*serverutil.Services, func(), error) {
+func exportServices(launcherManager setuputil.LauncherManager, hs *http.Server, gs *grpc.Server) (serverutil.ServiceInterface, error) {
 	logger, err := setuputil.GetLogger(launcherManager)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 	homeService := service.NewHomeService(logger)
 	websocketBizRepo := biz.NewWebsocketBiz(logger)
@@ -30,11 +30,9 @@ func exportServices(launcherManager setuputil.LauncherManager, hs *http.Server, 
 	pingBizRepo := biz.NewPingBiz(logger, pingDataRepo)
 	srvPingServer := service.NewPingService(logger, pingBizRepo)
 	srvTestdataServer := service.NewTestdataService(logger, websocketBizRepo)
-	services, cleanup, err := service.RegisterServices(hs, gs, homeService, websocketService, srvPingServer, srvTestdataServer)
+	serviceInterface, err := service.RegisterServices(hs, gs, homeService, websocketService, srvPingServer, srvTestdataServer)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
-	return services, func() {
-		cleanup()
-	}, nil
+	return serviceInterface, nil
 }

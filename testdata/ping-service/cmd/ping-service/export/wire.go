@@ -1,7 +1,7 @@
 //go:build wireinject
 // +build wireinject
 
-package exportservices
+package serviceexporter
 
 import (
 	"github.com/go-kratos/kratos/v2/transport/grpc"
@@ -14,7 +14,7 @@ import (
 	"github.com/google/wire"
 )
 
-func exportServices(launcherManager setuputil.LauncherManager, hs *http.Server, gs *grpc.Server) (*serverutil.Services, func(), error) {
+func exportServices(launcherManager setuputil.LauncherManager, hs *http.Server, gs *grpc.Server) (serverutil.ServiceInterface, error) {
 	panic(wire.Build(
 		// service
 		setuputil.GetLogger,
@@ -25,5 +25,5 @@ func exportServices(launcherManager setuputil.LauncherManager, hs *http.Server, 
 		// register services
 		service.RegisterServices,
 	))
-	return &serverutil.Services{}, func() {}, nil
+	return nil, nil
 }

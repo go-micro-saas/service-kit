@@ -2,7 +2,8 @@ package main
 
 import (
 	"flag"
-	runservices "github.com/go-micro-saas/service-kit/testdata/ping-service/cmd/ping-service/run"
+	serverutil "github.com/go-micro-saas/service-kit/server"
+	serviceexporter "github.com/go-micro-saas/service-kit/testdata/ping-service/cmd/ping-service/export"
 	stdlog "log"
 )
 
@@ -23,17 +24,13 @@ func main() {
 	if !flag.Parsed() {
 		flag.Parse()
 	}
-	app, cleanup, err := runservices.GetServerApp(flagconf)
+	configOpts := serviceexporter.ExportServiceConfig()
+	whitelist := serviceexporter.ExportAuthWhitelist()
+	services := []serverutil.ServiceExporter{serviceexporter.ExportServices}
+
+	app, cleanup, err := serverutil.InitServiceApp(flagconf, configOpts, services, whitelist)
 	if err != nil {
 		stdlog.Fatalf("==> runservices.GetServerApp failed: %+v\n", err)
 	}
-	defer func() {
-		if cleanup != nil {
-			cleanup()
-		}
-	}()
-	// start
-	if err := app.Run(); err != nil {
-		stdlog.Fatalf("==> app.Run failed: %+v\n", err)
-	}
+	serverutil.RunServer(app, cleanup)
 }
