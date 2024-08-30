@@ -203,6 +203,7 @@ etcd:
 
 # jaeger 服务追踪
 jaeger:
+  enable: true
   # kind: grpc、http 类型
   kind: grpc
   # addr: grpc=4317 http=4318
