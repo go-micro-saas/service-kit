@@ -18,7 +18,7 @@ import (
 
 // Injectors from wire.go:
 
-func initServices(launcherManager setuputil.LauncherManager, hs *http.Server, gs *grpc.Server) (*serverutil.Services, func(), error) {
+func exportServices(launcherManager setuputil.LauncherManager, hs *http.Server, gs *grpc.Server) (*serverutil.Services, func(), error) {
 	logger, err := setuputil.GetLogger(launcherManager)
 	if err != nil {
 		return nil, nil, err

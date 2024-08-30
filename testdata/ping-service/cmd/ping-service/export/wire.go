@@ -14,7 +14,7 @@ import (
 	"github.com/google/wire"
 )
 
-func initServices(launcherManager setuputil.LauncherManager, hs *http.Server, gs *grpc.Server) (*serverutil.Services, func(), error) {
+func exportServices(launcherManager setuputil.LauncherManager, hs *http.Server, gs *grpc.Server) (*serverutil.Services, func(), error) {
 	panic(wire.Build(
 		// service
 		setuputil.GetLogger,
