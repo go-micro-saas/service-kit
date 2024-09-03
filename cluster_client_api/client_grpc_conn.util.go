@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
+	configpb "github.com/go-micro-saas/service-kit/api/config"
 	curlpkg "github.com/ikaiguang/go-srv-kit/kit/curl"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 	middlewarepkg "github.com/ikaiguang/go-srv-kit/kratos/middleware"
@@ -27,11 +28,21 @@ func (s *apiManager) NewGRPCConnection(logger log.Logger, serviceName ServiceNam
 	opts = append(opts, grpc.WithMiddleware(middlewarepkg.DefaultClientMiddlewares(logHelper)...))
 
 	// 服务端点
-	endpointOpts, err := s.getGRPCEndpoint(serviceName)
+	apiConfig, err := s.GetServiceAPIConfig(serviceName)
+	if err != nil {
+		return nil, err
+	}
+	endpointOpts, err := s.getGRPCEndpointOptions(apiConfig)
 	if err != nil {
 		return nil, err
 	}
 	opts = append(opts, endpointOpts...)
+	logHelper.Infow(
+		"client.serviceName", apiConfig.ServiceName,
+		"client.transportType", apiConfig.TransportType.String(),
+		"client.registryType", apiConfig.RegistryType.String(),
+		"client.serviceTarget", apiConfig.ServiceTarget,
+	)
 
 	// 其他
 	opts = append(opts, otherOpts...)
@@ -45,36 +56,20 @@ func (s *apiManager) NewGRPCConnection(logger log.Logger, serviceName ServiceNam
 	return conn, nil
 }
 
-// getGRPCEndpoint 获取服务端点
-func (s *apiManager) getGRPCEndpoint(serviceName ServiceName) ([]grpc.ClientOption, error) {
-	//apiConfig, err := s.GetServiceAPIConfig(serviceName)
-	//if err != nil {
-	//	return nil, err
-	//}
-	//
-	//var (
-	//	clientKind = transport.KindGRPC
-	//	opts       []grpc.ClientOption
-	//	discovery  registry.Discovery
-	//	endpoint   string
-	//)
-	//switch registryType {
-	//case registrypkg.RegistryTypeConsul:
-	//	discovery, endpoint, err = getRegistryAndServerEndpoint(engineHandler, serviceName, endpointInfo.RegistryName)
-	//	if err != nil {
-	//		return nil, err
-	//	}
-	//	opts = append(opts, grpc.WithDiscovery(discovery))
-	//default:
-	//	endpoint = endpointInfo.GrpcHost
-	//}
-	//logpkg.Infow(
-	//	"client.kind", clientKind,
-	//	"client.serviceName", serviceName,
-	//	"client.registryType", apiConfig.ServiceTarget,
-	//	"client.endpoint", endpoint,
-	//)
-	//opts = append(opts, grpc.WithEndpoint(endpoint))
-	//return opts, nil
-	return nil, nil
+func (s *apiManager) getGRPCEndpointOptions(apiConfig *Config) ([]grpc.ClientOption, error) {
+	var opts []grpc.ClientOption
+
+	// endpoint
+	opts = append(opts, grpc.WithEndpoint(apiConfig.ServiceTarget))
+
+	// registry
+	switch apiConfig.RegistryType {
+	case configpb.ClusterClientApi_RT_CONSUL, configpb.ClusterClientApi_RT_ETCD:
+		r, err := s.getRegistryDiscovery(apiConfig)
+		if err != nil {
+			return nil, err
+		}
+		opts = append(opts, grpc.WithDiscovery(r))
+	}
+	return opts, nil
 }

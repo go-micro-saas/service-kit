@@ -265,19 +265,19 @@ message Encrypt {
 message ClusterClientApi {
   enum TransportType {
     TT_UNSPECIFIED = 0;  // 未指定，默认: HTTP
-    HTTP           = 1;
-    GRPC           = 2;
+    TT_HTTP        = 1;
+    TT_GRPC        = 2;
   }
   enum RegistryType {
     RT_UNSPECIFIED = 0;  // 未指定，默认: endpoint
-    ENDPOINT       = 1;
-    CONSUL         = 2;
-    ETCD           = 3;
+    RT_ENDPOINT    = 1;
+    RT_CONSUL      = 2;
+    RT_ETCD        = 3;
   }
-  string service_name   = 1;  // 服务名称
-  string transport_type = 2;  // 传输协议：http、grpc、...；默认: HTTP
-  string registry_type  = 3;  // 注册类型：endpoint、consul、etcd、...；配置中心配置：${registry_type}；例： Bootstrap.Consul
-  string service_target = 4;  // 服务目标：endpoint或registry，例：http://127.0.0.1:8899、discovery:///${registry_endpoint}
+  string service_name   = 1 [(validate.rules).string = { min_len: 1 }];  // 服务名称
+  string transport_type = 2;                                             // 传输协议：http、grpc、...；默认: HTTP
+  string registry_type  = 3;                                             // 注册类型：endpoint、consul、etcd、...；配置中心配置：${registry_type}；例： Bootstrap.Consul
+  string service_target = 4 [(validate.rules).string = { min_len: 1 }];  // 服务目标：endpoint或registry，例：http://127.0.0.1:8899、discovery:///${registry_endpoint}
 }
 
 // ThirdPartyApi 第三方api

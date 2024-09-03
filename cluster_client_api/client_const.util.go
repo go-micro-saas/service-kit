@@ -35,22 +35,22 @@ func (s *Config) SetByPbClusterClientApi(cfg *configpb.ClusterClientApi) {
 	tt := strings.ToLower(cfg.GetTransportType())
 	switch tt {
 	default:
-		s.TransportType = configpb.ClusterClientApi_HTTP
+		s.TransportType = configpb.ClusterClientApi_TT_HTTP
 	case "http":
-		s.TransportType = configpb.ClusterClientApi_HTTP
+		s.TransportType = configpb.ClusterClientApi_TT_HTTP
 	case "grpc":
-		s.TransportType = configpb.ClusterClientApi_GRPC
+		s.TransportType = configpb.ClusterClientApi_TT_GRPC
 	}
 	rt := strings.ToLower(cfg.GetRegistryType())
 	switch rt {
 	default:
-		s.RegistryType = configpb.ClusterClientApi_ENDPOINT
-	case configpb.ClusterClientApi_ENDPOINT:
-		s.RegistryType = configpb.ClusterClientApi_ENDPOINT
-	case configpb.ClusterClientApi_CONSUL:
-		s.RegistryType = configpb.ClusterClientApi_CONSUL
-	case configpb.ClusterClientApi_ETCD:
-		s.RegistryType = configpb.ClusterClientApi_ETCD
+		s.RegistryType = configpb.ClusterClientApi_RT_ENDPOINT
+	case "endpoint":
+		s.RegistryType = configpb.ClusterClientApi_RT_ENDPOINT
+	case "consul":
+		s.RegistryType = configpb.ClusterClientApi_RT_CONSUL
+	case "etcd":
+		s.RegistryType = configpb.ClusterClientApi_RT_ETCD
 	}
 	s.ServiceTarget = cfg.GetServiceTarget()
 }

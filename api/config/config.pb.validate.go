@@ -2910,13 +2910,31 @@ func (m *ClusterClientApi) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for ServiceName
+	if utf8.RuneCountInString(m.GetServiceName()) < 1 {
+		err := ClusterClientApiValidationError{
+			field:  "ServiceName",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	// no validation rules for TransportType
 
 	// no validation rules for RegistryType
 
-	// no validation rules for ServiceTarget
+	if utf8.RuneCountInString(m.GetServiceTarget()) < 1 {
+		err := ClusterClientApiValidationError{
+			field:  "ServiceTarget",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	if len(errors) > 0 {
 		return ClusterClientApiMultiError(errors)
