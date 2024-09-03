@@ -15,7 +15,7 @@ const (
 	defaultTimeout = curlpkg.DefaultTimeout
 )
 
-func (s *apiManager) NewGRPCConnection(logger log.Logger, serviceName ServiceName, otherOpts ...grpc.ClientOption) (*stdgrpc.ClientConn, error) {
+func (s *apiManager) NewGRPCConnection(serviceName ServiceName, otherOpts ...grpc.ClientOption) (*stdgrpc.ClientConn, error) {
 	var opts = []grpc.ClientOption{
 		grpc.WithTimeout(defaultTimeout),
 		grpc.WithHealthCheck(true),
@@ -24,10 +24,10 @@ func (s *apiManager) NewGRPCConnection(logger log.Logger, serviceName ServiceNam
 	}
 
 	// 中间件
-	logHelper := log.NewHelper(logger)
+	logHelper := log.NewHelper(s.logger)
 	opts = append(opts, grpc.WithMiddleware(middlewarepkg.DefaultClientMiddlewares(logHelper)...))
 
-	// 服务端点
+	// 服务端点logger
 	apiConfig, err := s.GetServiceAPIConfig(serviceName)
 	if err != nil {
 		return nil, err

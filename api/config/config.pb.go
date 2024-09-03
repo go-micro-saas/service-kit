@@ -302,7 +302,7 @@ type App struct {
 	ServerEnv            string            `protobuf:"bytes,3,opt,name=server_env,json=serverEnv,proto3" json:"server_env,omitempty"`                                                                        // 开发环境；值：DEVELOP、TESTING、PREVIEW、PRODUCTION
 	ServerVersion        string            `protobuf:"bytes,4,opt,name=server_version,json=serverVersion,proto3" json:"server_version,omitempty"`                                                            //
 	Id                   string            `protobuf:"bytes,5,opt,name=id,proto3" json:"id,omitempty"`                                                                                                       // 服务注册名称
-	ConfigMethod         string            `protobuf:"bytes,40,opt,name=config_method,json=configMethod,proto3" json:"config_method,omitempty"`                                                              // 配置方式；值：LOCAL、CONSUL、ETCD
+	ConfigMethod         string            `protobuf:"bytes,40,opt,name=config_method,json=configMethod,proto3" json:"config_method,omitempty"`                                                              // 配置方式；值：LOCAL、CONSUL、...
 	ConfigPathForGeneral string            `protobuf:"bytes,41,opt,name=config_path_for_general,json=configPathForGeneral,proto3" json:"config_path_for_general,omitempty"`                                  // 配置中心：基本配置路径
 	ConfigPathForServer  string            `protobuf:"bytes,42,opt,name=config_path_for_server,json=configPathForServer,proto3" json:"config_path_for_server,omitempty"`                                     // 配置中心：本服务的配置路径
 	HttpEndpoints        []string          `protobuf:"bytes,60,rep,name=http_endpoints,json=httpEndpoints,proto3" json:"http_endpoints,omitempty"`                                                           // app站点
@@ -1673,7 +1673,7 @@ type ClusterClientApi struct {
 
 	ServiceName   string `protobuf:"bytes,1,opt,name=service_name,json=serviceName,proto3" json:"service_name,omitempty"`       // 服务名称
 	TransportType string `protobuf:"bytes,2,opt,name=transport_type,json=transportType,proto3" json:"transport_type,omitempty"` // 传输协议：http、grpc、...；默认: HTTP
-	RegistryType  string `protobuf:"bytes,3,opt,name=registry_type,json=registryType,proto3" json:"registry_type,omitempty"`    // 注册类型：endpoint、consul、etcd、...；配置中心配置：${registry_type}；例： Bootstrap.Consul
+	RegistryType  string `protobuf:"bytes,3,opt,name=registry_type,json=registryType,proto3" json:"registry_type,omitempty"`    // 注册类型：endpoint、consul、...；配置中心配置：${registry_type}；例： Bootstrap.Consul
 	ServiceTarget string `protobuf:"bytes,4,opt,name=service_target,json=serviceTarget,proto3" json:"service_target,omitempty"` // 服务目标：endpoint或registry，例：http://127.0.0.1:8899、discovery:///${registry_endpoint}
 }
 

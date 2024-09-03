@@ -5,6 +5,11 @@ import (
 	"strings"
 )
 
+type ClientAPIManager interface {
+	// RegisterServiceAPIConfigs 注册服务API，覆盖更新
+	RegisterServiceAPIConfigs(apis []*configpb.ClusterClientApi) error
+}
+
 // ServiceName ...
 type ServiceName string
 
@@ -26,7 +31,7 @@ const (
 type Config struct {
 	ServiceName   string                                  // 服务名称
 	TransportType configpb.ClusterClientApi_TransportType // 传输协议：http、grpc、...；默认: HTTP
-	RegistryType  configpb.ClusterClientApi_RegistryType  // 注册类型：注册类型：endpoint、consul、etcd、...；配置中心配置：${registry_type}；例： Bootstrap.Consul
+	RegistryType  configpb.ClusterClientApi_RegistryType  // 注册类型：注册类型：endpoint、consul、...；配置中心配置：${registry_type}；例： Bootstrap.Consul
 	ServiceTarget string                                  // 服务目标：endpoint或registry，例：http://127.0.0.1:8899、discovery:///${registry_endpoint}
 }
 

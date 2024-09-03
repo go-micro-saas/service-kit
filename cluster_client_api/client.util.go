@@ -3,31 +3,43 @@ package clientutil
 import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/registry"
-	"github.com/go-kratos/kratos/v2/transport/grpc"
-	"github.com/go-kratos/kratos/v2/transport/http"
 	configpb "github.com/go-micro-saas/service-kit/api/config"
-	setuputil "github.com/go-micro-saas/service-kit/setup"
+	consulapi "github.com/hashicorp/consul/api"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 	registrypkg "github.com/ikaiguang/go-srv-kit/kratos/registry"
-	stdgrpc "google.golang.org/grpc"
 	"sync"
 )
 
-type ClientAPIManager interface {
-	// RegisterServiceAPIConfigs 注册服务API，覆盖更新
-	RegisterServiceAPIConfigs(apis []*configpb.ClusterClientApi) error
-	// GetServiceAPIConfig serviceName统一使用常量定义
-	GetServiceAPIConfig(serviceName ServiceName) (*Config, error)
-	// NewGRPCConnection grpc 链接
-	NewGRPCConnection(logger log.Logger, serviceName ServiceName, otherOpts ...grpc.ClientOption) (*stdgrpc.ClientConn, error)
-	// NewHTTPClient http 客户端
-	NewHTTPClient(logger log.Logger, serviceName ServiceName, otherOpts ...http.ClientOption) (*http.Client, error)
+type Option func(*option)
+
+func WithConsulClient(consulClient *consulapi.Client) Option {
+	return func(opt *option) {
+		opt.consulClient = consulClient
+	}
+}
+
+type option struct {
+	consulClient *consulapi.Client
+}
+
+func NewClientAPIManager(logger log.Logger, opts ...Option) (ClientAPIManager, error) {
+	o := &option{}
+	for i := range opts {
+		opts[i](o)
+	}
+	return &apiManager{
+		logger:       logger,
+		consulClient: o.consulClient,
+		configMap:    nil,
+		configMutex:  sync.RWMutex{},
+	}, nil
 }
 
 type apiManager struct {
-	launcherManager setuputil.LauncherManager
-	configMap       map[ServiceName]*Config
-	configMutex     sync.RWMutex
+	logger       log.Logger
+	consulClient *consulapi.Client
+	configMap    map[ServiceName]*Config
+	configMutex  sync.RWMutex
 }
 
 // RegisterServiceAPIConfigs 注册服务API，覆盖已有服务
@@ -71,11 +83,11 @@ func (s *apiManager) getRegistryDiscovery(apiConfig *Config) (registry.Discovery
 		e := errorpkg.ErrorUnimplemented(apiConfig.RegistryType.String())
 		return nil, errorpkg.WithStack(e)
 	case configpb.ClusterClientApi_RT_CONSUL:
-		consulClient, err := s.launcherManager.GetConsulClient()
-		if err != nil {
-			return nil, err
+		if s.consulClient == nil {
+			e := errorpkg.ErrorBadRequest("consulClient == nil")
+			return nil, errorpkg.WithStack(e)
 		}
-		r, err := registrypkg.NewConsulRegistry(consulClient)
+		r, err := registrypkg.NewConsulRegistry(s.consulClient)
 		if err != nil {
 			return nil, err
 		}

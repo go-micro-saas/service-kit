@@ -7,7 +7,7 @@ app:
   server_version: v1.0.0
   # ID: apputil.ID 服务唯一标识; 也用于服务注册发现
   id: "${app.project_name}:${app.server_name}:${app.server_env}:${app.server_version}"
-  # 配置方式；值：local、consul、etcd
+  # 配置方式；值：local、consul
   config_method: local
   config_path_for_general: "${app.project_name}/general-config"
   config_path_for_server: "${app.project_name}/ping-service/production/v1.0.0"

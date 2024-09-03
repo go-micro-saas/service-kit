@@ -11,14 +11,14 @@ import (
 	middlewarepkg "github.com/ikaiguang/go-srv-kit/kratos/middleware"
 )
 
-func (s *apiManager) NewHTTPClient(logger log.Logger, serviceName ServiceName, otherOpts ...http.ClientOption) (*http.Client, error) {
+func (s *apiManager) NewHTTPClient(serviceName ServiceName, otherOpts ...http.ClientOption) (*http.Client, error) {
 	var opts = []http.ClientOption{
 		http.WithTimeout(defaultTimeout),
 	}
 	opts = append(opts, apputil.ClientDecoderEncoder()...)
 
 	// 中间件
-	logHelper := log.NewHelper(logger)
+	logHelper := log.NewHelper(s.logger)
 	opts = append(opts, http.WithMiddleware(middlewarepkg.DefaultClientMiddlewares(logHelper)...))
 
 	// 服务端点
