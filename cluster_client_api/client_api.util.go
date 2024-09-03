@@ -2,43 +2,14 @@ package clientutil
 
 import (
 	configpb "github.com/go-micro-saas/service-kit/api/config"
-	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 	"strings"
-	"sync"
 )
 
-var (
-	_serviceConfigMap   = map[ServiceName]*Config{}
-	_serviceConfigMutex = sync.RWMutex{}
-)
+// ServiceName ...
+type ServiceName string
 
-func RegisterClientAPIConfig(apis []*configpb.ClusterClientApi) {
-	_serviceConfigMutex.Lock()
-	defer _serviceConfigMutex.Unlock()
-	for i := range apis {
-		conf := &Config{}
-		conf.SetByPbClusterClientApi(apis[i])
-		_serviceConfigMap[ServiceName(apis[i].ServiceName)] = conf
-	}
-}
-
-func GetClientAPIConfig(serviceName ServiceName) (*Config, error) {
-	if serviceName.String() == "" {
-		e := errorpkg.ErrorBadRequest("service name cannot be empty")
-		return nil, errorpkg.WithStack(e)
-	}
-	_serviceConfigMutex.RLock()
-	defer _serviceConfigMutex.RUnlock()
-	conf, ok := _serviceConfigMap[serviceName]
-	if !ok {
-		e := errorpkg.ErrorRecordNotFound("service configuration not found; ServiceName: %s", serviceName.String())
-		return nil, errorpkg.WithStack(e)
-	}
-	if conf == nil {
-		e := errorpkg.ErrorInternalError("service configuration error: config == nil")
-		return nil, errorpkg.WithStack(e)
-	}
-	return conf, nil
+func (s ServiceName) String() string {
+	return string(s)
 }
 
 // 示例：仅供参考
@@ -50,13 +21,6 @@ const (
 	DingtalkApi    ServiceName = "dingtalk-openapi"
 	DingtalkApiOld ServiceName = "dingtalk-openapi-old"
 )
-
-// ServiceName ...
-type ServiceName string
-
-func (s ServiceName) String() string {
-	return string(s)
-}
 
 // Config ...
 type Config struct {
