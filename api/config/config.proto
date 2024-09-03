@@ -268,21 +268,16 @@ message ClusterClientApi {
     HTTP           = 1;
     GRPC           = 2;
   }
-  enum ServiceType {
-    ST_UNSPECIFIED = 0;  // 未指定，默认: Endpoint
-    ENDPOINT       = 1;
-    REGISTRY       = 2;
-  }
   enum RegistryType {
-    RT_UNSPECIFIED = 0;  // 未指定，默认: consul
-    CONSUL         = 1;
-    ETCD           = 2;
+    RT_UNSPECIFIED = 0;  // 未指定，默认: endpoint
+    ENDPOINT       = 1;
+    CONSUL         = 2;
+    ETCD           = 3;
   }
   string service_name   = 1;  // 服务名称
   string transport_type = 2;  // 传输协议：http、grpc、...；默认: HTTP
-  string service_type   = 3;  // 服务类型：endpoint、registry、...；默认: endpoint
-  string registry_type  = 4;  // 注册类型：consul、etcd、...；读取配配置：${registry_type}；例： Bootstrap.Consul
-  string service_target = 5;  // 服务目标：endpoint或registry，例：http://127.0.0.1:8899、discovery:///${registry_endpoint}
+  string registry_type  = 3;  // 注册类型：endpoint、consul、etcd、...；配置中心配置：${registry_type}；例： Bootstrap.Consul
+  string service_target = 4;  // 服务目标：endpoint或registry，例：http://127.0.0.1:8899、discovery:///${registry_endpoint}
 }
 
 // ThirdPartyApi 第三方api

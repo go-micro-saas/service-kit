@@ -2,17 +2,15 @@ package clientutil
 
 //import (
 //	"context"
-//	configpb "github.com/go-micro-saas/service-kit/api/config"
-//	"strings"
-//	"sync"
-//
 //	"github.com/go-kratos/kratos/contrib/registry/consul/v2"
 //	"github.com/go-kratos/kratos/v2/log"
 //	"github.com/go-kratos/kratos/v2/registry"
 //	"github.com/go-kratos/kratos/v2/transport"
 //	"github.com/go-kratos/kratos/v2/transport/grpc"
 //	"github.com/go-kratos/kratos/v2/transport/http"
+//	configpb "github.com/go-micro-saas/service-kit/api/config"
 //	apputil "github.com/go-micro-saas/service-kit/app"
+//	setuputil "github.com/go-micro-saas/service-kit/setup"
 //	curlpkg "github.com/ikaiguang/go-srv-kit/kit/curl"
 //	clientpkg "github.com/ikaiguang/go-srv-kit/kratos/client"
 //	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
@@ -21,6 +19,8 @@ package clientutil
 //	registrypkg "github.com/ikaiguang/go-srv-kit/kratos/registry"
 //	stdgrpc "google.golang.org/grpc"
 //	"google.golang.org/protobuf/proto"
+//	"strings"
+//	"sync"
 //)
 //
 //const (
@@ -33,7 +33,7 @@ package clientutil
 //)
 //
 //// NewGRPCConnection grpc 链接
-//func NewGRPCConnection(engineHandler setuputil.Launch, serviceName ServiceName, otherOpts ...grpc.ClientOption) (*stdgrpc.ClientConn, error) {
+//func NewGRPCConnection(engineHandler setuputil.LauncherManager, serviceName ServiceName, otherOpts ...grpc.ClientOption) (*stdgrpc.ClientConn, error) {
 //	cc, ok := _grpcConnections.Load(serviceName)
 //	if ok {
 //		if conn, ok := cc.(*stdgrpc.ClientConn); ok {
@@ -51,7 +51,7 @@ package clientutil
 //}
 //
 //// NewHTTPConnection http 链接
-//func NewHTTPConnection(engineHandler setuputil.Launch, serviceName ServiceName, otherOpts ...http.ClientOption) (*http.Client, error) {
+//func NewHTTPConnection(engineHandler setuputil.LauncherManager, serviceName ServiceName, otherOpts ...http.ClientOption) (*http.Client, error) {
 //	cc, ok := _httpConnections.Load(serviceName)
 //	if ok {
 //		if conn, ok := cc.(*http.Client); ok {
@@ -69,7 +69,7 @@ package clientutil
 //}
 //
 //// newGRPCConnection grpc 链接
-//func newGRPCConnection(engineHandler setuputil.Launch, serviceName ServiceName, otherOpts ...grpc.ClientOption) (*stdgrpc.ClientConn, error) {
+//func newGRPCConnection(engineHandler setuputil.LauncherManager, serviceName ServiceName, otherOpts ...grpc.ClientOption) (*stdgrpc.ClientConn, error) {
 //	var opts = []grpc.ClientOption{
 //		grpc.WithTimeout(defaultTimeout),
 //	}
@@ -82,7 +82,7 @@ package clientutil
 //	opts = append(opts, endpointOpts...)
 //
 //	// 中间件
-//	logger, _, err := engineHandler.Logger()
+//	logger, err := engineHandler.GetLogger()
 //	if err != nil {
 //		return nil, err
 //	}
@@ -104,7 +104,7 @@ package clientutil
 //}
 //
 //// newHTTPConnection http 链接
-//func newHTTPConnection(engineHandler setuputil.Launch, serviceName ServiceName, otherOpts ...http.ClientOption) (*http.Client, error) {
+//func newHTTPConnection(engineHandler setuputil.LauncherManager, serviceName ServiceName, otherOpts ...http.ClientOption) (*http.Client, error) {
 //	var opts = []http.ClientOption{
 //		http.WithTimeout(defaultTimeout),
 //	}
@@ -118,7 +118,7 @@ package clientutil
 //	opts = append(opts, endpointOpts...)
 //
 //	// 中间件
-//	logger, _, err := engineHandler.Logger()
+//	logger, err := engineHandler.GetLogger()
 //	if err != nil {
 //		return nil, err
 //	}
@@ -137,7 +137,7 @@ package clientutil
 //}
 //
 //// getHTTPEndpoint 获取服务端点
-//func getHTTPEndpoint(engineHandler setuputil.Launch, serviceName ServiceName) ([]http.ClientOption, error) {
+//func getHTTPEndpoint(engineHandler setuputil.LauncherManager, serviceName ServiceName) ([]http.ClientOption, error) {
 //	endpointInfo, err := getClientApiConfig(engineHandler, serviceName)
 //	if err != nil {
 //		return nil, err
@@ -171,7 +171,7 @@ package clientutil
 //}
 //
 //// getGRPCEndpoint 获取服务端点
-//func getGRPCEndpoint(engineHandler setuputil.Launch, serviceName ServiceName) ([]grpc.ClientOption, error) {
+//func getGRPCEndpoint(engineHandler setuputil.LauncherManager, serviceName ServiceName) ([]grpc.ClientOption, error) {
 //	endpointInfo, err := getClientApiConfig(engineHandler, serviceName)
 //	if err != nil {
 //		return nil, err
@@ -205,7 +205,7 @@ package clientutil
 //}
 //
 //// getRegistryAndServerEndpoint ...
-//func getRegistryAndServerEndpoint(engineHandler setuputil.Launch, serviceName ServiceName, registryName string) (*consul.Registry, string, error) {
+//func getRegistryAndServerEndpoint(engineHandler setuputil.LauncherManager, serviceName ServiceName, registryName string) (*consul.Registry, string, error) {
 //	if registryName = strings.TrimSpace(registryName); registryName == "" {
 //		msg := "请先配置: client_api.xxx.name." + serviceName.String() + ".registry_name"
 //		e := errorpkg.ErrorInvalidParameter(msg)

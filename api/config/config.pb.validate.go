@@ -2914,8 +2914,6 @@ func (m *ClusterClientApi) validate(all bool) error {
 
 	// no validation rules for TransportType
 
-	// no validation rules for ServiceType
-
 	// no validation rules for RegistryType
 
 	// no validation rules for ServiceTarget

@@ -218,18 +218,15 @@ encrypt:
 
 # cluster_client_api 项目集群客户端api
 # transport_type 传输协议：http、grpc、...；默认: HTTP
-# service_type 服务类型：endpoint、registry、...；默认: endpoint
-# registry_type 注册类型：consul、etcd、...；读取配配置：${registry_type}；例： Bootstrap.Consul
+# registry_type 注册类型：endpoint、consul、etcd、...；配置中心配置：${registry_type}；例： Bootstrap.Consul
 # service_target 服务目标：endpoint或registry，例：http://127.0.0.1:8899、discovery:///${registry_endpoint}
 cluster_client_api:
   - service_name: ping-service
     transport_type: http
-    service_type: endpoint
-    registry_type:
+    registry_type: endpoint
     service_target: http://127.0.0.1:10001
   - service_name: nodeid-service
     transport_type: grpc
-    service_type: registry
     registry_type: consul
     service_target: discovery:///go-micro-saas:nodeid-service:develop:v1.0.0
 
