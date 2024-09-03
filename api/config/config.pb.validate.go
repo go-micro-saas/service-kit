@@ -2910,13 +2910,15 @@ func (m *ClusterClientApi) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Name
+	// no validation rules for ServiceName
 
-	// no validation rules for RegistryName
+	// no validation rules for TransportType
 
-	// no validation rules for HttpHost
+	// no validation rules for ServiceType
 
-	// no validation rules for GrpcHost
+	// no validation rules for RegistryType
+
+	// no validation rules for ServiceTarget
 
 	if len(errors) > 0 {
 		return ClusterClientApiMultiError(errors)
