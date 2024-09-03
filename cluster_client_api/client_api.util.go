@@ -31,8 +31,8 @@ type Config struct {
 }
 
 func (s *Config) SetByPbClusterClientApi(cfg *configpb.ClusterClientApi) {
-	s.ServiceName = cfg.ServiceName
-	tt := strings.ToLower(cfg.TransportType)
+	s.ServiceName = cfg.GetServiceName()
+	tt := strings.ToLower(cfg.GetTransportType())
 	switch tt {
 	default:
 		s.TransportType = configpb.ClusterClientApi_HTTP
@@ -41,7 +41,7 @@ func (s *Config) SetByPbClusterClientApi(cfg *configpb.ClusterClientApi) {
 	case "grpc":
 		s.TransportType = configpb.ClusterClientApi_GRPC
 	}
-	rt := strings.ToLower(cfg.RegistryType)
+	rt := strings.ToLower(cfg.GetRegistryType())
 	switch rt {
 	default:
 		s.RegistryType = configpb.ClusterClientApi_ENDPOINT
@@ -52,5 +52,5 @@ func (s *Config) SetByPbClusterClientApi(cfg *configpb.ClusterClientApi) {
 	case configpb.ClusterClientApi_ETCD:
 		s.RegistryType = configpb.ClusterClientApi_ETCD
 	}
-	s.ServiceTarget = cfg.ServiceTarget
+	s.ServiceTarget = cfg.GetServiceTarget()
 }

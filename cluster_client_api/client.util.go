@@ -2,6 +2,7 @@ package clientutil
 
 import (
 	configpb "github.com/go-micro-saas/service-kit/api/config"
+	setuputil "github.com/go-micro-saas/service-kit/setup"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 	"sync"
 )
@@ -14,8 +15,9 @@ type ClientAPIManager interface {
 }
 
 type apiManager struct {
-	configMap   map[ServiceName]*Config
-	configMutex sync.RWMutex
+	launcherManager setuputil.LauncherManager
+	configMap       map[ServiceName]*Config
+	configMutex     sync.RWMutex
 }
 
 // RegisterServiceAPIConfigs 注册服务API，覆盖已有服务
