@@ -55,14 +55,39 @@ func (s *clientAPIManager) RegisterServiceAPIConfigs(apiConfigs []*configpb.Clus
 		}
 	}
 	if hasConsulRegistry && s.opt.consulClient == nil {
-		e := errorpkg.ErrorBadRequest("uninitialized: consulClient == nil")
-		return errorpkg.WithStack(e)
+		return errorpkg.WithStack(uninitializedConsulClientError)
 	}
 	if hasEtcdRegistry && s.opt.etcdClient == nil {
-		e := errorpkg.ErrorBadRequest("uninitialized: etcdClient == nil")
-		return errorpkg.WithStack(e)
+		return errorpkg.WithStack(uninitializedEtcdClientError)
 	}
 	return nil
+}
+
+func (s *clientAPIManager) NewClientAPIConnection(serviceName ServiceName) (ClientConnection, error) {
+	apiConfig, err := s.GetServiceAPIConfig(serviceName)
+	if err != nil {
+		return nil, err
+	}
+	conn := &clientConnection{}
+	conn.SetTransportType(apiConfig.TransportType)
+	switch apiConfig.TransportType {
+	default:
+		conn.httpClient, err = s.NewHTTPClient(apiConfig)
+		if err != nil {
+			return nil, err
+		}
+	case configpb.ClusterClientApi_TT_HTTP:
+		conn.httpClient, err = s.NewHTTPClient(apiConfig)
+		if err != nil {
+			return nil, err
+		}
+	case configpb.ClusterClientApi_TT_GRPC:
+		conn.grpcConn, err = s.NewGRPCConnection(apiConfig)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return conn, nil
 }
 
 func (s *clientAPIManager) GetServiceAPIConfig(serviceName ServiceName) (*Config, error) {
@@ -91,8 +116,7 @@ func (s *clientAPIManager) getRegistryDiscovery(apiConfig *Config) (registry.Dis
 		return nil, errorpkg.WithStack(e)
 	case configpb.ClusterClientApi_RT_CONSUL:
 		if s.opt.consulClient == nil {
-			e := errorpkg.ErrorBadRequest("uninitialized: consulClient == nil")
-			return nil, errorpkg.WithStack(e)
+			return nil, errorpkg.WithStack(uninitializedConsulClientError)
 		}
 		r, err := registrypkg.NewConsulRegistry(s.opt.consulClient)
 		if err != nil {
@@ -101,8 +125,7 @@ func (s *clientAPIManager) getRegistryDiscovery(apiConfig *Config) (registry.Dis
 		return r, nil
 	case configpb.ClusterClientApi_RT_ETCD:
 		if s.opt.etcdClient == nil {
-			e := errorpkg.ErrorBadRequest("uninitialized: etcdClient == nil")
-			return nil, errorpkg.WithStack(e)
+			return nil, errorpkg.WithStack(uninitializedEtcdClientError)
 		}
 		r, err := registrypkg.NewEtcdRegistry(s.opt.etcdClient)
 		if err != nil {

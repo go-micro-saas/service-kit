@@ -1,8 +1,18 @@
 package clientutil
 
 import (
+	"github.com/go-kratos/kratos/v2/transport/http"
 	configpb "github.com/go-micro-saas/service-kit/api/config"
+	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
+	stdgrpc "google.golang.org/grpc"
 	"strings"
+)
+
+var (
+	uninitializedConsulClientError = errorpkg.ErrorBadRequest("uninitialized: consulClient == nil")
+	uninitializedEtcdClientError   = errorpkg.ErrorBadRequest("uninitialized: etcdClient == nil")
+	uninitializedGRPCConnError     = errorpkg.ErrorBadRequest("uninitialized: grpcConn == nil")
+	uninitializedHTTPClientError   = errorpkg.ErrorBadRequest("uninitialized: httpClient == nil")
 )
 
 type ClientAPIManager interface {
@@ -10,6 +20,16 @@ type ClientAPIManager interface {
 	RegisterServiceAPIConfigs(apis []*configpb.ClusterClientApi, opts ...Option) error
 	// GetServiceAPIConfig 获取服务配置
 	GetServiceAPIConfig(serviceName ServiceName) (*Config, error)
+	// NewClientAPIConnection 实例化客户端链接
+	NewClientAPIConnection(serviceName ServiceName) (ClientConnection, error)
+}
+
+type ClientConnection interface {
+	GetTransportType() configpb.ClusterClientApi_TransportType
+	IsHTTPTransport() bool
+	IsGRCPTransport() bool
+	GetGRPCConnection() (*stdgrpc.ClientConn, error)
+	GetHTTPClient() (*http.Client, error)
 }
 
 // ServiceName ...
@@ -58,4 +78,46 @@ func (s *Config) IsConsulRegistry() bool {
 
 func (s *Config) IsEtcdRegistry() bool {
 	return s.RegistryType == configpb.ClusterClientApi_RT_ETCD
+}
+
+type clientConnection struct {
+	transportType configpb.ClusterClientApi_TransportType
+	grpcConn      *stdgrpc.ClientConn
+	httpClient    *http.Client
+}
+
+func (c *clientConnection) SetTransportType(tt configpb.ClusterClientApi_TransportType) {
+	_, ok := configpb.ClusterClientApi_TransportType_name[int32(tt)]
+	if ok {
+		c.transportType = tt
+	}
+	if c.transportType == configpb.ClusterClientApi_TT_UNSPECIFIED {
+		c.transportType = configpb.ClusterClientApi_TT_HTTP
+	}
+}
+
+func (c *clientConnection) GetTransportType() configpb.ClusterClientApi_TransportType {
+	return c.transportType
+}
+
+func (c *clientConnection) IsHTTPTransport() bool {
+	return c.transportType == configpb.ClusterClientApi_TT_HTTP
+}
+
+func (c *clientConnection) IsGRCPTransport() bool {
+	return c.transportType == configpb.ClusterClientApi_TT_GRPC
+}
+
+func (c *clientConnection) GetGRPCConnection() (*stdgrpc.ClientConn, error) {
+	if c.grpcConn == nil {
+		return nil, errorpkg.WithStack(uninitializedGRPCConnError)
+	}
+	return c.grpcConn, nil
+}
+
+func (c *clientConnection) GetHTTPClient() (*http.Client, error) {
+	if c.httpClient == nil {
+		return nil, errorpkg.WithStack(uninitializedHTTPClientError)
+	}
+	return c.httpClient, nil
 }
