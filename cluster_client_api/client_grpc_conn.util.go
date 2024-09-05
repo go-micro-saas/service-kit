@@ -24,7 +24,7 @@ func (s *apiManager) NewGRPCConnection(serviceName ServiceName, otherOpts ...grp
 	}
 
 	// 中间件
-	logHelper := log.NewHelper(s.logger)
+	logHelper := log.NewHelper(s.opt.logger)
 	opts = append(opts, grpc.WithMiddleware(middlewarepkg.DefaultClientMiddlewares(logHelper)...))
 
 	// 服务端点logger

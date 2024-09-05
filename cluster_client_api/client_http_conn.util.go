@@ -18,7 +18,7 @@ func (s *apiManager) NewHTTPClient(serviceName ServiceName, otherOpts ...http.Cl
 	opts = append(opts, apputil.ClientDecoderEncoder()...)
 
 	// 中间件
-	logHelper := log.NewHelper(s.logger)
+	logHelper := log.NewHelper(s.opt.logger)
 	opts = append(opts, http.WithMiddleware(middlewarepkg.DefaultClientMiddlewares(logHelper)...))
 
 	// 服务端点

@@ -7,7 +7,7 @@ import (
 
 type ClientAPIManager interface {
 	// RegisterServiceAPIConfigs 注册服务API，覆盖更新
-	RegisterServiceAPIConfigs(apis []*configpb.ClusterClientApi) error
+	RegisterServiceAPIConfigs(apis []*configpb.ClusterClientApi, opts ...Option) error
 }
 
 // ServiceName ...
@@ -58,4 +58,12 @@ func (s *Config) SetByPbClusterClientApi(cfg *configpb.ClusterClientApi) {
 		s.RegistryType = configpb.ClusterClientApi_RT_ETCD
 	}
 	s.ServiceTarget = cfg.GetServiceTarget()
+}
+
+func (s *Config) IsConsulRegistry() bool {
+	return s.RegistryType == configpb.ClusterClientApi_RT_CONSUL
+}
+
+func (s *Config) IsEtcdRegistry() bool {
+	return s.RegistryType == configpb.ClusterClientApi_RT_ETCD
 }

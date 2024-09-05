@@ -1,51 +1,45 @@
 package clientutil
 
 import (
-	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/registry"
 	configpb "github.com/go-micro-saas/service-kit/api/config"
-	consulapi "github.com/hashicorp/consul/api"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
+	logpkg "github.com/ikaiguang/go-srv-kit/kratos/log"
 	registrypkg "github.com/ikaiguang/go-srv-kit/kratos/registry"
 	"sync"
 )
 
-type Option func(*option)
-
-func WithConsulClient(consulClient *consulapi.Client) Option {
-	return func(opt *option) {
-		opt.consulClient = consulClient
-	}
+type apiManager struct {
+	opt         *option
+	configMap   map[ServiceName]*Config
+	configMutex sync.RWMutex
 }
 
-type option struct {
-	consulClient *consulapi.Client
-}
-
-func NewClientAPIManager(logger log.Logger, opts ...Option) (ClientAPIManager, error) {
+func NewClientAPIManager(opts ...Option) (ClientAPIManager, error) {
 	o := &option{}
+	o.logger, _ = logpkg.NewDummyLogger()
 	for i := range opts {
 		opts[i](o)
 	}
 	return &apiManager{
-		logger:       logger,
-		consulClient: o.consulClient,
-		configMap:    nil,
-		configMutex:  sync.RWMutex{},
+		opt:         o,
+		configMap:   nil,
+		configMutex: sync.RWMutex{},
 	}, nil
 }
 
-type apiManager struct {
-	logger       log.Logger
-	consulClient *consulapi.Client
-	configMap    map[ServiceName]*Config
-	configMutex  sync.RWMutex
-}
-
 // RegisterServiceAPIConfigs 注册服务API，覆盖已有服务
-func (s *apiManager) RegisterServiceAPIConfigs(apiConfigs []*configpb.ClusterClientApi) error {
+func (s *apiManager) RegisterServiceAPIConfigs(apiConfigs []*configpb.ClusterClientApi, opts ...Option) error {
+	for i := range opts {
+		opts[i](s.opt)
+	}
+
 	s.configMutex.Lock()
 	defer s.configMutex.Unlock()
+
+	var (
+		hasConsulRegistry, hasEtcdRegistry bool
+	)
 	for i := range apiConfigs {
 		if err := apiConfigs[i].Validate(); err != nil {
 			e := errorpkg.ErrorBadRequest("")
@@ -54,6 +48,19 @@ func (s *apiManager) RegisterServiceAPIConfigs(apiConfigs []*configpb.ClusterCli
 		conf := &Config{}
 		conf.SetByPbClusterClientApi(apiConfigs[i])
 		s.configMap[ServiceName(apiConfigs[i].ServiceName)] = conf
+		if conf.IsConsulRegistry() {
+			hasConsulRegistry = true
+		} else if conf.IsEtcdRegistry() {
+			hasEtcdRegistry = true
+		}
+	}
+	if hasConsulRegistry && s.opt.consulClient == nil {
+		e := errorpkg.ErrorBadRequest("uninitialized: consulClient == nil")
+		return errorpkg.WithStack(e)
+	}
+	if hasEtcdRegistry && s.opt.etcdClient == nil {
+		e := errorpkg.ErrorBadRequest("uninitialized: etcdClient == nil")
+		return errorpkg.WithStack(e)
 	}
 	return nil
 }
@@ -83,17 +90,24 @@ func (s *apiManager) getRegistryDiscovery(apiConfig *Config) (registry.Discovery
 		e := errorpkg.ErrorUnimplemented(apiConfig.RegistryType.String())
 		return nil, errorpkg.WithStack(e)
 	case configpb.ClusterClientApi_RT_CONSUL:
-		if s.consulClient == nil {
-			e := errorpkg.ErrorBadRequest("consulClient == nil")
+		if s.opt.consulClient == nil {
+			e := errorpkg.ErrorBadRequest("uninitialized: consulClient == nil")
 			return nil, errorpkg.WithStack(e)
 		}
-		r, err := registrypkg.NewConsulRegistry(s.consulClient)
+		r, err := registrypkg.NewConsulRegistry(s.opt.consulClient)
 		if err != nil {
 			return nil, err
 		}
 		return r, nil
 	case configpb.ClusterClientApi_RT_ETCD:
-		e := errorpkg.ErrorUnimplemented(apiConfig.RegistryType.String())
-		return nil, errorpkg.WithStack(e)
+		if s.opt.etcdClient == nil {
+			e := errorpkg.ErrorBadRequest("uninitialized: etcdClient == nil")
+			return nil, errorpkg.WithStack(e)
+		}
+		r, err := registrypkg.NewEtcdRegistry(s.opt.etcdClient)
+		if err != nil {
+			return nil, err
+		}
+		return r, nil
 	}
 }
