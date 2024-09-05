@@ -8,6 +8,8 @@ import (
 type ClientAPIManager interface {
 	// RegisterServiceAPIConfigs 注册服务API，覆盖更新
 	RegisterServiceAPIConfigs(apis []*configpb.ClusterClientApi, opts ...Option) error
+	// GetServiceAPIConfig 获取服务配置
+	GetServiceAPIConfig(serviceName ServiceName) (*Config, error)
 }
 
 // ServiceName ...
@@ -16,16 +18,6 @@ type ServiceName string
 func (s ServiceName) String() string {
 	return string(s)
 }
-
-// 示例：仅供参考
-const (
-	PingService   ServiceName = "ping-service"
-	NodeidService ServiceName = "nodeid-service"
-
-	FeishuApi      ServiceName = "feishu-openapi"
-	DingtalkApi    ServiceName = "dingtalk-openapi"
-	DingtalkApiOld ServiceName = "dingtalk-openapi-old"
-)
 
 // Config ...
 type Config struct {

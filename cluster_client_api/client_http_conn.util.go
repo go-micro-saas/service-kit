@@ -11,7 +11,7 @@ import (
 	middlewarepkg "github.com/ikaiguang/go-srv-kit/kratos/middleware"
 )
 
-func (s *apiManager) NewHTTPClient(serviceName ServiceName, otherOpts ...http.ClientOption) (*http.Client, error) {
+func (s *clientAPIManager) NewHTTPClient(serviceName ServiceName, otherOpts ...http.ClientOption) (*http.Client, error) {
 	var opts = []http.ClientOption{
 		http.WithTimeout(defaultTimeout),
 	}
@@ -51,7 +51,7 @@ func (s *apiManager) NewHTTPClient(serviceName ServiceName, otherOpts ...http.Cl
 }
 
 // getHTTPEndpointOptions 获取服务端点
-func (s *apiManager) getHTTPEndpointOptions(apiConfig *Config) ([]http.ClientOption, error) {
+func (s *clientAPIManager) getHTTPEndpointOptions(apiConfig *Config) ([]http.ClientOption, error) {
 	var opts []http.ClientOption
 
 	// endpoint

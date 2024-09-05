@@ -15,7 +15,7 @@ const (
 	defaultTimeout = curlpkg.DefaultTimeout
 )
 
-func (s *apiManager) NewGRPCConnection(serviceName ServiceName, otherOpts ...grpc.ClientOption) (*stdgrpc.ClientConn, error) {
+func (s *clientAPIManager) NewGRPCConnection(serviceName ServiceName, otherOpts ...grpc.ClientOption) (*stdgrpc.ClientConn, error) {
 	var opts = []grpc.ClientOption{
 		grpc.WithTimeout(defaultTimeout),
 		grpc.WithHealthCheck(true),
@@ -56,7 +56,7 @@ func (s *apiManager) NewGRPCConnection(serviceName ServiceName, otherOpts ...grp
 	return conn, nil
 }
 
-func (s *apiManager) getGRPCEndpointOptions(apiConfig *Config) ([]grpc.ClientOption, error) {
+func (s *clientAPIManager) getGRPCEndpointOptions(apiConfig *Config) ([]grpc.ClientOption, error) {
 	var opts []grpc.ClientOption
 
 	// endpoint

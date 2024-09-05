@@ -9,7 +9,7 @@ import (
 	"sync"
 )
 
-type apiManager struct {
+type clientAPIManager struct {
 	opt         *option
 	configMap   map[ServiceName]*Config
 	configMutex sync.RWMutex
@@ -21,7 +21,7 @@ func NewClientAPIManager(opts ...Option) (ClientAPIManager, error) {
 	for i := range opts {
 		opts[i](o)
 	}
-	return &apiManager{
+	return &clientAPIManager{
 		opt:         o,
 		configMap:   nil,
 		configMutex: sync.RWMutex{},
@@ -29,7 +29,7 @@ func NewClientAPIManager(opts ...Option) (ClientAPIManager, error) {
 }
 
 // RegisterServiceAPIConfigs 注册服务API，覆盖已有服务
-func (s *apiManager) RegisterServiceAPIConfigs(apiConfigs []*configpb.ClusterClientApi, opts ...Option) error {
+func (s *clientAPIManager) RegisterServiceAPIConfigs(apiConfigs []*configpb.ClusterClientApi, opts ...Option) error {
 	for i := range opts {
 		opts[i](s.opt)
 	}
@@ -65,7 +65,7 @@ func (s *apiManager) RegisterServiceAPIConfigs(apiConfigs []*configpb.ClusterCli
 	return nil
 }
 
-func (s *apiManager) GetServiceAPIConfig(serviceName ServiceName) (*Config, error) {
+func (s *clientAPIManager) GetServiceAPIConfig(serviceName ServiceName) (*Config, error) {
 	if serviceName.String() == "" {
 		e := errorpkg.ErrorBadRequest("service name cannot be empty")
 		return nil, errorpkg.WithStack(e)
@@ -84,7 +84,7 @@ func (s *apiManager) GetServiceAPIConfig(serviceName ServiceName) (*Config, erro
 	return conf, nil
 }
 
-func (s *apiManager) getRegistryDiscovery(apiConfig *Config) (registry.Discovery, error) {
+func (s *clientAPIManager) getRegistryDiscovery(apiConfig *Config) (registry.Discovery, error) {
 	switch apiConfig.RegistryType {
 	default:
 		e := errorpkg.ErrorUnimplemented(apiConfig.RegistryType.String())
