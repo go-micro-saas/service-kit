@@ -12,8 +12,10 @@ app:
   config_path_for_general: "${app.project_name}/general-config"
   config_path_for_server: "${app.project_name}/${app.server_name}/${app.server_env}/${app.version}"
   http_endpoints:
-    - https://uufff.com
+    # 服务注册，局域网地址或者集群地址
+    # - http://127.0.0.1:10101
   grpc_endpoints:
-    - 127.0.0.1:10102
+    # 服务注册，局域网地址或者集群地址
+    # - grpc://127.0.0.1:10102
   metadata:
     id: "${app.project_name}:${app.server_name}:${app.server_env}:${app.server_version}"

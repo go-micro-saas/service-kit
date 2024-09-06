@@ -302,11 +302,11 @@ type App struct {
 	ServerEnv            string            `protobuf:"bytes,3,opt,name=server_env,json=serverEnv,proto3" json:"server_env,omitempty"`                                                                        // 开发环境；值：DEVELOP、TESTING、PREVIEW、PRODUCTION
 	ServerVersion        string            `protobuf:"bytes,4,opt,name=server_version,json=serverVersion,proto3" json:"server_version,omitempty"`                                                            //
 	Id                   string            `protobuf:"bytes,5,opt,name=id,proto3" json:"id,omitempty"`                                                                                                       // 服务注册名称
-	ConfigMethod         string            `protobuf:"bytes,40,opt,name=config_method,json=configMethod,proto3" json:"config_method,omitempty"`                                                              // 配置方式；值：LOCAL、CONSUL、...
+	ConfigMethod         string            `protobuf:"bytes,40,opt,name=config_method,json=configMethod,proto3" json:"config_method,omitempty"`                                                              // 配置方式；值：LOCAL、CONSUL
 	ConfigPathForGeneral string            `protobuf:"bytes,41,opt,name=config_path_for_general,json=configPathForGeneral,proto3" json:"config_path_for_general,omitempty"`                                  // 配置中心：基本配置路径
 	ConfigPathForServer  string            `protobuf:"bytes,42,opt,name=config_path_for_server,json=configPathForServer,proto3" json:"config_path_for_server,omitempty"`                                     // 配置中心：本服务的配置路径
-	HttpEndpoints        []string          `protobuf:"bytes,60,rep,name=http_endpoints,json=httpEndpoints,proto3" json:"http_endpoints,omitempty"`                                                           // app站点
-	GrpcEndpoints        []string          `protobuf:"bytes,61,rep,name=grpc_endpoints,json=grpcEndpoints,proto3" json:"grpc_endpoints,omitempty"`                                                           // grpc站点
+	HttpEndpoints        []string          `protobuf:"bytes,60,rep,name=http_endpoints,json=httpEndpoints,proto3" json:"http_endpoints,omitempty"`                                                           // app站点；用于服务注册；如：http://192.168.100.200:10001
+	GrpcEndpoints        []string          `protobuf:"bytes,61,rep,name=grpc_endpoints,json=grpcEndpoints,proto3" json:"grpc_endpoints,omitempty"`                                                           // grpc站点；用于服务注册；如：grpc://192.168.100.200:10002
 	Metadata             map[string]string `protobuf:"bytes,100,rep,name=metadata,proto3" json:"metadata,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"` // 元数据
 }
 

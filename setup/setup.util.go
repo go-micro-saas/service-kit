@@ -115,6 +115,7 @@ func NewLauncherManager(configFilePath string, configOpts ...configutil.Option) 
 		}
 	}
 
+	// mongo
 	mongoConfig := bootstrap.GetMongo()
 	if mongoConfig.GetEnable() {
 		_, err = launcher.GetMongoClient()

@@ -14,6 +14,7 @@ import (
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 	registrypkg "github.com/ikaiguang/go-srv-kit/kratos/registry"
 	stdlog "log"
+	"net/url"
 )
 
 // NewApp .
@@ -68,6 +69,28 @@ func NewApp(launcherManager setuputil.LauncherManager, hs *http.Server, gs *grpc
 			kratos.Server(servers...),
 		}
 	)
+
+	// 服务注册，如果为空，自动获取服务的Endpoint
+	var endpoints []*url.URL
+	for _, item := range appConfig.GetHttpEndpoints() {
+		u, err := url.Parse(item)
+		if err != nil {
+			e := errorpkg.ErrorInvalidParameter(err.Error())
+			return nil, errorpkg.WithStack(e)
+		}
+		endpoints = append(endpoints, u)
+	}
+	for _, item := range appConfig.GetGrpcEndpoints() {
+		u, err := url.Parse(item)
+		if err != nil {
+			e := errorpkg.ErrorInvalidParameter(err.Error())
+			return nil, errorpkg.WithStack(e)
+		}
+		endpoints = append(endpoints, u)
+	}
+	if len(endpoints) > 0 {
+		appOptions = append(appOptions, kratos.Endpoint(endpoints...))
+	}
 
 	// 启用服务注册中心
 	if conf.GetSetting().GetEnableConsulRegistry() {
