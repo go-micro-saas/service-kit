@@ -24,8 +24,9 @@ func NewPingBiz(
 	logHelper := log.NewHelper(log.With(logger, "module", "ping/biz/ping"))
 
 	return &pingBiz{
-		log:      logHelper,
-		pingData: pingData,
+		log:               logHelper,
+		serviceAPIManager: serviceAPIManager,
+		pingData:          pingData,
 	}
 }
 

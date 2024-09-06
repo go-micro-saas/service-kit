@@ -230,7 +230,7 @@ cluster_service_api:
   - service_name: ping-service-http
     transport_type: http
     registry_type: endpoint
-    service_target: http://127.0.0.1:10001
+    service_target: http://127.0.0.1:10101
   - service_name: ping-service-grpc
     transport_type: grpc
     registry_type: consul

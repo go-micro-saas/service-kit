@@ -8,14 +8,14 @@ var (
 	_apiConnection = sync.Map{}
 )
 
-func NewSingletonClientAPIConnection(serviceAPIManager ServiceAPIManager, serviceName ServiceName) (ServiceAPIConnection, error) {
+func NewSingletonServiceAPIConnection(serviceAPIManager ServiceAPIManager, serviceName ServiceName) (ServiceAPIConnection, error) {
 	cc, ok := _apiConnection.Load(serviceName)
 	if ok {
 		if conn, ok := cc.(ServiceAPIConnection); ok {
 			return conn, nil
 		}
 	}
-	conn, err := NewClientAPIConnection(serviceAPIManager, serviceName)
+	conn, err := NewServiceAPIConnection(serviceAPIManager, serviceName)
 	if err != nil {
 		return nil, err
 	}
@@ -23,7 +23,7 @@ func NewSingletonClientAPIConnection(serviceAPIManager ServiceAPIManager, servic
 	return conn, nil
 }
 
-func NewClientAPIConnection(serviceAPIManager ServiceAPIManager, serviceName ServiceName) (ServiceAPIConnection, error) {
+func NewServiceAPIConnection(serviceAPIManager ServiceAPIManager, serviceName ServiceName) (ServiceAPIConnection, error) {
 	conn, err := serviceAPIManager.NewAPIConnection(serviceName)
 	if err != nil {
 		return nil, err
