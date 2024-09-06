@@ -6,6 +6,7 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	configpb "github.com/go-micro-saas/service-kit/api/config"
 	authutil "github.com/go-micro-saas/service-kit/auth"
+	clientutil "github.com/go-micro-saas/service-kit/cluster_service_api"
 	consulutil "github.com/go-micro-saas/service-kit/consul"
 	jaegerutil "github.com/go-micro-saas/service-kit/jaeger"
 	loggerutil "github.com/go-micro-saas/service-kit/logger"
@@ -16,6 +17,7 @@ import (
 	redisutil "github.com/go-micro-saas/service-kit/redis"
 	consulapi "github.com/hashicorp/consul/api"
 	authpkg "github.com/ikaiguang/go-srv-kit/kratos/auth"
+	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 	"github.com/redis/go-redis/v9"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
@@ -27,24 +29,26 @@ import (
 type launcherManager struct {
 	conf *configpb.Bootstrap
 
-	loggerManagerOnce   sync.Once
-	loggerManager       loggerutil.LoggerManager
-	redisManagerOnce    sync.Once
-	redisManager        redisutil.RedisManager
-	mysqlManagerOnce    sync.Once
-	mysqlManager        mysqlutil.MysqlManager
-	postgresManagerOnce sync.Once
-	postgresManager     postgresutil.PostgresManager
-	mongoManagerOnce    sync.Once
-	mongoManager        mongoutil.MongoManager
-	consulManagerOnce   sync.Once
-	consulManager       consulutil.ConsulManager
-	jaegerManagerOnce   sync.Once
-	jaegerManager       jaegerutil.JaegerManager
-	rabbitmqManagerOnce sync.Once
-	rabbitmqManager     rabbitmqutil.RabbitmqManager
-	authInstanceOnce    sync.Once
-	authInstance        authutil.AuthInstance
+	loggerManagerOnce     sync.Once
+	loggerManager         loggerutil.LoggerManager
+	redisManagerOnce      sync.Once
+	redisManager          redisutil.RedisManager
+	mysqlManagerOnce      sync.Once
+	mysqlManager          mysqlutil.MysqlManager
+	postgresManagerOnce   sync.Once
+	postgresManager       postgresutil.PostgresManager
+	mongoManagerOnce      sync.Once
+	mongoManager          mongoutil.MongoManager
+	consulManagerOnce     sync.Once
+	consulManager         consulutil.ConsulManager
+	jaegerManagerOnce     sync.Once
+	jaegerManager         jaegerutil.JaegerManager
+	rabbitmqManagerOnce   sync.Once
+	rabbitmqManager       rabbitmqutil.RabbitmqManager
+	authInstanceOnce      sync.Once
+	authInstance          authutil.AuthInstance
+	serviceAPIManagerOnce sync.Once
+	serviceAPIManager     clientutil.ServiceAPIManager
 }
 
 func (s *launcherManager) GetConfig() *configpb.Bootstrap {
@@ -362,6 +366,60 @@ func (s *launcherManager) GetAuthManager() (authpkg.AuthRepo, error) {
 		return nil, err
 	}
 	return authInstance.GetAuthManger()
+}
+
+func (s *launcherManager) getServiceApiManager() (clientutil.ServiceAPIManager, error) {
+	apiConfigs, diffRT, err := clientutil.ToConfig(s.conf.GetClusterServiceApi())
+	if err != nil {
+		return nil, err
+	}
+	var opts []clientutil.Option
+	for rt := range diffRT {
+		if rt == configpb.RegistryTypeEnum_CONSUL {
+			consulClient, err := s.GetConsulClient()
+			if err != nil {
+				return nil, err
+			}
+			opts = append(opts, clientutil.WithConsulClient(consulClient))
+		} else if rt == configpb.RegistryTypeEnum_ETCD {
+			e := errorpkg.ErrorUnimplemented("uninitialized setup etcd")
+			return nil, errorpkg.WithStack(e)
+			//etcdClient, err := s.GetEtcdClient()
+			//if err != nil {
+			//	return nil, err
+			//}
+			//opts = append(opts, clientutil.WithEtcdClient(etcdClient))
+		}
+	}
+	serviceAPIManager, err := clientutil.NewServiceAPIManager(opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = serviceAPIManager.RegisterServiceAPIConfigs(apiConfigs)
+	if err != nil {
+		return nil, err
+	}
+	s.serviceAPIManager = serviceAPIManager
+	return serviceAPIManager, nil
+}
+
+func (s *launcherManager) getSingletonServiceApiManager() (clientutil.ServiceAPIManager, error) {
+	var err error
+	s.serviceAPIManagerOnce.Do(func() {
+		s.serviceAPIManager, err = s.getServiceApiManager()
+	})
+	if err != nil {
+		s.serviceAPIManagerOnce = sync.Once{}
+	}
+	return s.serviceAPIManager, err
+}
+
+func (s *launcherManager) GetServiceApiExporter() (clientutil.ServiceAPIManager, error) {
+	serviceAPIManager, err := s.getSingletonServiceApiManager()
+	if err != nil {
+		return nil, err
+	}
+	return serviceAPIManager, nil
 }
 
 func (s *launcherManager) Close() error {

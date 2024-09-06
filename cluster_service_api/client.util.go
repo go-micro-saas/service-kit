@@ -29,7 +29,7 @@ func NewServiceAPIManager(opts ...Option) (ServiceAPIManager, error) {
 }
 
 // RegisterServiceAPIConfigs 注册服务API，覆盖已有服务
-func (s *serviceAPIManager) RegisterServiceAPIConfigs(apiConfigs []*configpb.ClusterServiceApi, opts ...Option) error {
+func (s *serviceAPIManager) RegisterServiceAPIConfigs(apiConfigs []*Config, opts ...Option) error {
 	for i := range opts {
 		opts[i](s.opt)
 	}
@@ -41,16 +41,10 @@ func (s *serviceAPIManager) RegisterServiceAPIConfigs(apiConfigs []*configpb.Clu
 		hasConsulRegistry, hasEtcdRegistry bool
 	)
 	for i := range apiConfigs {
-		if err := apiConfigs[i].Validate(); err != nil {
-			e := errorpkg.ErrorBadRequest("")
-			return errorpkg.Wrap(e, err)
-		}
-		conf := &Config{}
-		conf.SetByPbClusterServiceApi(apiConfigs[i])
-		s.configMap[ServiceName(apiConfigs[i].ServiceName)] = conf
-		if conf.IsConsulRegistry() {
+		s.configMap[ServiceName(apiConfigs[i].ServiceName)] = apiConfigs[i]
+		if apiConfigs[i].IsConsulRegistry() {
 			hasConsulRegistry = true
-		} else if conf.IsEtcdRegistry() {
+		} else if apiConfigs[i].IsEtcdRegistry() {
 			hasEtcdRegistry = true
 		}
 	}
@@ -76,12 +70,12 @@ func (s *serviceAPIManager) NewAPIConnection(serviceName ServiceName) (ServiceAP
 		if err != nil {
 			return nil, err
 		}
-	case configpb.ClusterServiceApi_TT_HTTP:
+	case configpb.TransportTypeEnum_HTTP:
 		conn.httpClient, err = s.NewHTTPClient(apiConfig)
 		if err != nil {
 			return nil, err
 		}
-	case configpb.ClusterServiceApi_TT_GRPC:
+	case configpb.TransportTypeEnum_GRPC:
 		conn.grpcConn, err = s.NewGRPCConnection(apiConfig)
 		if err != nil {
 			return nil, err
@@ -114,7 +108,7 @@ func (s *serviceAPIManager) getRegistryDiscovery(apiConfig *Config) (registry.Di
 	default:
 		e := errorpkg.ErrorUnimplemented(apiConfig.RegistryType.String())
 		return nil, errorpkg.WithStack(e)
-	case configpb.ClusterServiceApi_RT_CONSUL:
+	case configpb.RegistryTypeEnum_CONSUL:
 		if s.opt.consulClient == nil {
 			return nil, errorpkg.WithStack(uninitializedConsulClientError)
 		}
@@ -123,7 +117,7 @@ func (s *serviceAPIManager) getRegistryDiscovery(apiConfig *Config) (registry.Di
 			return nil, err
 		}
 		return r, nil
-	case configpb.ClusterServiceApi_RT_ETCD:
+	case configpb.RegistryTypeEnum_ETCD:
 		if s.opt.etcdClient == nil {
 			return nil, errorpkg.WithStack(uninitializedEtcdClientError)
 		}

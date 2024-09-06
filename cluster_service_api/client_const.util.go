@@ -17,7 +17,7 @@ var (
 
 type ServiceAPIManager interface {
 	// RegisterServiceAPIConfigs 注册服务API，覆盖更新
-	RegisterServiceAPIConfigs(apis []*configpb.ClusterServiceApi, opts ...Option) error
+	RegisterServiceAPIConfigs(apis []*Config, opts ...Option) error
 	// GetServiceAPIConfig 获取服务配置
 	GetServiceAPIConfig(serviceName ServiceName) (*Config, error)
 	// NewAPIConnection 实例化客户端链接
@@ -25,8 +25,8 @@ type ServiceAPIManager interface {
 }
 
 type ServiceAPIConnection interface {
-	GetTransportType() configpb.ClusterServiceApi_TransportType
-	IsTransportType(tt configpb.ClusterServiceApi_TransportType) bool
+	GetTransportType() configpb.TransportTypeEnum_TransportType
+	IsTransportType(tt configpb.TransportTypeEnum_TransportType) bool
 	GetGRPCConnection() (*stdgrpc.ClientConn, error)
 	GetHTTPClient() (*http.Client, error)
 }
@@ -41,8 +41,8 @@ func (s ServiceName) String() string {
 // Config ...
 type Config struct {
 	ServiceName   string                                   // 服务名称
-	TransportType configpb.ClusterServiceApi_TransportType // 传输协议：http、grpc、...；默认: HTTP
-	RegistryType  configpb.ClusterServiceApi_RegistryType  // 注册类型：注册类型：endpoint、consul、...；配置中心配置：${registry_type}；例： Bootstrap.Consul
+	TransportType configpb.TransportTypeEnum_TransportType // 传输协议：http、grpc、...；默认: HTTP
+	RegistryType  configpb.RegistryTypeEnum_RegistryType   // 注册类型：注册类型：endpoint、consul、...；配置中心配置：${registry_type}；例： Bootstrap.Consul
 	ServiceTarget string                                   // 服务目标：endpoint或registry，例：http://127.0.0.1:8899、discovery:///${registry_endpoint}
 }
 
@@ -51,64 +51,82 @@ func (s *Config) SetByPbClusterServiceApi(cfg *configpb.ClusterServiceApi) {
 	tt := strings.ToLower(cfg.GetTransportType())
 	switch tt {
 	default:
-		s.TransportType = configpb.ClusterServiceApi_TT_HTTP
+		s.TransportType = configpb.TransportTypeEnum_HTTP
 	case "http":
-		s.TransportType = configpb.ClusterServiceApi_TT_HTTP
+		s.TransportType = configpb.TransportTypeEnum_HTTP
 	case "grpc":
-		s.TransportType = configpb.ClusterServiceApi_TT_GRPC
+		s.TransportType = configpb.TransportTypeEnum_GRPC
 	}
 	rt := strings.ToLower(cfg.GetRegistryType())
 	switch rt {
 	default:
-		s.RegistryType = configpb.ClusterServiceApi_RT_ENDPOINT
+		s.RegistryType = configpb.RegistryTypeEnum_ENDPOINT
 	case "endpoint":
-		s.RegistryType = configpb.ClusterServiceApi_RT_ENDPOINT
+		s.RegistryType = configpb.RegistryTypeEnum_ENDPOINT
 	case "consul":
-		s.RegistryType = configpb.ClusterServiceApi_RT_CONSUL
+		s.RegistryType = configpb.RegistryTypeEnum_CONSUL
 	case "etcd":
-		s.RegistryType = configpb.ClusterServiceApi_RT_ETCD
+		s.RegistryType = configpb.RegistryTypeEnum_ETCD
 	}
 	s.ServiceTarget = cfg.GetServiceTarget()
 }
 
 func (s *Config) IsConsulRegistry() bool {
-	return s.RegistryType == configpb.ClusterServiceApi_RT_CONSUL
+	return s.RegistryType == configpb.RegistryTypeEnum_CONSUL
 }
 
 func (s *Config) IsEtcdRegistry() bool {
-	return s.RegistryType == configpb.ClusterServiceApi_RT_ETCD
+	return s.RegistryType == configpb.RegistryTypeEnum_ETCD
+}
+
+func ToConfig(apiConfigs []*configpb.ClusterServiceApi) ([]*Config, map[configpb.RegistryTypeEnum_RegistryType]bool, error) {
+	var (
+		results = make([]*Config, 0, len(apiConfigs))
+		diffRT  = make(map[configpb.RegistryTypeEnum_RegistryType]bool, len(apiConfigs))
+	)
+	for i := range apiConfigs {
+		if err := apiConfigs[i].Validate(); err != nil {
+			e := errorpkg.ErrorBadRequest("")
+			return results, diffRT, errorpkg.Wrap(e, err)
+		}
+		conf := &Config{}
+		conf.SetByPbClusterServiceApi(apiConfigs[i])
+		results = append(results, conf)
+		diffRT[conf.RegistryType] = true
+	}
+	return results, diffRT, nil
 }
 
 type clientConnection struct {
-	transportType configpb.ClusterServiceApi_TransportType
+	transportType configpb.TransportTypeEnum_TransportType
 	grpcConn      *stdgrpc.ClientConn
 	httpClient    *http.Client
 }
 
-func (c *clientConnection) SetTransportType(tt configpb.ClusterServiceApi_TransportType) {
-	_, ok := configpb.ClusterServiceApi_TransportType_name[int32(tt)]
+func (c *clientConnection) SetTransportType(tt configpb.TransportTypeEnum_TransportType) {
+	_, ok := configpb.TransportTypeEnum_TransportType_name[int32(tt)]
 	if ok {
 		c.transportType = tt
 	}
-	if c.transportType == configpb.ClusterServiceApi_TT_UNSPECIFIED {
-		c.transportType = configpb.ClusterServiceApi_TT_HTTP
+	if c.transportType == configpb.TransportTypeEnum_UNSPECIFIED {
+		c.transportType = configpb.TransportTypeEnum_HTTP
 	}
 }
 
-func (c *clientConnection) GetTransportType() configpb.ClusterServiceApi_TransportType {
+func (c *clientConnection) GetTransportType() configpb.TransportTypeEnum_TransportType {
 	return c.transportType
 }
 
-func (c *clientConnection) IsTransportType(tt configpb.ClusterServiceApi_TransportType) bool {
+func (c *clientConnection) IsTransportType(tt configpb.TransportTypeEnum_TransportType) bool {
 	return c.transportType == tt
 }
 
 func (c *clientConnection) IsHTTPTransport() bool {
-	return c.transportType == configpb.ClusterServiceApi_TT_HTTP
+	return c.transportType == configpb.TransportTypeEnum_HTTP
 }
 
 func (c *clientConnection) IsGRCPTransport() bool {
-	return c.transportType == configpb.ClusterServiceApi_TT_GRPC
+	return c.transportType == configpb.TransportTypeEnum_GRPC
 }
 
 func (c *clientConnection) GetGRPCConnection() (*stdgrpc.ClientConn, error) {

@@ -22,105 +22,105 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type ClusterServiceApi_TransportType int32
+type TransportTypeEnum_TransportType int32
 
 const (
-	ClusterServiceApi_TT_UNSPECIFIED ClusterServiceApi_TransportType = 0 // 未指定，默认: HTTP
-	ClusterServiceApi_TT_HTTP        ClusterServiceApi_TransportType = 1
-	ClusterServiceApi_TT_GRPC        ClusterServiceApi_TransportType = 2
+	TransportTypeEnum_UNSPECIFIED TransportTypeEnum_TransportType = 0 // 未指定，默认: HTTP
+	TransportTypeEnum_HTTP        TransportTypeEnum_TransportType = 1
+	TransportTypeEnum_GRPC        TransportTypeEnum_TransportType = 2
 )
 
-// Enum value maps for ClusterServiceApi_TransportType.
+// Enum value maps for TransportTypeEnum_TransportType.
 var (
-	ClusterServiceApi_TransportType_name = map[int32]string{
-		0: "TT_UNSPECIFIED",
-		1: "TT_HTTP",
-		2: "TT_GRPC",
+	TransportTypeEnum_TransportType_name = map[int32]string{
+		0: "UNSPECIFIED",
+		1: "HTTP",
+		2: "GRPC",
 	}
-	ClusterServiceApi_TransportType_value = map[string]int32{
-		"TT_UNSPECIFIED": 0,
-		"TT_HTTP":        1,
-		"TT_GRPC":        2,
+	TransportTypeEnum_TransportType_value = map[string]int32{
+		"UNSPECIFIED": 0,
+		"HTTP":        1,
+		"GRPC":        2,
 	}
 )
 
-func (x ClusterServiceApi_TransportType) Enum() *ClusterServiceApi_TransportType {
-	p := new(ClusterServiceApi_TransportType)
+func (x TransportTypeEnum_TransportType) Enum() *TransportTypeEnum_TransportType {
+	p := new(TransportTypeEnum_TransportType)
 	*p = x
 	return p
 }
 
-func (x ClusterServiceApi_TransportType) String() string {
+func (x TransportTypeEnum_TransportType) String() string {
 	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
 }
 
-func (ClusterServiceApi_TransportType) Descriptor() protoreflect.EnumDescriptor {
+func (TransportTypeEnum_TransportType) Descriptor() protoreflect.EnumDescriptor {
 	return file_api_config_config_proto_enumTypes[0].Descriptor()
 }
 
-func (ClusterServiceApi_TransportType) Type() protoreflect.EnumType {
+func (TransportTypeEnum_TransportType) Type() protoreflect.EnumType {
 	return &file_api_config_config_proto_enumTypes[0]
 }
 
-func (x ClusterServiceApi_TransportType) Number() protoreflect.EnumNumber {
+func (x TransportTypeEnum_TransportType) Number() protoreflect.EnumNumber {
 	return protoreflect.EnumNumber(x)
 }
 
-// Deprecated: Use ClusterServiceApi_TransportType.Descriptor instead.
-func (ClusterServiceApi_TransportType) EnumDescriptor() ([]byte, []int) {
+// Deprecated: Use TransportTypeEnum_TransportType.Descriptor instead.
+func (TransportTypeEnum_TransportType) EnumDescriptor() ([]byte, []int) {
 	return file_api_config_config_proto_rawDescGZIP(), []int{14, 0}
 }
 
-type ClusterServiceApi_RegistryType int32
+type RegistryTypeEnum_RegistryType int32
 
 const (
-	ClusterServiceApi_RT_UNSPECIFIED ClusterServiceApi_RegistryType = 0 // 未指定，默认: endpoint
-	ClusterServiceApi_RT_ENDPOINT    ClusterServiceApi_RegistryType = 1
-	ClusterServiceApi_RT_CONSUL      ClusterServiceApi_RegistryType = 2
-	ClusterServiceApi_RT_ETCD        ClusterServiceApi_RegistryType = 3
+	RegistryTypeEnum_UNSPECIFIED RegistryTypeEnum_RegistryType = 0 // 未指定，默认: ENDPOINT
+	RegistryTypeEnum_ENDPOINT    RegistryTypeEnum_RegistryType = 1
+	RegistryTypeEnum_CONSUL      RegistryTypeEnum_RegistryType = 2
+	RegistryTypeEnum_ETCD        RegistryTypeEnum_RegistryType = 3
 )
 
-// Enum value maps for ClusterServiceApi_RegistryType.
+// Enum value maps for RegistryTypeEnum_RegistryType.
 var (
-	ClusterServiceApi_RegistryType_name = map[int32]string{
-		0: "RT_UNSPECIFIED",
-		1: "RT_ENDPOINT",
-		2: "RT_CONSUL",
-		3: "RT_ETCD",
+	RegistryTypeEnum_RegistryType_name = map[int32]string{
+		0: "UNSPECIFIED",
+		1: "ENDPOINT",
+		2: "CONSUL",
+		3: "ETCD",
 	}
-	ClusterServiceApi_RegistryType_value = map[string]int32{
-		"RT_UNSPECIFIED": 0,
-		"RT_ENDPOINT":    1,
-		"RT_CONSUL":      2,
-		"RT_ETCD":        3,
+	RegistryTypeEnum_RegistryType_value = map[string]int32{
+		"UNSPECIFIED": 0,
+		"ENDPOINT":    1,
+		"CONSUL":      2,
+		"ETCD":        3,
 	}
 )
 
-func (x ClusterServiceApi_RegistryType) Enum() *ClusterServiceApi_RegistryType {
-	p := new(ClusterServiceApi_RegistryType)
+func (x RegistryTypeEnum_RegistryType) Enum() *RegistryTypeEnum_RegistryType {
+	p := new(RegistryTypeEnum_RegistryType)
 	*p = x
 	return p
 }
 
-func (x ClusterServiceApi_RegistryType) String() string {
+func (x RegistryTypeEnum_RegistryType) String() string {
 	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
 }
 
-func (ClusterServiceApi_RegistryType) Descriptor() protoreflect.EnumDescriptor {
+func (RegistryTypeEnum_RegistryType) Descriptor() protoreflect.EnumDescriptor {
 	return file_api_config_config_proto_enumTypes[1].Descriptor()
 }
 
-func (ClusterServiceApi_RegistryType) Type() protoreflect.EnumType {
+func (RegistryTypeEnum_RegistryType) Type() protoreflect.EnumType {
 	return &file_api_config_config_proto_enumTypes[1]
 }
 
-func (x ClusterServiceApi_RegistryType) Number() protoreflect.EnumNumber {
+func (x RegistryTypeEnum_RegistryType) Number() protoreflect.EnumNumber {
 	return protoreflect.EnumNumber(x)
 }
 
-// Deprecated: Use ClusterServiceApi_RegistryType.Descriptor instead.
-func (ClusterServiceApi_RegistryType) EnumDescriptor() ([]byte, []int) {
-	return file_api_config_config_proto_rawDescGZIP(), []int{14, 1}
+// Deprecated: Use RegistryTypeEnum_RegistryType.Descriptor instead.
+func (RegistryTypeEnum_RegistryType) EnumDescriptor() ([]byte, []int) {
+	return file_api_config_config_proto_rawDescGZIP(), []int{15, 0}
 }
 
 // Bootstrap 配置引导
@@ -1673,6 +1673,82 @@ func (x *Encrypt) GetTokenEncrypt() *Encrypt_TokenEncrypt {
 	return nil
 }
 
+type TransportTypeEnum struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *TransportTypeEnum) Reset() {
+	*x = TransportTypeEnum{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_config_config_proto_msgTypes[14]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *TransportTypeEnum) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TransportTypeEnum) ProtoMessage() {}
+
+func (x *TransportTypeEnum) ProtoReflect() protoreflect.Message {
+	mi := &file_api_config_config_proto_msgTypes[14]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TransportTypeEnum.ProtoReflect.Descriptor instead.
+func (*TransportTypeEnum) Descriptor() ([]byte, []int) {
+	return file_api_config_config_proto_rawDescGZIP(), []int{14}
+}
+
+type RegistryTypeEnum struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *RegistryTypeEnum) Reset() {
+	*x = RegistryTypeEnum{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_config_config_proto_msgTypes[15]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *RegistryTypeEnum) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RegistryTypeEnum) ProtoMessage() {}
+
+func (x *RegistryTypeEnum) ProtoReflect() protoreflect.Message {
+	mi := &file_api_config_config_proto_msgTypes[15]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RegistryTypeEnum.ProtoReflect.Descriptor instead.
+func (*RegistryTypeEnum) Descriptor() ([]byte, []int) {
+	return file_api_config_config_proto_rawDescGZIP(), []int{15}
+}
+
 // ClusterServiceApi 项目集群客户端api
 type ClusterServiceApi struct {
 	state         protoimpl.MessageState
@@ -1688,7 +1764,7 @@ type ClusterServiceApi struct {
 func (x *ClusterServiceApi) Reset() {
 	*x = ClusterServiceApi{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_config_config_proto_msgTypes[14]
+		mi := &file_api_config_config_proto_msgTypes[16]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1701,7 +1777,7 @@ func (x *ClusterServiceApi) String() string {
 func (*ClusterServiceApi) ProtoMessage() {}
 
 func (x *ClusterServiceApi) ProtoReflect() protoreflect.Message {
-	mi := &file_api_config_config_proto_msgTypes[14]
+	mi := &file_api_config_config_proto_msgTypes[16]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1714,7 +1790,7 @@ func (x *ClusterServiceApi) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ClusterServiceApi.ProtoReflect.Descriptor instead.
 func (*ClusterServiceApi) Descriptor() ([]byte, []int) {
-	return file_api_config_config_proto_rawDescGZIP(), []int{14}
+	return file_api_config_config_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *ClusterServiceApi) GetServiceName() string {
@@ -1764,7 +1840,7 @@ type ThirdPartyApi struct {
 func (x *ThirdPartyApi) Reset() {
 	*x = ThirdPartyApi{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_config_config_proto_msgTypes[15]
+		mi := &file_api_config_config_proto_msgTypes[17]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1777,7 +1853,7 @@ func (x *ThirdPartyApi) String() string {
 func (*ThirdPartyApi) ProtoMessage() {}
 
 func (x *ThirdPartyApi) ProtoReflect() protoreflect.Message {
-	mi := &file_api_config_config_proto_msgTypes[15]
+	mi := &file_api_config_config_proto_msgTypes[17]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1790,7 +1866,7 @@ func (x *ThirdPartyApi) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ThirdPartyApi.ProtoReflect.Descriptor instead.
 func (*ThirdPartyApi) Descriptor() ([]byte, []int) {
-	return file_api_config_config_proto_rawDescGZIP(), []int{15}
+	return file_api_config_config_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *ThirdPartyApi) GetName() string {
@@ -1866,7 +1942,7 @@ type Snowflake struct {
 func (x *Snowflake) Reset() {
 	*x = Snowflake{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_config_config_proto_msgTypes[16]
+		mi := &file_api_config_config_proto_msgTypes[18]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1879,7 +1955,7 @@ func (x *Snowflake) String() string {
 func (*Snowflake) ProtoMessage() {}
 
 func (x *Snowflake) ProtoReflect() protoreflect.Message {
-	mi := &file_api_config_config_proto_msgTypes[16]
+	mi := &file_api_config_config_proto_msgTypes[18]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1892,7 +1968,7 @@ func (x *Snowflake) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Snowflake.ProtoReflect.Descriptor instead.
 func (*Snowflake) Descriptor() ([]byte, []int) {
-	return file_api_config_config_proto_rawDescGZIP(), []int{16}
+	return file_api_config_config_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *Snowflake) GetEnable() bool {
@@ -1950,7 +2026,7 @@ type Setting_Captcha struct {
 func (x *Setting_Captcha) Reset() {
 	*x = Setting_Captcha{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_config_config_proto_msgTypes[18]
+		mi := &file_api_config_config_proto_msgTypes[20]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1963,7 +2039,7 @@ func (x *Setting_Captcha) String() string {
 func (*Setting_Captcha) ProtoMessage() {}
 
 func (x *Setting_Captcha) ProtoReflect() protoreflect.Message {
-	mi := &file_api_config_config_proto_msgTypes[18]
+	mi := &file_api_config_config_proto_msgTypes[20]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2008,7 +2084,7 @@ type Setting_Login struct {
 func (x *Setting_Login) Reset() {
 	*x = Setting_Login{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_config_config_proto_msgTypes[19]
+		mi := &file_api_config_config_proto_msgTypes[21]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2021,7 +2097,7 @@ func (x *Setting_Login) String() string {
 func (*Setting_Login) ProtoMessage() {}
 
 func (x *Setting_Login) ProtoReflect() protoreflect.Message {
-	mi := &file_api_config_config_proto_msgTypes[19]
+	mi := &file_api_config_config_proto_msgTypes[21]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2080,7 +2156,7 @@ type Server_HTTP struct {
 func (x *Server_HTTP) Reset() {
 	*x = Server_HTTP{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_config_config_proto_msgTypes[20]
+		mi := &file_api_config_config_proto_msgTypes[22]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2093,7 +2169,7 @@ func (x *Server_HTTP) String() string {
 func (*Server_HTTP) ProtoMessage() {}
 
 func (x *Server_HTTP) ProtoReflect() protoreflect.Message {
-	mi := &file_api_config_config_proto_msgTypes[20]
+	mi := &file_api_config_config_proto_msgTypes[22]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2152,7 +2228,7 @@ type Server_GRPC struct {
 func (x *Server_GRPC) Reset() {
 	*x = Server_GRPC{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_config_config_proto_msgTypes[21]
+		mi := &file_api_config_config_proto_msgTypes[23]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2165,7 +2241,7 @@ func (x *Server_GRPC) String() string {
 func (*Server_GRPC) ProtoMessage() {}
 
 func (x *Server_GRPC) ProtoReflect() protoreflect.Message {
-	mi := &file_api_config_config_proto_msgTypes[21]
+	mi := &file_api_config_config_proto_msgTypes[23]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2222,7 +2298,7 @@ type Log_Console struct {
 func (x *Log_Console) Reset() {
 	*x = Log_Console{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_config_config_proto_msgTypes[22]
+		mi := &file_api_config_config_proto_msgTypes[24]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2235,7 +2311,7 @@ func (x *Log_Console) String() string {
 func (*Log_Console) ProtoMessage() {}
 
 func (x *Log_Console) ProtoReflect() protoreflect.Message {
-	mi := &file_api_config_config_proto_msgTypes[22]
+	mi := &file_api_config_config_proto_msgTypes[24]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2284,7 +2360,7 @@ type Log_File struct {
 func (x *Log_File) Reset() {
 	*x = Log_File{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_config_config_proto_msgTypes[23]
+		mi := &file_api_config_config_proto_msgTypes[25]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2297,7 +2373,7 @@ func (x *Log_File) String() string {
 func (*Log_File) ProtoMessage() {}
 
 func (x *Log_File) ProtoReflect() protoreflect.Message {
-	mi := &file_api_config_config_proto_msgTypes[23]
+	mi := &file_api_config_config_proto_msgTypes[25]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2382,7 +2458,7 @@ type Encrypt_TransferEncrypt struct {
 func (x *Encrypt_TransferEncrypt) Reset() {
 	*x = Encrypt_TransferEncrypt{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_config_config_proto_msgTypes[24]
+		mi := &file_api_config_config_proto_msgTypes[26]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2395,7 +2471,7 @@ func (x *Encrypt_TransferEncrypt) String() string {
 func (*Encrypt_TransferEncrypt) ProtoMessage() {}
 
 func (x *Encrypt_TransferEncrypt) ProtoReflect() protoreflect.Message {
-	mi := &file_api_config_config_proto_msgTypes[24]
+	mi := &file_api_config_config_proto_msgTypes[26]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2438,7 +2514,7 @@ type Encrypt_ServiceEncrypt struct {
 func (x *Encrypt_ServiceEncrypt) Reset() {
 	*x = Encrypt_ServiceEncrypt{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_config_config_proto_msgTypes[25]
+		mi := &file_api_config_config_proto_msgTypes[27]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2451,7 +2527,7 @@ func (x *Encrypt_ServiceEncrypt) String() string {
 func (*Encrypt_ServiceEncrypt) ProtoMessage() {}
 
 func (x *Encrypt_ServiceEncrypt) ProtoReflect() protoreflect.Message {
-	mi := &file_api_config_config_proto_msgTypes[25]
+	mi := &file_api_config_config_proto_msgTypes[27]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2494,7 +2570,7 @@ type Encrypt_TokenEncrypt struct {
 func (x *Encrypt_TokenEncrypt) Reset() {
 	*x = Encrypt_TokenEncrypt{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_config_config_proto_msgTypes[26]
+		mi := &file_api_config_config_proto_msgTypes[28]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2507,7 +2583,7 @@ func (x *Encrypt_TokenEncrypt) String() string {
 func (*Encrypt_TokenEncrypt) ProtoMessage() {}
 
 func (x *Encrypt_TokenEncrypt) ProtoReflect() protoreflect.Message {
-	mi := &file_api_config_config_proto_msgTypes[26]
+	mi := &file_api_config_config_proto_msgTypes[28]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2986,64 +3062,65 @@ var file_api_config_config_proto_rawDesc = []byte{
 	0x08, 0x73, 0x69, 0x67, 0x6e, 0x5f, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
 	0x07, 0x73, 0x69, 0x67, 0x6e, 0x4b, 0x65, 0x79, 0x12, 0x1f, 0x0a, 0x0b, 0x72, 0x65, 0x66, 0x72,
 	0x65, 0x73, 0x68, 0x5f, 0x6b, 0x65, 0x79, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x72,
-	0x65, 0x66, 0x72, 0x65, 0x73, 0x68, 0x4b, 0x65, 0x79, 0x22, 0xcb, 0x02, 0x0a, 0x11, 0x43, 0x6c,
-	0x75, 0x73, 0x74, 0x65, 0x72, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x41, 0x70, 0x69, 0x12,
-	0x2a, 0x0a, 0x0c, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x5f, 0x6e, 0x61, 0x6d, 0x65, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x72, 0x02, 0x10, 0x01, 0x52, 0x0b,
-	0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x4e, 0x61, 0x6d, 0x65, 0x12, 0x25, 0x0a, 0x0e, 0x74,
-	0x72, 0x61, 0x6e, 0x73, 0x70, 0x6f, 0x72, 0x74, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x18, 0x02, 0x20,
-	0x01, 0x28, 0x09, 0x52, 0x0d, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x70, 0x6f, 0x72, 0x74, 0x54, 0x79,
-	0x70, 0x65, 0x12, 0x23, 0x0a, 0x0d, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x5f, 0x74,
-	0x79, 0x70, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x72, 0x65, 0x67, 0x69, 0x73,
-	0x74, 0x72, 0x79, 0x54, 0x79, 0x70, 0x65, 0x12, 0x2e, 0x0a, 0x0e, 0x73, 0x65, 0x72, 0x76, 0x69,
-	0x63, 0x65, 0x5f, 0x74, 0x61, 0x72, 0x67, 0x65, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x42,
-	0x07, 0xfa, 0x42, 0x04, 0x72, 0x02, 0x10, 0x01, 0x52, 0x0d, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63,
-	0x65, 0x54, 0x61, 0x72, 0x67, 0x65, 0x74, 0x22, 0x3d, 0x0a, 0x0d, 0x54, 0x72, 0x61, 0x6e, 0x73,
-	0x70, 0x6f, 0x72, 0x74, 0x54, 0x79, 0x70, 0x65, 0x12, 0x12, 0x0a, 0x0e, 0x54, 0x54, 0x5f, 0x55,
-	0x4e, 0x53, 0x50, 0x45, 0x43, 0x49, 0x46, 0x49, 0x45, 0x44, 0x10, 0x00, 0x12, 0x0b, 0x0a, 0x07,
-	0x54, 0x54, 0x5f, 0x48, 0x54, 0x54, 0x50, 0x10, 0x01, 0x12, 0x0b, 0x0a, 0x07, 0x54, 0x54, 0x5f,
-	0x47, 0x52, 0x50, 0x43, 0x10, 0x02, 0x22, 0x4f, 0x0a, 0x0c, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74,
-	0x72, 0x79, 0x54, 0x79, 0x70, 0x65, 0x12, 0x12, 0x0a, 0x0e, 0x52, 0x54, 0x5f, 0x55, 0x4e, 0x53,
-	0x50, 0x45, 0x43, 0x49, 0x46, 0x49, 0x45, 0x44, 0x10, 0x00, 0x12, 0x0f, 0x0a, 0x0b, 0x52, 0x54,
-	0x5f, 0x45, 0x4e, 0x44, 0x50, 0x4f, 0x49, 0x4e, 0x54, 0x10, 0x01, 0x12, 0x0d, 0x0a, 0x09, 0x52,
-	0x54, 0x5f, 0x43, 0x4f, 0x4e, 0x53, 0x55, 0x4c, 0x10, 0x02, 0x12, 0x0b, 0x0a, 0x07, 0x52, 0x54,
-	0x5f, 0x45, 0x54, 0x43, 0x44, 0x10, 0x03, 0x22, 0x80, 0x02, 0x0a, 0x0d, 0x54, 0x68, 0x69, 0x72,
-	0x64, 0x50, 0x61, 0x72, 0x74, 0x79, 0x41, 0x70, 0x69, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d,
-	0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x1b, 0x0a,
-	0x09, 0x68, 0x74, 0x74, 0x70, 0x5f, 0x68, 0x6f, 0x73, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09,
-	0x52, 0x08, 0x68, 0x74, 0x74, 0x70, 0x48, 0x6f, 0x73, 0x74, 0x12, 0x1b, 0x0a, 0x09, 0x67, 0x72,
-	0x70, 0x63, 0x5f, 0x68, 0x6f, 0x73, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x67,
-	0x72, 0x70, 0x63, 0x48, 0x6f, 0x73, 0x74, 0x12, 0x19, 0x0a, 0x08, 0x69, 0x73, 0x5f, 0x64, 0x65,
-	0x62, 0x75, 0x67, 0x18, 0x04, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x69, 0x73, 0x44, 0x65, 0x62,
-	0x75, 0x67, 0x12, 0x1b, 0x0a, 0x09, 0x61, 0x63, 0x63, 0x65, 0x73, 0x73, 0x5f, 0x69, 0x64, 0x18,
-	0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x61, 0x63, 0x63, 0x65, 0x73, 0x73, 0x49, 0x64, 0x12,
-	0x23, 0x0a, 0x0d, 0x61, 0x63, 0x63, 0x65, 0x73, 0x73, 0x5f, 0x73, 0x65, 0x63, 0x72, 0x65, 0x74,
-	0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x61, 0x63, 0x63, 0x65, 0x73, 0x73, 0x53, 0x65,
-	0x63, 0x72, 0x65, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x65, 0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x5f,
-	0x69, 0x64, 0x18, 0x07, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x65, 0x6e, 0x63, 0x72, 0x79, 0x70,
-	0x74, 0x49, 0x64, 0x12, 0x25, 0x0a, 0x0e, 0x65, 0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x5f, 0x73,
-	0x65, 0x63, 0x72, 0x65, 0x74, 0x18, 0x08, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0d, 0x65, 0x6e, 0x63,
-	0x72, 0x79, 0x70, 0x74, 0x53, 0x65, 0x63, 0x72, 0x65, 0x74, 0x22, 0xcf, 0x01, 0x0a, 0x09, 0x53,
-	0x6e, 0x6f, 0x77, 0x66, 0x6c, 0x61, 0x6b, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x65, 0x6e, 0x61, 0x62,
-	0x6c, 0x65, 0x18, 0x64, 0x20, 0x01, 0x28, 0x08, 0x52, 0x06, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65,
-	0x12, 0x1a, 0x0a, 0x08, 0x65, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x08, 0x65, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x12, 0x25, 0x0a, 0x0e,
-	0x77, 0x69, 0x74, 0x68, 0x5f, 0x64, 0x69, 0x73, 0x63, 0x6f, 0x76, 0x65, 0x72, 0x79, 0x18, 0x02,
-	0x20, 0x01, 0x28, 0x08, 0x52, 0x0d, 0x77, 0x69, 0x74, 0x68, 0x44, 0x69, 0x73, 0x63, 0x6f, 0x76,
-	0x65, 0x72, 0x79, 0x12, 0x2f, 0x0a, 0x14, 0x77, 0x69, 0x74, 0x68, 0x5f, 0x68, 0x74, 0x74, 0x70,
-	0x5f, 0x62, 0x61, 0x73, 0x69, 0x63, 0x5f, 0x61, 0x75, 0x74, 0x68, 0x18, 0x03, 0x20, 0x01, 0x28,
-	0x08, 0x52, 0x11, 0x77, 0x69, 0x74, 0x68, 0x48, 0x74, 0x74, 0x70, 0x42, 0x61, 0x73, 0x69, 0x63,
-	0x41, 0x75, 0x74, 0x68, 0x12, 0x1a, 0x0a, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65,
-	0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65,
-	0x12, 0x1a, 0x0a, 0x08, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x18, 0x05, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x08, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x42, 0x65, 0x0a, 0x14,
-	0x73, 0x61, 0x61, 0x73, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x6b, 0x69, 0x74, 0x2e, 0x63, 0x6f, 0x6e,
-	0x66, 0x69, 0x67, 0x73, 0x42, 0x11, 0x53, 0x61, 0x61, 0x73, 0x41, 0x70, 0x69, 0x4b, 0x69, 0x74,
-	0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x73, 0x50, 0x01, 0x5a, 0x38, 0x67, 0x69, 0x74, 0x68, 0x75,
-	0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x2d, 0x6d, 0x69, 0x63, 0x72, 0x6f, 0x2d, 0x73,
-	0x61, 0x61, 0x73, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2d, 0x6b, 0x69, 0x74, 0x2f,
-	0x61, 0x70, 0x69, 0x2f, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x3b, 0x63, 0x6f, 0x6e, 0x66, 0x69,
-	0x67, 0x70, 0x62, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x65, 0x66, 0x72, 0x65, 0x73, 0x68, 0x4b, 0x65, 0x79, 0x22, 0x49, 0x0a, 0x11, 0x54, 0x72, 0x61,
+	0x6e, 0x73, 0x70, 0x6f, 0x72, 0x74, 0x54, 0x79, 0x70, 0x65, 0x45, 0x6e, 0x75, 0x6d, 0x22, 0x34,
+	0x0a, 0x0d, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x70, 0x6f, 0x72, 0x74, 0x54, 0x79, 0x70, 0x65, 0x12,
+	0x0f, 0x0a, 0x0b, 0x55, 0x4e, 0x53, 0x50, 0x45, 0x43, 0x49, 0x46, 0x49, 0x45, 0x44, 0x10, 0x00,
+	0x12, 0x08, 0x0a, 0x04, 0x48, 0x54, 0x54, 0x50, 0x10, 0x01, 0x12, 0x08, 0x0a, 0x04, 0x47, 0x52,
+	0x50, 0x43, 0x10, 0x02, 0x22, 0x57, 0x0a, 0x10, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79,
+	0x54, 0x79, 0x70, 0x65, 0x45, 0x6e, 0x75, 0x6d, 0x22, 0x43, 0x0a, 0x0c, 0x52, 0x65, 0x67, 0x69,
+	0x73, 0x74, 0x72, 0x79, 0x54, 0x79, 0x70, 0x65, 0x12, 0x0f, 0x0a, 0x0b, 0x55, 0x4e, 0x53, 0x50,
+	0x45, 0x43, 0x49, 0x46, 0x49, 0x45, 0x44, 0x10, 0x00, 0x12, 0x0c, 0x0a, 0x08, 0x45, 0x4e, 0x44,
+	0x50, 0x4f, 0x49, 0x4e, 0x54, 0x10, 0x01, 0x12, 0x0a, 0x0a, 0x06, 0x43, 0x4f, 0x4e, 0x53, 0x55,
+	0x4c, 0x10, 0x02, 0x12, 0x08, 0x0a, 0x04, 0x45, 0x54, 0x43, 0x44, 0x10, 0x03, 0x22, 0xbb, 0x01,
+	0x0a, 0x11, 0x43, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
+	0x41, 0x70, 0x69, 0x12, 0x2a, 0x0a, 0x0c, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x5f, 0x6e,
+	0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x72, 0x02,
+	0x10, 0x01, 0x52, 0x0b, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x4e, 0x61, 0x6d, 0x65, 0x12,
+	0x25, 0x0a, 0x0e, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x70, 0x6f, 0x72, 0x74, 0x5f, 0x74, 0x79, 0x70,
+	0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0d, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x70, 0x6f,
+	0x72, 0x74, 0x54, 0x79, 0x70, 0x65, 0x12, 0x23, 0x0a, 0x0d, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74,
+	0x72, 0x79, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x72,
+	0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x54, 0x79, 0x70, 0x65, 0x12, 0x2e, 0x0a, 0x0e, 0x73,
+	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x5f, 0x74, 0x61, 0x72, 0x67, 0x65, 0x74, 0x18, 0x04, 0x20,
+	0x01, 0x28, 0x09, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x72, 0x02, 0x10, 0x01, 0x52, 0x0d, 0x73, 0x65,
+	0x72, 0x76, 0x69, 0x63, 0x65, 0x54, 0x61, 0x72, 0x67, 0x65, 0x74, 0x22, 0x80, 0x02, 0x0a, 0x0d,
+	0x54, 0x68, 0x69, 0x72, 0x64, 0x50, 0x61, 0x72, 0x74, 0x79, 0x41, 0x70, 0x69, 0x12, 0x12, 0x0a,
+	0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d,
+	0x65, 0x12, 0x1b, 0x0a, 0x09, 0x68, 0x74, 0x74, 0x70, 0x5f, 0x68, 0x6f, 0x73, 0x74, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x68, 0x74, 0x74, 0x70, 0x48, 0x6f, 0x73, 0x74, 0x12, 0x1b,
+	0x0a, 0x09, 0x67, 0x72, 0x70, 0x63, 0x5f, 0x68, 0x6f, 0x73, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x08, 0x67, 0x72, 0x70, 0x63, 0x48, 0x6f, 0x73, 0x74, 0x12, 0x19, 0x0a, 0x08, 0x69,
+	0x73, 0x5f, 0x64, 0x65, 0x62, 0x75, 0x67, 0x18, 0x04, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x69,
+	0x73, 0x44, 0x65, 0x62, 0x75, 0x67, 0x12, 0x1b, 0x0a, 0x09, 0x61, 0x63, 0x63, 0x65, 0x73, 0x73,
+	0x5f, 0x69, 0x64, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x61, 0x63, 0x63, 0x65, 0x73,
+	0x73, 0x49, 0x64, 0x12, 0x23, 0x0a, 0x0d, 0x61, 0x63, 0x63, 0x65, 0x73, 0x73, 0x5f, 0x73, 0x65,
+	0x63, 0x72, 0x65, 0x74, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x61, 0x63, 0x63, 0x65,
+	0x73, 0x73, 0x53, 0x65, 0x63, 0x72, 0x65, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x65, 0x6e, 0x63, 0x72,
+	0x79, 0x70, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x07, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x65, 0x6e,
+	0x63, 0x72, 0x79, 0x70, 0x74, 0x49, 0x64, 0x12, 0x25, 0x0a, 0x0e, 0x65, 0x6e, 0x63, 0x72, 0x79,
+	0x70, 0x74, 0x5f, 0x73, 0x65, 0x63, 0x72, 0x65, 0x74, 0x18, 0x08, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x0d, 0x65, 0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x53, 0x65, 0x63, 0x72, 0x65, 0x74, 0x22, 0xcf,
+	0x01, 0x0a, 0x09, 0x53, 0x6e, 0x6f, 0x77, 0x66, 0x6c, 0x61, 0x6b, 0x65, 0x12, 0x16, 0x0a, 0x06,
+	0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x18, 0x64, 0x20, 0x01, 0x28, 0x08, 0x52, 0x06, 0x65, 0x6e,
+	0x61, 0x62, 0x6c, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x65, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x65, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74,
+	0x12, 0x25, 0x0a, 0x0e, 0x77, 0x69, 0x74, 0x68, 0x5f, 0x64, 0x69, 0x73, 0x63, 0x6f, 0x76, 0x65,
+	0x72, 0x79, 0x18, 0x02, 0x20, 0x01, 0x28, 0x08, 0x52, 0x0d, 0x77, 0x69, 0x74, 0x68, 0x44, 0x69,
+	0x73, 0x63, 0x6f, 0x76, 0x65, 0x72, 0x79, 0x12, 0x2f, 0x0a, 0x14, 0x77, 0x69, 0x74, 0x68, 0x5f,
+	0x68, 0x74, 0x74, 0x70, 0x5f, 0x62, 0x61, 0x73, 0x69, 0x63, 0x5f, 0x61, 0x75, 0x74, 0x68, 0x18,
+	0x03, 0x20, 0x01, 0x28, 0x08, 0x52, 0x11, 0x77, 0x69, 0x74, 0x68, 0x48, 0x74, 0x74, 0x70, 0x42,
+	0x61, 0x73, 0x69, 0x63, 0x41, 0x75, 0x74, 0x68, 0x12, 0x1a, 0x0a, 0x08, 0x75, 0x73, 0x65, 0x72,
+	0x6e, 0x61, 0x6d, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x75, 0x73, 0x65, 0x72,
+	0x6e, 0x61, 0x6d, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64,
+	0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64,
+	0x42, 0x65, 0x0a, 0x14, 0x73, 0x61, 0x61, 0x73, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x6b, 0x69, 0x74,
+	0x2e, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x73, 0x42, 0x11, 0x53, 0x61, 0x61, 0x73, 0x41, 0x70,
+	0x69, 0x4b, 0x69, 0x74, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x73, 0x50, 0x01, 0x5a, 0x38, 0x67,
+	0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x2d, 0x6d, 0x69, 0x63,
+	0x72, 0x6f, 0x2d, 0x73, 0x61, 0x61, 0x73, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2d,
+	0x6b, 0x69, 0x74, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x3b, 0x63,
+	0x6f, 0x6e, 0x66, 0x69, 0x67, 0x70, 0x62, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -3059,10 +3136,10 @@ func file_api_config_config_proto_rawDescGZIP() []byte {
 }
 
 var file_api_config_config_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_api_config_config_proto_msgTypes = make([]protoimpl.MessageInfo, 27)
+var file_api_config_config_proto_msgTypes = make([]protoimpl.MessageInfo, 29)
 var file_api_config_config_proto_goTypes = []any{
-	(ClusterServiceApi_TransportType)(0), // 0: saas.api.kit.configs.ClusterServiceApi.TransportType
-	(ClusterServiceApi_RegistryType)(0),  // 1: saas.api.kit.configs.ClusterServiceApi.RegistryType
+	(TransportTypeEnum_TransportType)(0), // 0: saas.api.kit.configs.TransportTypeEnum.TransportType
+	(RegistryTypeEnum_RegistryType)(0),   // 1: saas.api.kit.configs.RegistryTypeEnum.RegistryType
 	(*Bootstrap)(nil),                    // 2: saas.api.kit.configs.Bootstrap
 	(*App)(nil),                          // 3: saas.api.kit.configs.App
 	(*Setting)(nil),                      // 4: saas.api.kit.configs.Setting
@@ -3077,20 +3154,22 @@ var file_api_config_config_proto_goTypes = []any{
 	(*Jaeger)(nil),                       // 13: saas.api.kit.configs.Jaeger
 	(*Rabbitmq)(nil),                     // 14: saas.api.kit.configs.Rabbitmq
 	(*Encrypt)(nil),                      // 15: saas.api.kit.configs.Encrypt
-	(*ClusterServiceApi)(nil),            // 16: saas.api.kit.configs.ClusterServiceApi
-	(*ThirdPartyApi)(nil),                // 17: saas.api.kit.configs.ThirdPartyApi
-	(*Snowflake)(nil),                    // 18: saas.api.kit.configs.Snowflake
-	nil,                                  // 19: saas.api.kit.configs.App.MetadataEntry
-	(*Setting_Captcha)(nil),              // 20: saas.api.kit.configs.Setting.Captcha
-	(*Setting_Login)(nil),                // 21: saas.api.kit.configs.Setting.Login
-	(*Server_HTTP)(nil),                  // 22: saas.api.kit.configs.Server.HTTP
-	(*Server_GRPC)(nil),                  // 23: saas.api.kit.configs.Server.GRPC
-	(*Log_Console)(nil),                  // 24: saas.api.kit.configs.Log.Console
-	(*Log_File)(nil),                     // 25: saas.api.kit.configs.Log.File
-	(*Encrypt_TransferEncrypt)(nil),      // 26: saas.api.kit.configs.Encrypt.TransferEncrypt
-	(*Encrypt_ServiceEncrypt)(nil),       // 27: saas.api.kit.configs.Encrypt.ServiceEncrypt
-	(*Encrypt_TokenEncrypt)(nil),         // 28: saas.api.kit.configs.Encrypt.TokenEncrypt
-	(*durationpb.Duration)(nil),          // 29: google.protobuf.Duration
+	(*TransportTypeEnum)(nil),            // 16: saas.api.kit.configs.TransportTypeEnum
+	(*RegistryTypeEnum)(nil),             // 17: saas.api.kit.configs.RegistryTypeEnum
+	(*ClusterServiceApi)(nil),            // 18: saas.api.kit.configs.ClusterServiceApi
+	(*ThirdPartyApi)(nil),                // 19: saas.api.kit.configs.ThirdPartyApi
+	(*Snowflake)(nil),                    // 20: saas.api.kit.configs.Snowflake
+	nil,                                  // 21: saas.api.kit.configs.App.MetadataEntry
+	(*Setting_Captcha)(nil),              // 22: saas.api.kit.configs.Setting.Captcha
+	(*Setting_Login)(nil),                // 23: saas.api.kit.configs.Setting.Login
+	(*Server_HTTP)(nil),                  // 24: saas.api.kit.configs.Server.HTTP
+	(*Server_GRPC)(nil),                  // 25: saas.api.kit.configs.Server.GRPC
+	(*Log_Console)(nil),                  // 26: saas.api.kit.configs.Log.Console
+	(*Log_File)(nil),                     // 27: saas.api.kit.configs.Log.File
+	(*Encrypt_TransferEncrypt)(nil),      // 28: saas.api.kit.configs.Encrypt.TransferEncrypt
+	(*Encrypt_ServiceEncrypt)(nil),       // 29: saas.api.kit.configs.Encrypt.ServiceEncrypt
+	(*Encrypt_TokenEncrypt)(nil),         // 30: saas.api.kit.configs.Encrypt.TokenEncrypt
+	(*durationpb.Duration)(nil),          // 31: google.protobuf.Duration
 }
 var file_api_config_config_proto_depIdxs = []int32{
 	3,  // 0: saas.api.kit.configs.Bootstrap.app:type_name -> saas.api.kit.configs.App
@@ -3106,45 +3185,45 @@ var file_api_config_config_proto_depIdxs = []int32{
 	13, // 10: saas.api.kit.configs.Bootstrap.jaeger:type_name -> saas.api.kit.configs.Jaeger
 	8,  // 11: saas.api.kit.configs.Bootstrap.mongo:type_name -> saas.api.kit.configs.Mongo
 	15, // 12: saas.api.kit.configs.Bootstrap.encrypt:type_name -> saas.api.kit.configs.Encrypt
-	16, // 13: saas.api.kit.configs.Bootstrap.cluster_service_api:type_name -> saas.api.kit.configs.ClusterServiceApi
-	17, // 14: saas.api.kit.configs.Bootstrap.third_party_api:type_name -> saas.api.kit.configs.ThirdPartyApi
-	18, // 15: saas.api.kit.configs.Bootstrap.snowflake:type_name -> saas.api.kit.configs.Snowflake
-	19, // 16: saas.api.kit.configs.App.metadata:type_name -> saas.api.kit.configs.App.MetadataEntry
-	20, // 17: saas.api.kit.configs.Setting.captcha:type_name -> saas.api.kit.configs.Setting.Captcha
-	21, // 18: saas.api.kit.configs.Setting.login:type_name -> saas.api.kit.configs.Setting.Login
-	22, // 19: saas.api.kit.configs.Server.http:type_name -> saas.api.kit.configs.Server.HTTP
-	23, // 20: saas.api.kit.configs.Server.grpc:type_name -> saas.api.kit.configs.Server.GRPC
-	24, // 21: saas.api.kit.configs.Log.console:type_name -> saas.api.kit.configs.Log.Console
-	25, // 22: saas.api.kit.configs.Log.file:type_name -> saas.api.kit.configs.Log.File
-	29, // 23: saas.api.kit.configs.MySQL.slow_threshold:type_name -> google.protobuf.Duration
-	29, // 24: saas.api.kit.configs.MySQL.conn_max_lifetime:type_name -> google.protobuf.Duration
-	29, // 25: saas.api.kit.configs.MySQL.conn_max_idle_time:type_name -> google.protobuf.Duration
-	29, // 26: saas.api.kit.configs.Mongo.connect_timeout:type_name -> google.protobuf.Duration
-	29, // 27: saas.api.kit.configs.Mongo.timeout:type_name -> google.protobuf.Duration
-	29, // 28: saas.api.kit.configs.Mongo.heartbeat_interval:type_name -> google.protobuf.Duration
-	29, // 29: saas.api.kit.configs.Mongo.max_conn_idle_time:type_name -> google.protobuf.Duration
-	29, // 30: saas.api.kit.configs.Mongo.slow_threshold:type_name -> google.protobuf.Duration
-	29, // 31: saas.api.kit.configs.Redis.dial_timeout:type_name -> google.protobuf.Duration
-	29, // 32: saas.api.kit.configs.Redis.read_timeout:type_name -> google.protobuf.Duration
-	29, // 33: saas.api.kit.configs.Redis.write_timeout:type_name -> google.protobuf.Duration
-	29, // 34: saas.api.kit.configs.Redis.conn_max_lifetime:type_name -> google.protobuf.Duration
-	29, // 35: saas.api.kit.configs.Redis.conn_max_idle_time:type_name -> google.protobuf.Duration
-	29, // 36: saas.api.kit.configs.PSQL.slow_threshold:type_name -> google.protobuf.Duration
-	29, // 37: saas.api.kit.configs.PSQL.conn_max_lifetime:type_name -> google.protobuf.Duration
-	29, // 38: saas.api.kit.configs.PSQL.conn_max_idle_time:type_name -> google.protobuf.Duration
-	29, // 39: saas.api.kit.configs.Consul.wait_time:type_name -> google.protobuf.Duration
-	29, // 40: saas.api.kit.configs.Etcd.dial_timeout:type_name -> google.protobuf.Duration
-	29, // 41: saas.api.kit.configs.Jaeger.timeout:type_name -> google.protobuf.Duration
-	26, // 42: saas.api.kit.configs.Encrypt.transfer_encrypt:type_name -> saas.api.kit.configs.Encrypt.TransferEncrypt
-	27, // 43: saas.api.kit.configs.Encrypt.service_encrypt:type_name -> saas.api.kit.configs.Encrypt.ServiceEncrypt
-	28, // 44: saas.api.kit.configs.Encrypt.token_encrypt:type_name -> saas.api.kit.configs.Encrypt.TokenEncrypt
-	29, // 45: saas.api.kit.configs.Setting.Captcha.captcha_ttl:type_name -> google.protobuf.Duration
-	29, // 46: saas.api.kit.configs.Setting.Login.password_err_serial_duration:type_name -> google.protobuf.Duration
-	29, // 47: saas.api.kit.configs.Setting.Login.password_err_lock_duration:type_name -> google.protobuf.Duration
-	29, // 48: saas.api.kit.configs.Server.HTTP.timeout:type_name -> google.protobuf.Duration
-	29, // 49: saas.api.kit.configs.Server.GRPC.timeout:type_name -> google.protobuf.Duration
-	29, // 50: saas.api.kit.configs.Log.File.rotate_time:type_name -> google.protobuf.Duration
-	29, // 51: saas.api.kit.configs.Log.File.storage_age:type_name -> google.protobuf.Duration
+	18, // 13: saas.api.kit.configs.Bootstrap.cluster_service_api:type_name -> saas.api.kit.configs.ClusterServiceApi
+	19, // 14: saas.api.kit.configs.Bootstrap.third_party_api:type_name -> saas.api.kit.configs.ThirdPartyApi
+	20, // 15: saas.api.kit.configs.Bootstrap.snowflake:type_name -> saas.api.kit.configs.Snowflake
+	21, // 16: saas.api.kit.configs.App.metadata:type_name -> saas.api.kit.configs.App.MetadataEntry
+	22, // 17: saas.api.kit.configs.Setting.captcha:type_name -> saas.api.kit.configs.Setting.Captcha
+	23, // 18: saas.api.kit.configs.Setting.login:type_name -> saas.api.kit.configs.Setting.Login
+	24, // 19: saas.api.kit.configs.Server.http:type_name -> saas.api.kit.configs.Server.HTTP
+	25, // 20: saas.api.kit.configs.Server.grpc:type_name -> saas.api.kit.configs.Server.GRPC
+	26, // 21: saas.api.kit.configs.Log.console:type_name -> saas.api.kit.configs.Log.Console
+	27, // 22: saas.api.kit.configs.Log.file:type_name -> saas.api.kit.configs.Log.File
+	31, // 23: saas.api.kit.configs.MySQL.slow_threshold:type_name -> google.protobuf.Duration
+	31, // 24: saas.api.kit.configs.MySQL.conn_max_lifetime:type_name -> google.protobuf.Duration
+	31, // 25: saas.api.kit.configs.MySQL.conn_max_idle_time:type_name -> google.protobuf.Duration
+	31, // 26: saas.api.kit.configs.Mongo.connect_timeout:type_name -> google.protobuf.Duration
+	31, // 27: saas.api.kit.configs.Mongo.timeout:type_name -> google.protobuf.Duration
+	31, // 28: saas.api.kit.configs.Mongo.heartbeat_interval:type_name -> google.protobuf.Duration
+	31, // 29: saas.api.kit.configs.Mongo.max_conn_idle_time:type_name -> google.protobuf.Duration
+	31, // 30: saas.api.kit.configs.Mongo.slow_threshold:type_name -> google.protobuf.Duration
+	31, // 31: saas.api.kit.configs.Redis.dial_timeout:type_name -> google.protobuf.Duration
+	31, // 32: saas.api.kit.configs.Redis.read_timeout:type_name -> google.protobuf.Duration
+	31, // 33: saas.api.kit.configs.Redis.write_timeout:type_name -> google.protobuf.Duration
+	31, // 34: saas.api.kit.configs.Redis.conn_max_lifetime:type_name -> google.protobuf.Duration
+	31, // 35: saas.api.kit.configs.Redis.conn_max_idle_time:type_name -> google.protobuf.Duration
+	31, // 36: saas.api.kit.configs.PSQL.slow_threshold:type_name -> google.protobuf.Duration
+	31, // 37: saas.api.kit.configs.PSQL.conn_max_lifetime:type_name -> google.protobuf.Duration
+	31, // 38: saas.api.kit.configs.PSQL.conn_max_idle_time:type_name -> google.protobuf.Duration
+	31, // 39: saas.api.kit.configs.Consul.wait_time:type_name -> google.protobuf.Duration
+	31, // 40: saas.api.kit.configs.Etcd.dial_timeout:type_name -> google.protobuf.Duration
+	31, // 41: saas.api.kit.configs.Jaeger.timeout:type_name -> google.protobuf.Duration
+	28, // 42: saas.api.kit.configs.Encrypt.transfer_encrypt:type_name -> saas.api.kit.configs.Encrypt.TransferEncrypt
+	29, // 43: saas.api.kit.configs.Encrypt.service_encrypt:type_name -> saas.api.kit.configs.Encrypt.ServiceEncrypt
+	30, // 44: saas.api.kit.configs.Encrypt.token_encrypt:type_name -> saas.api.kit.configs.Encrypt.TokenEncrypt
+	31, // 45: saas.api.kit.configs.Setting.Captcha.captcha_ttl:type_name -> google.protobuf.Duration
+	31, // 46: saas.api.kit.configs.Setting.Login.password_err_serial_duration:type_name -> google.protobuf.Duration
+	31, // 47: saas.api.kit.configs.Setting.Login.password_err_lock_duration:type_name -> google.protobuf.Duration
+	31, // 48: saas.api.kit.configs.Server.HTTP.timeout:type_name -> google.protobuf.Duration
+	31, // 49: saas.api.kit.configs.Server.GRPC.timeout:type_name -> google.protobuf.Duration
+	31, // 50: saas.api.kit.configs.Log.File.rotate_time:type_name -> google.protobuf.Duration
+	31, // 51: saas.api.kit.configs.Log.File.storage_age:type_name -> google.protobuf.Duration
 	52, // [52:52] is the sub-list for method output_type
 	52, // [52:52] is the sub-list for method input_type
 	52, // [52:52] is the sub-list for extension type_name
@@ -3327,7 +3406,7 @@ func file_api_config_config_proto_init() {
 			}
 		}
 		file_api_config_config_proto_msgTypes[14].Exporter = func(v any, i int) any {
-			switch v := v.(*ClusterServiceApi); i {
+			switch v := v.(*TransportTypeEnum); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3339,7 +3418,7 @@ func file_api_config_config_proto_init() {
 			}
 		}
 		file_api_config_config_proto_msgTypes[15].Exporter = func(v any, i int) any {
-			switch v := v.(*ThirdPartyApi); i {
+			switch v := v.(*RegistryTypeEnum); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3351,7 +3430,19 @@ func file_api_config_config_proto_init() {
 			}
 		}
 		file_api_config_config_proto_msgTypes[16].Exporter = func(v any, i int) any {
-			switch v := v.(*Snowflake); i {
+			switch v := v.(*ClusterServiceApi); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_config_config_proto_msgTypes[17].Exporter = func(v any, i int) any {
+			switch v := v.(*ThirdPartyApi); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3363,19 +3454,7 @@ func file_api_config_config_proto_init() {
 			}
 		}
 		file_api_config_config_proto_msgTypes[18].Exporter = func(v any, i int) any {
-			switch v := v.(*Setting_Captcha); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_config_config_proto_msgTypes[19].Exporter = func(v any, i int) any {
-			switch v := v.(*Setting_Login); i {
+			switch v := v.(*Snowflake); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3387,7 +3466,7 @@ func file_api_config_config_proto_init() {
 			}
 		}
 		file_api_config_config_proto_msgTypes[20].Exporter = func(v any, i int) any {
-			switch v := v.(*Server_HTTP); i {
+			switch v := v.(*Setting_Captcha); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3399,7 +3478,7 @@ func file_api_config_config_proto_init() {
 			}
 		}
 		file_api_config_config_proto_msgTypes[21].Exporter = func(v any, i int) any {
-			switch v := v.(*Server_GRPC); i {
+			switch v := v.(*Setting_Login); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3411,7 +3490,7 @@ func file_api_config_config_proto_init() {
 			}
 		}
 		file_api_config_config_proto_msgTypes[22].Exporter = func(v any, i int) any {
-			switch v := v.(*Log_Console); i {
+			switch v := v.(*Server_HTTP); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3423,7 +3502,7 @@ func file_api_config_config_proto_init() {
 			}
 		}
 		file_api_config_config_proto_msgTypes[23].Exporter = func(v any, i int) any {
-			switch v := v.(*Log_File); i {
+			switch v := v.(*Server_GRPC); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3435,7 +3514,7 @@ func file_api_config_config_proto_init() {
 			}
 		}
 		file_api_config_config_proto_msgTypes[24].Exporter = func(v any, i int) any {
-			switch v := v.(*Encrypt_TransferEncrypt); i {
+			switch v := v.(*Log_Console); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3447,7 +3526,7 @@ func file_api_config_config_proto_init() {
 			}
 		}
 		file_api_config_config_proto_msgTypes[25].Exporter = func(v any, i int) any {
-			switch v := v.(*Encrypt_ServiceEncrypt); i {
+			switch v := v.(*Log_File); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3459,6 +3538,30 @@ func file_api_config_config_proto_init() {
 			}
 		}
 		file_api_config_config_proto_msgTypes[26].Exporter = func(v any, i int) any {
+			switch v := v.(*Encrypt_TransferEncrypt); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_config_config_proto_msgTypes[27].Exporter = func(v any, i int) any {
+			switch v := v.(*Encrypt_ServiceEncrypt); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_config_config_proto_msgTypes[28].Exporter = func(v any, i int) any {
 			switch v := v.(*Encrypt_TokenEncrypt); i {
 			case 0:
 				return &v.state
@@ -3477,7 +3580,7 @@ func file_api_config_config_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_api_config_config_proto_rawDesc,
 			NumEnums:      2,
-			NumMessages:   27,
+			NumMessages:   29,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

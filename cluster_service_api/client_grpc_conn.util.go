@@ -60,7 +60,7 @@ func (s *serviceAPIManager) getGRPCEndpointOptions(apiConfig *Config) ([]grpc.Cl
 
 	// registry
 	switch apiConfig.RegistryType {
-	case configpb.ClusterServiceApi_RT_CONSUL, configpb.ClusterServiceApi_RT_ETCD:
+	case configpb.RegistryTypeEnum_CONSUL, configpb.RegistryTypeEnum_ETCD:
 		r, err := s.getRegistryDiscovery(apiConfig)
 		if err != nil {
 			return nil, err

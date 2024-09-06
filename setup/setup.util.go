@@ -5,6 +5,7 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	configpb "github.com/go-micro-saas/service-kit/api/config"
 	apputil "github.com/go-micro-saas/service-kit/app"
+	clientutil "github.com/go-micro-saas/service-kit/cluster_service_api"
 	configutil "github.com/go-micro-saas/service-kit/config"
 	consulapi "github.com/hashicorp/consul/api"
 	debugpkg "github.com/ikaiguang/go-srv-kit/debug"
@@ -34,6 +35,8 @@ type LauncherManager interface {
 
 	GetTokenManager() (authpkg.TokenManger, error)
 	GetAuthManager() (authpkg.AuthRepo, error)
+
+	GetServiceApiExporter() (clientutil.ServiceAPIManager, error)
 
 	Close() error
 }
@@ -133,7 +136,7 @@ func NewLauncherManager(configFilePath string, configOpts ...configutil.Option) 
 		}
 	}
 
-	// jaeger
+	// jaeger.GetExporter()
 	jaegerConfig := bootstrap.GetJaeger()
 	if jaegerConfig.GetEnable() {
 		_, err = launcher.GetJaegerExporter()

@@ -262,19 +262,25 @@ message Encrypt {
   TokenEncrypt token_encrypt       = 3;
 }
 
+message TransportTypeEnum {
+  enum TransportType {
+    UNSPECIFIED = 0;  // 未指定，默认: HTTP
+    HTTP        = 1;
+    GRPC        = 2;
+  }
+}
+
+message RegistryTypeEnum {
+  enum RegistryType {
+    UNSPECIFIED = 0;  // 未指定，默认: ENDPOINT
+    ENDPOINT    = 1;
+    CONSUL      = 2;
+    ETCD        = 3;
+  }
+}
+
 // ClusterServiceApi 项目集群客户端api
 message ClusterServiceApi {
-  enum TransportType {
-    TT_UNSPECIFIED = 0;  // 未指定，默认: HTTP
-    TT_HTTP        = 1;
-    TT_GRPC        = 2;
-  }
-  enum RegistryType {
-    RT_UNSPECIFIED = 0;  // 未指定，默认: endpoint
-    RT_ENDPOINT    = 1;
-    RT_CONSUL      = 2;
-    RT_ETCD        = 3;
-  }
   string service_name   = 1 [(validate.rules).string = { min_len: 1 }];  // 服务名称
   string transport_type = 2;                                             // 传输协议：http、grpc、...；默认: HTTP
   string registry_type  = 3;                                             // 注册类型：endpoint、consul、...；配置中心配置：${registry_type}；例： Bootstrap.Consul
