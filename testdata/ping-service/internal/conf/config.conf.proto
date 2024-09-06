@@ -10,8 +10,8 @@ option java_outer_classname = "SaasApiPingConf";
 import "validate/validate.proto";
 
 message ServiceConfig {
-  message Business {
+  message PingService {
     string key = 1 [(validate.rules).string = { ignore_empty: true }];
   }
-  Business business = 1;
+  PingService ping_service = 1;
 }
