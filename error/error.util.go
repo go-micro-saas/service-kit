@@ -22,6 +22,16 @@ type GetMetadata interface {
 	GetMetadata() map[string]string
 }
 
+func CheckHTTPResponse(httpCode int, response Response) *errors.Error {
+	if e := CheckHTTPStatus(httpCode); e != nil {
+		return e
+	}
+	if e := CheckResponseCode(response); e != nil {
+		return e
+	}
+	return nil
+}
+
 func CheckHTTPStatus(statusCode int) *errors.Error {
 	if statusCode >= stdhttp.StatusOK && statusCode < stdhttp.StatusMultipleChoices {
 		return nil
@@ -36,12 +46,12 @@ func CheckHTTPStatus(statusCode int) *errors.Error {
 	return e
 }
 
-func CheckResponseCode(resp Response) *errors.Error {
-	if resp.GetCode() == OK {
+func CheckResponseCode(response Response) *errors.Error {
+	if response.GetCode() == OK {
 		return nil
 	}
-	e := errors.New(int(resp.GetCode()), resp.GetReason(), resp.GetMessage())
-	if md, ok := resp.(GetMetadata); ok {
+	e := errors.New(int(response.GetCode()), response.GetReason(), response.GetMessage())
+	if md, ok := response.(GetMetadata); ok {
 		e.Metadata = md.GetMetadata()
 	}
 	return e
