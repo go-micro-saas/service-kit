@@ -4,16 +4,10 @@ import (
 	configpb "github.com/go-micro-saas/service-kit/api/config"
 	apppkg "github.com/ikaiguang/go-srv-kit/kratos/app"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
-	"sync"
 )
 
 var (
 	_bootstrap *configpb.Bootstrap
-	_id        string
-
-	// 不要直接使用 s.env, 请使用 GetEnv()
-	_env     apppkg.RuntimeEnvEnum_RuntimeEnv
-	_envOnce sync.Once
 )
 
 func SetConfig(bootstrap *configpb.Bootstrap) {
@@ -28,14 +22,8 @@ func GetConfig() (*configpb.Bootstrap, error) {
 	return _bootstrap, nil
 }
 
-func SetID(appConfig *configpb.App) {
-	app := &AppConfig{}
-	app.SetByPbApp(appConfig)
-	_id = appConfig.GetId()
-}
-
 func GetID() string {
-	return _id
+	return ID(ToAppConfig(_bootstrap.GetApp()))
 }
 
 func GetEnv() apppkg.RuntimeEnvEnum_RuntimeEnv {

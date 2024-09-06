@@ -26,6 +26,9 @@ type AppConfig struct {
 }
 
 func (a *AppConfig) SetByPbApp(appConfig *configpb.App) {
+	if appConfig == nil {
+		return
+	}
 	a.ProjectName = appConfig.ProjectName
 	a.ServerName = appConfig.ServerName
 	a.ServerEnv = appConfig.ServerEnv

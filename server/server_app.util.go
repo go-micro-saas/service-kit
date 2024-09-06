@@ -63,9 +63,7 @@ func NewApp(launcherManager setuputil.LauncherManager, hs *http.Server, gs *grpc
 	}
 
 	// appid
-	ac := &apputil.AppConfig{}
-	ac.SetByPbApp(appConfig)
-	appID := apputil.ID(ac)
+	appID := apputil.ID(apputil.ToAppConfig(appConfig))
 	appConfig.Id = appID
 	if appConfig.GetMetadata() == nil {
 		appConfig.Metadata = make(map[string]string)
