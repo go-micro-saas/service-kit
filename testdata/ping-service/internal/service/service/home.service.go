@@ -3,7 +3,7 @@ package service
 import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport/http"
-	resourcev1 "github.com/ikaiguang/go-srv-kit/api/ping/v1/resources"
+	resourcev1 "github.com/go-micro-saas/service-kit/testdata/ping-service/api/ping/v1/resources"
 	apppkg "github.com/ikaiguang/go-srv-kit/kratos/app"
 )
 

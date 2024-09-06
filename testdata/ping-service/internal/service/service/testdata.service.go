@@ -4,9 +4,9 @@ import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport/http"
+	resourcev1 "github.com/go-micro-saas/service-kit/testdata/ping-service/api/testdata/v1/resources"
+	servicev1 "github.com/go-micro-saas/service-kit/testdata/ping-service/api/testdata/v1/services"
 	bizrepo "github.com/go-micro-saas/service-kit/testdata/ping-service/internal/biz/repo"
-	resourcev1 "github.com/ikaiguang/go-srv-kit/api/testdata/v1/resources"
-	servicev1 "github.com/ikaiguang/go-srv-kit/api/testdata/v1/services"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 )
 

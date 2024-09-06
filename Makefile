@@ -25,7 +25,6 @@ define protoc_protobuf
 		protoc \
 			--proto_path=. \
 			--proto_path=$(GOPATH)/src \
-			--proto_path=./testdata/ping-service \
 			--proto_path=./third_party \
 			--go_out=paths=source_relative:. \
 			--go-grpc_out=paths=source_relative:. \

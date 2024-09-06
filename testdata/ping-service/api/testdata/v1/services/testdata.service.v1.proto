@@ -9,7 +9,7 @@ option java_package         = "saas.api.testdata.servicev1";
 option java_outer_classname = "SaasApiTestdataServiceV1";
 
 import "google/api/annotations.proto";
-import "api/testdata/v1/resources/testdata.resource.v1.proto";
+import "testdata/ping-service/api/testdata/v1/resources/testdata.resource.v1.proto";
 
 // SrvTestdata 测试
 service SrvTestdata {

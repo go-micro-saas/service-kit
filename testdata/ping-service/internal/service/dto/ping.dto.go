@@ -1,8 +1,8 @@
 package dto
 
 import (
+	resourcev1 "github.com/go-micro-saas/service-kit/testdata/ping-service/api/ping/v1/resources"
 	"github.com/go-micro-saas/service-kit/testdata/ping-service/internal/biz/bo"
-	resourcev1 "github.com/ikaiguang/go-srv-kit/api/ping/v1/resources"
 )
 
 var (

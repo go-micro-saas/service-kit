@@ -9,7 +9,7 @@ option java_package         = "saas.api.ping.servicev1";
 option java_outer_classname = "SaasApiPingServiceV1";
 
 import "google/api/annotations.proto";
-import "api/ping/v1/resources/ping.resource.v1.proto";
+import "testdata/ping-service/api/ping/v1/resources/ping.resource.v1.proto";
 
 // SrvPing ping服务
 service SrvPing {

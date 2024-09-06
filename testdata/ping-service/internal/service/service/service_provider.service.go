@@ -4,9 +4,9 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	serverutil "github.com/go-micro-saas/service-kit/server"
+	pingservicev1 "github.com/go-micro-saas/service-kit/testdata/ping-service/api/ping/v1/services"
+	testdataservicev1 "github.com/go-micro-saas/service-kit/testdata/ping-service/api/testdata/v1/services"
 	"github.com/gorilla/mux"
-	pingservicev1 "github.com/ikaiguang/go-srv-kit/api/ping/v1/services"
-	testdataservicev1 "github.com/ikaiguang/go-srv-kit/api/testdata/v1/services"
 	stdlog "log"
 )
 
