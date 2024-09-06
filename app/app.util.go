@@ -12,6 +12,12 @@ import (
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 )
 
+func ToAppConfig(appConfig *configpb.App) *AppConfig {
+	ac := &AppConfig{}
+	ac.SetByPbApp(appConfig)
+	return ac
+}
+
 type AppConfig struct {
 	ProjectName   string //
 	ServerName    string //
