@@ -63,7 +63,7 @@ func (s *clientAPIManager) RegisterServiceAPIConfigs(apiConfigs []*configpb.Clus
 	return nil
 }
 
-func (s *clientAPIManager) NewClientAPIConnection(serviceName ServiceName) (ClientConnection, error) {
+func (s *clientAPIManager) NewAPIConnection(serviceName ServiceName) (APIConnection, error) {
 	apiConfig, err := s.GetServiceAPIConfig(serviceName)
 	if err != nil {
 		return nil, err

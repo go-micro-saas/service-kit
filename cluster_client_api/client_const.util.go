@@ -20,14 +20,13 @@ type ClientAPIManager interface {
 	RegisterServiceAPIConfigs(apis []*configpb.ClusterClientApi, opts ...Option) error
 	// GetServiceAPIConfig 获取服务配置
 	GetServiceAPIConfig(serviceName ServiceName) (*Config, error)
-	// NewClientAPIConnection 实例化客户端链接
-	NewClientAPIConnection(serviceName ServiceName) (ClientConnection, error)
+	// NewAPIConnection 实例化客户端链接
+	NewAPIConnection(serviceName ServiceName) (APIConnection, error)
 }
 
-type ClientConnection interface {
+type APIConnection interface {
 	GetTransportType() configpb.ClusterClientApi_TransportType
-	IsHTTPTransport() bool
-	IsGRCPTransport() bool
+	IsTransportType(tt configpb.ClusterClientApi_TransportType) bool
 	GetGRPCConnection() (*stdgrpc.ClientConn, error)
 	GetHTTPClient() (*http.Client, error)
 }
@@ -98,6 +97,10 @@ func (c *clientConnection) SetTransportType(tt configpb.ClusterClientApi_Transpo
 
 func (c *clientConnection) GetTransportType() configpb.ClusterClientApi_TransportType {
 	return c.transportType
+}
+
+func (c *clientConnection) IsTransportType(tt configpb.ClusterClientApi_TransportType) bool {
+	return c.transportType == tt
 }
 
 func (c *clientConnection) IsHTTPTransport() bool {

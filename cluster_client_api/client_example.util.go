@@ -1,10 +1,36 @@
 package clientutil
 
 import (
-	"github.com/go-kratos/kratos/v2/transport/http"
 	pingservicev1 "github.com/ikaiguang/go-srv-kit/api/ping/v1/services"
-	stdgrpc "google.golang.org/grpc"
+	"sync"
 )
+
+var (
+	_apiConnection = sync.Map{}
+)
+
+func NewSingletonClientAPIConnection(clientAPIManager ClientAPIManager, serviceName ServiceName) (APIConnection, error) {
+	cc, ok := _apiConnection.Load(serviceName)
+	if ok {
+		if conn, ok := cc.(APIConnection); ok {
+			return conn, nil
+		}
+	}
+	conn, err := NewClientAPIConnection(clientAPIManager, serviceName)
+	if err != nil {
+		return nil, err
+	}
+	_apiConnection.Store(serviceName, conn)
+	return conn, nil
+}
+
+func NewClientAPIConnection(clientAPIManager ClientAPIManager, serviceName ServiceName) (APIConnection, error) {
+	conn, err := clientAPIManager.NewAPIConnection(serviceName)
+	if err != nil {
+		return nil, err
+	}
+	return conn, nil
+}
 
 // 示例：仅供参考
 const (
@@ -17,29 +43,27 @@ const (
 )
 
 // NewPingGRPCClient ...
-func NewPingGRPCClient(apiManager ClientAPIManager) (pingservicev1.SrvPingClient, error) {
-	conf, err := apiManager.GetServiceAPIConfig(PingService)
+func NewPingGRPCClient(clientAPIManager ClientAPIManager) (pingservicev1.SrvPingClient, error) {
+	conn, err := NewSingletonClientAPIConnection(clientAPIManager, PingService)
 	if err != nil {
 		return nil, err
 	}
-	_ = conf
-	var conn *stdgrpc.ClientConn
-	//if err != nil {
-	//	return nil, err
-	//}
-	return pingservicev1.NewSrvPingClient(conn), nil
+	grpcConn, err := conn.GetGRPCConnection()
+	if err != nil {
+		return nil, err
+	}
+	return pingservicev1.NewSrvPingClient(grpcConn), nil
 }
 
 // NewPingHTTPClient ...
-func NewPingHTTPClient(apiManager ClientAPIManager) (pingservicev1.SrvPingHTTPClient, error) {
-	conf, err := apiManager.GetServiceAPIConfig(PingService)
+func NewPingHTTPClient(clientAPIManager ClientAPIManager) (pingservicev1.SrvPingHTTPClient, error) {
+	conn, err := NewSingletonClientAPIConnection(clientAPIManager, PingService)
 	if err != nil {
 		return nil, err
 	}
-	_ = conf
-	var conn *http.Client
-	//if err != nil {
-	//	return nil, err
-	//}
-	return pingservicev1.NewSrvPingHTTPClient(conn), nil
+	httpClient, err := conn.GetHTTPClient()
+	if err != nil {
+		return nil, err
+	}
+	return pingservicev1.NewSrvPingHTTPClient(httpClient), nil
 }
