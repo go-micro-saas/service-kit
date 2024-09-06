@@ -15,17 +15,22 @@ type serviceAPIManager struct {
 	configMutex sync.RWMutex
 }
 
-func NewServiceAPIManager(opts ...Option) (ServiceAPIManager, error) {
+func NewServiceAPIManager(apiConfigs []*Config, opts ...Option) (ServiceAPIManager, error) {
 	o := &option{}
 	o.logger, _ = logpkg.NewDummyLogger()
 	for i := range opts {
 		opts[i](o)
 	}
-	return &serviceAPIManager{
+	manager := &serviceAPIManager{
 		opt:         o,
-		configMap:   nil,
+		configMap:   make(map[ServiceName]*Config),
 		configMutex: sync.RWMutex{},
-	}, nil
+	}
+	err := manager.RegisterServiceAPIConfigs(apiConfigs)
+	if err != nil {
+		return nil, err
+	}
+	return manager, nil
 }
 
 // RegisterServiceAPIConfigs 注册服务API，覆盖已有服务

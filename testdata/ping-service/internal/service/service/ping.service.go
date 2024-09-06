@@ -49,6 +49,11 @@ func (s *pingService) Ping(ctx context.Context, req *resourcev1.PingReq) (*resou
 		panic("testdata panic")
 	}
 
+	// request
+	if req.GetMessage() == "request" {
+		s.requestClusterServiceAPI(ctx, req)
+	}
+
 	param := dto.PingDTO.ToBoGetPingMessageParam(req)
 	reply, err := s.pingBiz.GetPingMessage(ctx, param)
 	if err != nil {
@@ -67,4 +72,8 @@ func (s *pingService) testLogger(ctx context.Context, in *resourcev1.PingReq) {
 	logpkg.InfowWithContext(ctx, "==> logpkg.InfowWithContext : Ping Received: ", in.GetMessage())
 	logpkg.Info("==> logpkg.Info : Ping Received: ", in.GetMessage())
 	debugutil.Printw("==> debugutil.Print : Ping Received: ", in.GetMessage())
+}
+
+func (s *pingService) requestClusterServiceAPI(ctx context.Context, in *resourcev1.PingReq) {
+	return
 }

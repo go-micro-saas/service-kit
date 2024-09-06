@@ -391,11 +391,7 @@ func (s *launcherManager) getServiceApiManager() (clientutil.ServiceAPIManager, 
 			//opts = append(opts, clientutil.WithEtcdClient(etcdClient))
 		}
 	}
-	serviceAPIManager, err := clientutil.NewServiceAPIManager(opts...)
-	if err != nil {
-		return nil, err
-	}
-	err = serviceAPIManager.RegisterServiceAPIConfigs(apiConfigs)
+	serviceAPIManager, err := clientutil.NewServiceAPIManager(apiConfigs, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -414,7 +410,7 @@ func (s *launcherManager) getSingletonServiceApiManager() (clientutil.ServiceAPI
 	return s.serviceAPIManager, err
 }
 
-func (s *launcherManager) GetServiceApiExporter() (clientutil.ServiceAPIManager, error) {
+func (s *launcherManager) GetServiceApiManager() (clientutil.ServiceAPIManager, error) {
 	serviceAPIManager, err := s.getSingletonServiceApiManager()
 	if err != nil {
 		return nil, err

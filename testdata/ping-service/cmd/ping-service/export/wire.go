@@ -18,6 +18,7 @@ func exportServices(launcherManager setuputil.LauncherManager, hs *http.Server, 
 	panic(wire.Build(
 		// service
 		setuputil.GetLogger,
+		setuputil.GetServiceAPIManager,
 		data.NewPingData,
 		biz.NewWebsocketBiz, biz.NewPingBiz,
 		service.NewHomeService, service.NewWebsocketService,

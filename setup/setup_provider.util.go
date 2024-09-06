@@ -3,6 +3,7 @@ package setuputil
 import (
 	"github.com/ThreeDotsLabs/watermill-amqp/v2/pkg/amqp"
 	"github.com/go-kratos/kratos/v2/log"
+	clientutil "github.com/go-micro-saas/service-kit/cluster_service_api"
 	consulapi "github.com/hashicorp/consul/api"
 	authpkg "github.com/ikaiguang/go-srv-kit/kratos/auth"
 	"github.com/redis/go-redis/v9"
@@ -63,6 +64,9 @@ func GetTokenManager(launcherManager LauncherManager) (authpkg.TokenManger, erro
 }
 func GetAuthManager(launcherManager LauncherManager) (authpkg.AuthRepo, error) {
 	return launcherManager.GetAuthManager()
+}
+func GetServiceAPIManager(launcherManager LauncherManager) (clientutil.ServiceAPIManager, error) {
+	return launcherManager.GetServiceApiManager()
 }
 func Close(launcherManager LauncherManager) error {
 	return launcherManager.Close()

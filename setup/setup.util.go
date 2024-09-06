@@ -36,7 +36,7 @@ type LauncherManager interface {
 	GetTokenManager() (authpkg.TokenManger, error)
 	GetAuthManager() (authpkg.AuthRepo, error)
 
-	GetServiceApiExporter() (clientutil.ServiceAPIManager, error)
+	GetServiceApiManager() (clientutil.ServiceAPIManager, error)
 
 	Close() error
 }

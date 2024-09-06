@@ -26,8 +26,12 @@ func exportServices(launcherManager setuputil.LauncherManager, hs *http.Server, 
 	homeService := service.NewHomeService(logger)
 	websocketBizRepo := biz.NewWebsocketBiz(logger)
 	websocketService := service.NewWebsocketService(logger, websocketBizRepo)
+	serviceAPIManager, err := setuputil.GetServiceAPIManager(launcherManager)
+	if err != nil {
+		return nil, err
+	}
 	pingDataRepo := data.NewPingData(logger)
-	pingBizRepo := biz.NewPingBiz(logger, pingDataRepo)
+	pingBizRepo := biz.NewPingBiz(logger, serviceAPIManager, pingDataRepo)
 	srvPingServer := service.NewPingService(logger, pingBizRepo)
 	srvTestdataServer := service.NewTestdataService(logger, websocketBizRepo)
 	serviceInterface, err := service.RegisterServices(hs, gs, homeService, websocketService, srvPingServer, srvTestdataServer)
