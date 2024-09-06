@@ -71,16 +71,10 @@ func NewApp(launcherManager setuputil.LauncherManager, hs *http.Server, gs *grpc
 	)
 
 	// 服务注册，如果为空，自动获取服务的Endpoint
-	var endpoints []*url.URL
-	for _, item := range appConfig.GetHttpEndpoints() {
-		u, err := url.Parse(item)
-		if err != nil {
-			e := errorpkg.ErrorInvalidParameter(err.Error())
-			return nil, errorpkg.WithStack(e)
-		}
-		endpoints = append(endpoints, u)
-	}
-	for _, item := range appConfig.GetGrpcEndpoints() {
+	// 如： http://192.168.100.200:10001、grpc://192.168.100.200:10002
+	// 如： http://xxx-service.namespace.svc.cluster.local:10001、grpc://xxx-service.namespace:10002
+	var endpoints = make([]*url.URL, 0, len(appConfig.GetRegistryEndpoints()))
+	for _, item := range appConfig.GetRegistryEndpoints() {
 		u, err := url.Parse(item)
 		if err != nil {
 			e := errorpkg.ErrorInvalidParameter(err.Error())
