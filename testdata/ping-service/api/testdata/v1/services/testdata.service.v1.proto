@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package saas.api.testdata.servicev1;
+
+// 多语言特定包名，用于源代码引用
+option go_package           = "github.com/go-micro-saas/service-kit/testdata/ping-service/api/testdata/v1/services;servicev1";
+option java_multiple_files  = true;
+option java_package         = "saas.api.testdata.servicev1";
+option java_outer_classname = "SaasApiTestdataServiceV1";
+
+import "google/api/annotations.proto";
+import "api/testdata/v1/resources/testdata.resource.v1.proto";
+
+// SrvTestdata 测试
+service SrvTestdata {
+  // Websocket websocket
+  rpc Websocket(saas.api.testdata.resourcev1.TestReq) returns (saas.api.testdata.resourcev1.TestResp) {
+    option (google.api.http) = {
+      get: "/api/v1/testdata/websocket"
+    };
+  }
+
+  // Get Get
+  rpc Get(saas.api.testdata.resourcev1.TestReq) returns (saas.api.testdata.resourcev1.TestResp) {
+    option (google.api.http) = {
+      get: "/api/v1/testdata/get"
+      // body:"*" // WARN: GET xxx body should not be declared.
+    };
+  }
+
+  // Put Put
+  rpc Put(saas.api.testdata.resourcev1.TestReq) returns (saas.api.testdata.resourcev1.TestResp) {
+    option (google.api.http) = {
+      put: "/api/v1/testdata/put"
+      body: "*"
+    };
+  }
+
+  // Post Post
+  rpc Post(saas.api.testdata.resourcev1.TestReq) returns (saas.api.testdata.resourcev1.TestResp) {
+    option (google.api.http) = {
+      post: "/api/v1/testdata/post"
+      body: "*"
+    };
+  }
+
+  // Delete Delete
+  rpc Delete(saas.api.testdata.resourcev1.TestReq) returns (saas.api.testdata.resourcev1.TestResp) {
+    option (google.api.http) = {
+      delete: "/api/v1/testdata/post"
+      // body:"*" // WARN: DELETE xxx body should not be declared.
+    };
+  }
+
+  // Patch Patch
+  rpc Patch(saas.api.testdata.resourcev1.TestReq) returns (saas.api.testdata.resourcev1.TestResp) {
+    option (google.api.http) = {
+      patch: "/api/v1/testdata/post"
+      body: "*"
+    };
+  }
+
+  // ServerToClient A server-to-client streaming RPC.
+  rpc ServerToClient(saas.api.testdata.resourcev1.TestReq) returns (stream saas.api.testdata.resourcev1.TestResp) {
+    option (google.api.http) = {
+      get: "/api/v1/testdata/server-to-client"
+    };
+  }
+
+  // ClientToServer A client-to-server streaming RPC.
+  rpc ClientToServer(stream saas.api.testdata.resourcev1.TestReq) returns (saas.api.testdata.resourcev1.TestResp) {
+    option (google.api.http) = {
+      get: "/api/v1/testdata/client-to-server"
+    };
+  }
+
+  // BidirectionalStream A Bidirectional streaming RPC.
+  rpc BidirectionalStream(stream saas.api.testdata.resourcev1.TestReq) returns (stream saas.api.testdata.resourcev1.TestResp) {
+    option (google.api.http) = {
+      get: "/api/v1/testdata/bidirectional-stream"
+    };
+  }
+}

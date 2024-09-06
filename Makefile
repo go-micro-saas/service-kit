@@ -25,6 +25,7 @@ define protoc_protobuf
 		protoc \
 			--proto_path=. \
 			--proto_path=$(GOPATH)/src \
+			--proto_path=./testdata/ping-service \
 			--proto_path=./third_party \
 			--go_out=paths=source_relative:. \
 			--go-grpc_out=paths=source_relative:. \
@@ -82,6 +83,11 @@ init:
 # api
 include api/makefile_protoc.mk
 include api/config/makefile_protoc.mk
+#include testdata/ping-service/api/makefile_protoc.mk
+include testdata/ping-service/api/ping/makefile_protoc.mk
+include testdata/ping-service/api/ping/v1/makefile_protoc.mk
+include testdata/ping-service/api/testdata/makefile_protoc.mk
+include testdata/ping-service/api/testdata/v1/makefile_protoc.mk
 
 # run
 include testdata/ping-service/internal/conf/makefile_protoc.mk

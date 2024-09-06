@@ -10,7 +10,7 @@ require (
 	github.com/google/wire v0.6.0
 	github.com/gorilla/websocket v1.5.3
 	github.com/hashicorp/consul/api v1.29.4
-	github.com/ikaiguang/go-srv-kit v0.3.11
+	github.com/ikaiguang/go-srv-kit v0.3.12
 	github.com/redis/go-redis/v9 v9.6.1
 	go.etcd.io/etcd/client/v3 v3.5.15
 	go.mongodb.org/mongo-driver v1.16.1
@@ -79,7 +79,7 @@ require (
 	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/rabbitmq/amqp091-go v1.10.0 // indirect
-	github.com/rs/xid v1.5.0 // indirect
+	github.com/rs/xid v1.6.0 // indirect
 	github.com/tidwall/gjson v1.14.2 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.0 // indirect
