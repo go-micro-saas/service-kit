@@ -434,7 +434,7 @@ func (m *Bootstrap) validate(all bool) error {
 		}
 	}
 
-	for idx, item := range m.GetClusterClientApi() {
+	for idx, item := range m.GetClusterServiceApi() {
 		_, _ = idx, item
 
 		if all {
@@ -442,7 +442,7 @@ func (m *Bootstrap) validate(all bool) error {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
 					errors = append(errors, BootstrapValidationError{
-						field:  fmt.Sprintf("ClusterClientApi[%v]", idx),
+						field:  fmt.Sprintf("ClusterServiceApi[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
 					})
@@ -450,7 +450,7 @@ func (m *Bootstrap) validate(all bool) error {
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
 					errors = append(errors, BootstrapValidationError{
-						field:  fmt.Sprintf("ClusterClientApi[%v]", idx),
+						field:  fmt.Sprintf("ClusterServiceApi[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
 					})
@@ -459,7 +459,7 @@ func (m *Bootstrap) validate(all bool) error {
 		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return BootstrapValidationError{
-					field:  fmt.Sprintf("ClusterClientApi[%v]", idx),
+					field:  fmt.Sprintf("ClusterServiceApi[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
@@ -2888,22 +2888,22 @@ var _ interface {
 	ErrorName() string
 } = EncryptValidationError{}
 
-// Validate checks the field values on ClusterClientApi with the rules defined
+// Validate checks the field values on ClusterServiceApi with the rules defined
 // in the proto definition for this message. If any rules are violated, the
 // first error encountered is returned, or nil if there are no violations.
-func (m *ClusterClientApi) Validate() error {
+func (m *ClusterServiceApi) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on ClusterClientApi with the rules
+// ValidateAll checks the field values on ClusterServiceApi with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// ClusterClientApiMultiError, or nil if none found.
-func (m *ClusterClientApi) ValidateAll() error {
+// ClusterServiceApiMultiError, or nil if none found.
+func (m *ClusterServiceApi) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *ClusterClientApi) validate(all bool) error {
+func (m *ClusterServiceApi) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -2911,7 +2911,7 @@ func (m *ClusterClientApi) validate(all bool) error {
 	var errors []error
 
 	if utf8.RuneCountInString(m.GetServiceName()) < 1 {
-		err := ClusterClientApiValidationError{
+		err := ClusterServiceApiValidationError{
 			field:  "ServiceName",
 			reason: "value length must be at least 1 runes",
 		}
@@ -2926,7 +2926,7 @@ func (m *ClusterClientApi) validate(all bool) error {
 	// no validation rules for RegistryType
 
 	if utf8.RuneCountInString(m.GetServiceTarget()) < 1 {
-		err := ClusterClientApiValidationError{
+		err := ClusterServiceApiValidationError{
 			field:  "ServiceTarget",
 			reason: "value length must be at least 1 runes",
 		}
@@ -2937,19 +2937,19 @@ func (m *ClusterClientApi) validate(all bool) error {
 	}
 
 	if len(errors) > 0 {
-		return ClusterClientApiMultiError(errors)
+		return ClusterServiceApiMultiError(errors)
 	}
 
 	return nil
 }
 
-// ClusterClientApiMultiError is an error wrapping multiple validation errors
-// returned by ClusterClientApi.ValidateAll() if the designated constraints
+// ClusterServiceApiMultiError is an error wrapping multiple validation errors
+// returned by ClusterServiceApi.ValidateAll() if the designated constraints
 // aren't met.
-type ClusterClientApiMultiError []error
+type ClusterServiceApiMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m ClusterClientApiMultiError) Error() string {
+func (m ClusterServiceApiMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -2958,11 +2958,11 @@ func (m ClusterClientApiMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m ClusterClientApiMultiError) AllErrors() []error { return m }
+func (m ClusterServiceApiMultiError) AllErrors() []error { return m }
 
-// ClusterClientApiValidationError is the validation error returned by
-// ClusterClientApi.Validate if the designated constraints aren't met.
-type ClusterClientApiValidationError struct {
+// ClusterServiceApiValidationError is the validation error returned by
+// ClusterServiceApi.Validate if the designated constraints aren't met.
+type ClusterServiceApiValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -2970,22 +2970,24 @@ type ClusterClientApiValidationError struct {
 }
 
 // Field function returns field value.
-func (e ClusterClientApiValidationError) Field() string { return e.field }
+func (e ClusterServiceApiValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e ClusterClientApiValidationError) Reason() string { return e.reason }
+func (e ClusterServiceApiValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e ClusterClientApiValidationError) Cause() error { return e.cause }
+func (e ClusterServiceApiValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e ClusterClientApiValidationError) Key() bool { return e.key }
+func (e ClusterServiceApiValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e ClusterClientApiValidationError) ErrorName() string { return "ClusterClientApiValidationError" }
+func (e ClusterServiceApiValidationError) ErrorName() string {
+	return "ClusterServiceApiValidationError"
+}
 
 // Error satisfies the builtin error interface
-func (e ClusterClientApiValidationError) Error() string {
+func (e ClusterServiceApiValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -2997,14 +2999,14 @@ func (e ClusterClientApiValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sClusterClientApi.%s: %s%s",
+		"invalid %sClusterServiceApi.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = ClusterClientApiValidationError{}
+var _ error = ClusterServiceApiValidationError{}
 
 var _ interface {
 	Field() string
@@ -3012,7 +3014,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = ClusterClientApiValidationError{}
+} = ClusterServiceApiValidationError{}
 
 // Validate checks the field values on ThirdPartyApi with the rules defined in
 // the proto definition for this message. If any rules are violated, the first

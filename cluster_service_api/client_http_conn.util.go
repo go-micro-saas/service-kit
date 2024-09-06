@@ -11,9 +11,9 @@ import (
 	middlewarepkg "github.com/ikaiguang/go-srv-kit/kratos/middleware"
 )
 
-func (s *clientAPIManager) NewHTTPClient(apiConfig *Config, otherOpts ...http.ClientOption) (*http.Client, error) {
+func (s *serviceAPIManager) NewHTTPClient(apiConfig *Config, otherOpts ...http.ClientOption) (*http.Client, error) {
 	var opts = []http.ClientOption{
-		http.WithTimeout(defaultTimeout),
+		http.WithTimeout(DefaultTimeout),
 	}
 	opts = append(opts, apputil.ClientDecoderEncoder()...)
 
@@ -47,7 +47,7 @@ func (s *clientAPIManager) NewHTTPClient(apiConfig *Config, otherOpts ...http.Cl
 }
 
 // getHTTPEndpointOptions 获取服务端点
-func (s *clientAPIManager) getHTTPEndpointOptions(apiConfig *Config) ([]http.ClientOption, error) {
+func (s *serviceAPIManager) getHTTPEndpointOptions(apiConfig *Config) ([]http.ClientOption, error) {
 	var opts []http.ClientOption
 
 	// endpoint
@@ -55,7 +55,7 @@ func (s *clientAPIManager) getHTTPEndpointOptions(apiConfig *Config) ([]http.Cli
 
 	// registry
 	switch apiConfig.RegistryType {
-	case configpb.ClusterClientApi_RT_CONSUL, configpb.ClusterClientApi_RT_ETCD:
+	case configpb.ClusterServiceApi_RT_CONSUL, configpb.ClusterServiceApi_RT_ETCD:
 		r, err := s.getRegistryDiscovery(apiConfig)
 		if err != nil {
 			return nil, err

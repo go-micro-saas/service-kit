@@ -5,22 +5,22 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	configpb "github.com/go-micro-saas/service-kit/api/config"
-	curlpkg "github.com/ikaiguang/go-srv-kit/kit/curl"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 	middlewarepkg "github.com/ikaiguang/go-srv-kit/kratos/middleware"
 	stdgrpc "google.golang.org/grpc"
+	"time"
 )
 
 const (
-	defaultTimeout = curlpkg.DefaultTimeout
+	DefaultTimeout = time.Minute
 )
 
-func (s *clientAPIManager) NewGRPCConnection(apiConfig *Config, otherOpts ...grpc.ClientOption) (*stdgrpc.ClientConn, error) {
+func (s *serviceAPIManager) NewGRPCConnection(apiConfig *Config, otherOpts ...grpc.ClientOption) (*stdgrpc.ClientConn, error) {
 	var opts = []grpc.ClientOption{
-		grpc.WithTimeout(defaultTimeout),
+		grpc.WithTimeout(DefaultTimeout),
 		grpc.WithHealthCheck(true),
 		grpc.WithPrintDiscoveryDebugLog(true),
-		//grpc.WithOptions(stdgrpc.WithTimeout(defaultTimeout)), // dial option
+		//grpc.WithOptions(stdgrpc.WithTimeout(DefaultTimeout)), // dial option
 	}
 
 	// 中间件
@@ -52,7 +52,7 @@ func (s *clientAPIManager) NewGRPCConnection(apiConfig *Config, otherOpts ...grp
 	return conn, nil
 }
 
-func (s *clientAPIManager) getGRPCEndpointOptions(apiConfig *Config) ([]grpc.ClientOption, error) {
+func (s *serviceAPIManager) getGRPCEndpointOptions(apiConfig *Config) ([]grpc.ClientOption, error) {
 	var opts []grpc.ClientOption
 
 	// endpoint
@@ -60,7 +60,7 @@ func (s *clientAPIManager) getGRPCEndpointOptions(apiConfig *Config) ([]grpc.Cli
 
 	// registry
 	switch apiConfig.RegistryType {
-	case configpb.ClusterClientApi_RT_CONSUL, configpb.ClusterClientApi_RT_ETCD:
+	case configpb.ClusterServiceApi_RT_CONSUL, configpb.ClusterServiceApi_RT_ETCD:
 		r, err := s.getRegistryDiscovery(apiConfig)
 		if err != nil {
 			return nil, err

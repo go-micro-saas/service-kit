@@ -9,19 +9,19 @@ import (
 	"sync"
 )
 
-type clientAPIManager struct {
+type serviceAPIManager struct {
 	opt         *option
 	configMap   map[ServiceName]*Config
 	configMutex sync.RWMutex
 }
 
-func NewClientAPIManager(opts ...Option) (ClientAPIManager, error) {
+func NewServiceAPIManager(opts ...Option) (ServiceAPIManager, error) {
 	o := &option{}
 	o.logger, _ = logpkg.NewDummyLogger()
 	for i := range opts {
 		opts[i](o)
 	}
-	return &clientAPIManager{
+	return &serviceAPIManager{
 		opt:         o,
 		configMap:   nil,
 		configMutex: sync.RWMutex{},
@@ -29,7 +29,7 @@ func NewClientAPIManager(opts ...Option) (ClientAPIManager, error) {
 }
 
 // RegisterServiceAPIConfigs 注册服务API，覆盖已有服务
-func (s *clientAPIManager) RegisterServiceAPIConfigs(apiConfigs []*configpb.ClusterClientApi, opts ...Option) error {
+func (s *serviceAPIManager) RegisterServiceAPIConfigs(apiConfigs []*configpb.ClusterServiceApi, opts ...Option) error {
 	for i := range opts {
 		opts[i](s.opt)
 	}
@@ -46,7 +46,7 @@ func (s *clientAPIManager) RegisterServiceAPIConfigs(apiConfigs []*configpb.Clus
 			return errorpkg.Wrap(e, err)
 		}
 		conf := &Config{}
-		conf.SetByPbClusterClientApi(apiConfigs[i])
+		conf.SetByPbClusterServiceApi(apiConfigs[i])
 		s.configMap[ServiceName(apiConfigs[i].ServiceName)] = conf
 		if conf.IsConsulRegistry() {
 			hasConsulRegistry = true
@@ -63,7 +63,7 @@ func (s *clientAPIManager) RegisterServiceAPIConfigs(apiConfigs []*configpb.Clus
 	return nil
 }
 
-func (s *clientAPIManager) NewAPIConnection(serviceName ServiceName) (APIConnection, error) {
+func (s *serviceAPIManager) NewAPIConnection(serviceName ServiceName) (ServiceAPIConnection, error) {
 	apiConfig, err := s.GetServiceAPIConfig(serviceName)
 	if err != nil {
 		return nil, err
@@ -76,12 +76,12 @@ func (s *clientAPIManager) NewAPIConnection(serviceName ServiceName) (APIConnect
 		if err != nil {
 			return nil, err
 		}
-	case configpb.ClusterClientApi_TT_HTTP:
+	case configpb.ClusterServiceApi_TT_HTTP:
 		conn.httpClient, err = s.NewHTTPClient(apiConfig)
 		if err != nil {
 			return nil, err
 		}
-	case configpb.ClusterClientApi_TT_GRPC:
+	case configpb.ClusterServiceApi_TT_GRPC:
 		conn.grpcConn, err = s.NewGRPCConnection(apiConfig)
 		if err != nil {
 			return nil, err
@@ -90,7 +90,7 @@ func (s *clientAPIManager) NewAPIConnection(serviceName ServiceName) (APIConnect
 	return conn, nil
 }
 
-func (s *clientAPIManager) GetServiceAPIConfig(serviceName ServiceName) (*Config, error) {
+func (s *serviceAPIManager) GetServiceAPIConfig(serviceName ServiceName) (*Config, error) {
 	if serviceName.String() == "" {
 		e := errorpkg.ErrorBadRequest("service name cannot be empty")
 		return nil, errorpkg.WithStack(e)
@@ -109,12 +109,12 @@ func (s *clientAPIManager) GetServiceAPIConfig(serviceName ServiceName) (*Config
 	return conf, nil
 }
 
-func (s *clientAPIManager) getRegistryDiscovery(apiConfig *Config) (registry.Discovery, error) {
+func (s *serviceAPIManager) getRegistryDiscovery(apiConfig *Config) (registry.Discovery, error) {
 	switch apiConfig.RegistryType {
 	default:
 		e := errorpkg.ErrorUnimplemented(apiConfig.RegistryType.String())
 		return nil, errorpkg.WithStack(e)
-	case configpb.ClusterClientApi_RT_CONSUL:
+	case configpb.ClusterServiceApi_RT_CONSUL:
 		if s.opt.consulClient == nil {
 			return nil, errorpkg.WithStack(uninitializedConsulClientError)
 		}
@@ -123,7 +123,7 @@ func (s *clientAPIManager) getRegistryDiscovery(apiConfig *Config) (registry.Dis
 			return nil, err
 		}
 		return r, nil
-	case configpb.ClusterClientApi_RT_ETCD:
+	case configpb.ClusterServiceApi_RT_ETCD:
 		if s.opt.etcdClient == nil {
 			return nil, errorpkg.WithStack(uninitializedEtcdClientError)
 		}

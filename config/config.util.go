@@ -70,8 +70,8 @@ func TokenEncryptConfig(bootstrap *configpb.Bootstrap) *configpb.Encrypt_TokenEn
 	return bootstrap.GetEncrypt().GetTokenEncrypt()
 }
 
-func ClusterClientApis(bootstrap *configpb.Bootstrap) []*configpb.ClusterClientApi {
-	return bootstrap.GetClusterClientApi()
+func ClusterServiceApis(bootstrap *configpb.Bootstrap) []*configpb.ClusterServiceApi {
+	return bootstrap.GetClusterServiceApi()
 }
 func ThirdPartyApis(bootstrap *configpb.Bootstrap) []*configpb.ThirdPartyApi {
 	return bootstrap.GetThirdPartyApi()
