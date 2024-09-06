@@ -43,8 +43,12 @@ const (
 )
 
 // NewPingGRPCClient ...
-func NewPingGRPCClient(clientAPIManager ClientAPIManager) (pingservicev1.SrvPingClient, error) {
-	conn, err := NewSingletonClientAPIConnection(clientAPIManager, PingService)
+func NewPingGRPCClient(clientAPIManager ClientAPIManager, rewriteServiceName ...ServiceName) (pingservicev1.SrvPingClient, error) {
+	serviceName := PingService
+	for i := range rewriteServiceName {
+		serviceName = rewriteServiceName[i]
+	}
+	conn, err := NewSingletonClientAPIConnection(clientAPIManager, serviceName)
 	if err != nil {
 		return nil, err
 	}
@@ -56,8 +60,12 @@ func NewPingGRPCClient(clientAPIManager ClientAPIManager) (pingservicev1.SrvPing
 }
 
 // NewPingHTTPClient ...
-func NewPingHTTPClient(clientAPIManager ClientAPIManager) (pingservicev1.SrvPingHTTPClient, error) {
-	conn, err := NewSingletonClientAPIConnection(clientAPIManager, PingService)
+func NewPingHTTPClient(clientAPIManager ClientAPIManager, rewriteServiceName ...ServiceName) (pingservicev1.SrvPingHTTPClient, error) {
+	serviceName := PingService
+	for i := range rewriteServiceName {
+		serviceName = rewriteServiceName[i]
+	}
+	conn, err := NewSingletonClientAPIConnection(clientAPIManager, serviceName)
 	if err != nil {
 		return nil, err
 	}

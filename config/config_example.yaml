@@ -227,14 +227,14 @@ encrypt:
 # registry_type 注册类型：endpoint、consul、...；配置中心配置：${registry_type}；例： Bootstrap.Consul
 # service_target 服务目标：endpoint或registry，例：http://127.0.0.1:8899、discovery:///${registry_endpoint}
 cluster_client_api:
-  - service_name: ping-service
+  - service_name: ping-service-http
     transport_type: http
     registry_type: endpoint
     service_target: http://127.0.0.1:10001
-  - service_name: nodeid-service
+  - service_name: ping-service-grpc
     transport_type: grpc
     registry_type: consul
-    service_target: discovery:///go-micro-saas:nodeid-service:develop:v1.0.0
+    service_target: discovery:///go-micro-saas:ping-service:production:v1.0.0
 
 # third_party_api 第三方api
 third_party_api:

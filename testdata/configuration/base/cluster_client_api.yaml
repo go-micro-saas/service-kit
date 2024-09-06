@@ -1,22 +1,13 @@
 # cluster_client_api 项目集群客户端api
-# registry_endpoint = ${app.project_name}/${app.server_name}/${app.server_env}/${app.server_version}
-# 例子：registry_endpoint = go-micro-saas/DEVELOP/v1.0.0-xxx/user-service
-# registry_name = ${app.server_name}
-# http_scheme : 默认值 http
+# transport_type 传输协议：http、grpc、...；默认: HTTP
+# registry_type 注册类型：endpoint、consul、...；配置中心配置：${registry_type}；例： Bootstrap.Consul
+# service_target 服务目标：endpoint或registry，例：http://127.0.0.1:8899、discovery:///${registry_endpoint}
 cluster_client_api:
-  - name: ping-service
-    registry_name: ping-service
-    http_host: http://127.0.0.1:10001
-    grpc_host: 127.0.0.1:10002
-  - name: snowflake-service
-    registry_name: snowflake-service
-    http_host: http://127.0.0.1:10101
-    grpc_host: 127.0.0.1:10102
-  - name: user-service
-    registry_name: user-service
-    http_host: http://127.0.0.1:10201
-    grpc_host: 127.0.0.1:10202
-  - name: admin-service
-    registry_name: admin-service
-    http_host: http://127.0.0.1:10201
-    grpc_host: 127.0.0.1:10202
+  - service_name: ping-service-http
+    transport_type: http
+    registry_type: endpoint
+    service_target: http://127.0.0.1:10001
+  - service_name: ping-service-grpc
+    transport_type: grpc
+    registry_type: consul
+    service_target: discovery:///go-micro-saas:ping-service:production:v1.0.0
