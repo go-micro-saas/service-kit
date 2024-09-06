@@ -83,7 +83,7 @@ func main() {
 			e := errorpkg.ErrorBadRequest(err.Error())
 			panic(e)
 		}
-		storeDir = apputil.Path(bs.GetApp())
+		storeDir = apputil.Path(apputil.ToAppConfig(bs.GetApp()))
 	}
 	if storeDir == "" {
 		e := errorpkg.ErrorBadRequest("请配置存储路径：store_dir")
