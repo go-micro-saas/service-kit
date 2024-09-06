@@ -9,14 +9,14 @@ var (
 	_apiConnection = sync.Map{}
 )
 
-func NewSingletonClientAPIConnection(clientAPIManager ServiceAPIManager, serviceName ServiceName) (ServiceAPIConnection, error) {
+func NewSingletonClientAPIConnection(serviceAPIManager ServiceAPIManager, serviceName ServiceName) (ServiceAPIConnection, error) {
 	cc, ok := _apiConnection.Load(serviceName)
 	if ok {
 		if conn, ok := cc.(ServiceAPIConnection); ok {
 			return conn, nil
 		}
 	}
-	conn, err := NewClientAPIConnection(clientAPIManager, serviceName)
+	conn, err := NewClientAPIConnection(serviceAPIManager, serviceName)
 	if err != nil {
 		return nil, err
 	}
@@ -24,8 +24,8 @@ func NewSingletonClientAPIConnection(clientAPIManager ServiceAPIManager, service
 	return conn, nil
 }
 
-func NewClientAPIConnection(clientAPIManager ServiceAPIManager, serviceName ServiceName) (ServiceAPIConnection, error) {
-	conn, err := clientAPIManager.NewAPIConnection(serviceName)
+func NewClientAPIConnection(serviceAPIManager ServiceAPIManager, serviceName ServiceName) (ServiceAPIConnection, error) {
+	conn, err := serviceAPIManager.NewAPIConnection(serviceName)
 	if err != nil {
 		return nil, err
 	}
@@ -43,12 +43,12 @@ const (
 )
 
 // NewPingGRPCClient ...
-func NewPingGRPCClient(clientAPIManager ServiceAPIManager, rewriteServiceName ...ServiceName) (pingservicev1.SrvPingClient, error) {
+func NewPingGRPCClient(serviceAPIManager ServiceAPIManager, rewriteServiceName ...ServiceName) (pingservicev1.SrvPingClient, error) {
 	serviceName := PingService
 	for i := range rewriteServiceName {
 		serviceName = rewriteServiceName[i]
 	}
-	conn, err := NewSingletonClientAPIConnection(clientAPIManager, serviceName)
+	conn, err := NewSingletonClientAPIConnection(serviceAPIManager, serviceName)
 	if err != nil {
 		return nil, err
 	}
@@ -60,12 +60,12 @@ func NewPingGRPCClient(clientAPIManager ServiceAPIManager, rewriteServiceName ..
 }
 
 // NewPingHTTPClient ...
-func NewPingHTTPClient(clientAPIManager ServiceAPIManager, rewriteServiceName ...ServiceName) (pingservicev1.SrvPingHTTPClient, error) {
+func NewPingHTTPClient(serviceAPIManager ServiceAPIManager, rewriteServiceName ...ServiceName) (pingservicev1.SrvPingHTTPClient, error) {
 	serviceName := PingService
 	for i := range rewriteServiceName {
 		serviceName = rewriteServiceName[i]
 	}
-	conn, err := NewSingletonClientAPIConnection(clientAPIManager, serviceName)
+	conn, err := NewSingletonClientAPIConnection(serviceAPIManager, serviceName)
 	if err != nil {
 		return nil, err
 	}
