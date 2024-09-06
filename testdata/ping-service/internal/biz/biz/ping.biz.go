@@ -8,6 +8,7 @@ import (
 	"github.com/go-micro-saas/service-kit/testdata/ping-service/internal/biz/bo"
 	bizrepo "github.com/go-micro-saas/service-kit/testdata/ping-service/internal/biz/repo"
 	datarepo "github.com/go-micro-saas/service-kit/testdata/ping-service/internal/data/repo"
+	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 )
 
 type pingBiz struct {
@@ -53,13 +54,13 @@ func (s *pingBiz) TestingRequest(ctx context.Context) error {
 	pingHTTPReq := &resourcev1.PingReq{Message: "request_by_http"}
 	pingHTTPResp, err := pingHTTPClient.Ping(ctx, pingHTTPReq)
 	if err != nil {
-		return err
+		return errorpkg.FormatError(err)
 	}
 	s.log.Infow("==> TestingRequest: ", pingHTTPResp.GetData().GetMessage())
 	pingGRPCReq := &resourcev1.PingReq{Message: "request_by_grpc"}
 	pingGRPCResp, err := pingGRPCClient.Ping(ctx, pingGRPCReq)
 	if err != nil {
-		return err
+		return errorpkg.FormatError(err)
 	}
 	s.log.Infow("==> TestingRequest: ", pingGRPCResp.GetData().GetMessage())
 	return nil
