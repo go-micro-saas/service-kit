@@ -15,10 +15,14 @@ func InitTracerWithJaegerExporter(appConfig *configpb.App, exp *otlptrace.Export
 	var opts = []middlewarepkg.TracerOption{
 		middlewarepkg.WithTracerJaegerExporter(exp),
 	}
-	return middlewarepkg.SetTracer(apputil.ID(appConfig), opts...)
+	ac := &apputil.AppConfig{}
+	ac.SetByPbApp(appConfig)
+	return middlewarepkg.SetTracer(apputil.ID(ac), opts...)
 }
 
 func InitTracer(appConfig *configpb.App) error {
 	stdlog.Println("|*** LOADING: Tracer: ...")
-	return middlewarepkg.SetTracer(apputil.ID(appConfig))
+	ac := &apputil.AppConfig{}
+	ac.SetByPbApp(appConfig)
+	return middlewarepkg.SetTracer(apputil.ID(ac))
 }

@@ -12,6 +12,20 @@ import (
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 )
 
+type AppConfig struct {
+	ProjectName   string //
+	ServerName    string //
+	ServerEnv     string // 开发环境；值：DEVELOP、TESTING、PREVIEW、PRODUCTION
+	ServerVersion string //
+}
+
+func (a *AppConfig) SetByPbApp(appConfig *configpb.App) {
+	a.ProjectName = appConfig.ProjectName
+	a.ServerName = appConfig.ServerName
+	a.ServerEnv = appConfig.ServerEnv
+	a.ServerVersion = appConfig.ServerVersion
+}
+
 const (
 	RedisSep = ":"
 	PathSep  = "/"
@@ -19,28 +33,30 @@ const (
 
 // ID 程序ID
 // 例：go-srv-saas:user-service:DEVELOP:v1.0.0
-func ID(appConfig *configpb.App) string {
+func ID(appConfig *AppConfig) string {
 	return Identifier(appConfig, RedisSep)
 }
 
-func Path(appConfig *configpb.App) string {
+func Path(appConfig *AppConfig) string {
 	return Identifier(appConfig, PathSep)
 }
 
-func AbsPath(appConfig *configpb.App) string {
+func AbsPath(appConfig *AppConfig) string {
 	return PathSep + Identifier(appConfig, PathSep)
 }
 
 // Identifier app 唯一标准
 // @result = app.ProjectName + "/" + app.ServerName + "/" + app.ServerEnv + "/" + app.ServerVersion
-func Identifier(appConfig *configpb.App, sep string) string {
+func Identifier(appConfig *AppConfig, sep string) string {
 	var ss = make([]string, 0, 4)
 	if appConfig.ProjectName != "" {
 		ss = append(ss, appConfig.ProjectName)
 	}
-	if appConfig.ServerName != "" {
-		ss = append(ss, appConfig.ServerName)
+	serviceName := appConfig.ServerName
+	if appConfig.ServerName == "" {
+		serviceName = "my-service"
 	}
+	ss = append(ss, serviceName)
 	ss = append(ss, strings.ToLower(apppkg.ParseEnv(appConfig.ServerEnv).String()))
 	if appConfig.ServerVersion != "" {
 		ss = append(ss, appConfig.ServerVersion)

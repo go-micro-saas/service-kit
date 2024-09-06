@@ -186,6 +186,8 @@ github.com/ikaiguang/go-srv-kit v0.3.11 h1:olxwLhmE463C2oJ9ED9HagX7Il6SIvERrfpUq
 github.com/ikaiguang/go-srv-kit v0.3.11/go.mod h1:mxRiwjxJ8NL5NEDhMv5lXWV1cELHhwHQ6tapGzJUYUc=
 github.com/ikaiguang/go-srv-kit v0.3.12 h1:uH//EOprpTPFpa4biH8Rq6e0oo1thfeDNhEq28PRlOY=
 github.com/ikaiguang/go-srv-kit v0.3.12/go.mod h1:iNHvJNeamh514NdUWqx6i6774fAIWhTBn+tAYUT5vW8=
+github.com/ikaiguang/go-srv-kit v0.3.13 h1:nLQHne4tRXboXOvYgj6+ExWyY3qiHsFZHMG9NeuhlNg=
+github.com/ikaiguang/go-srv-kit v0.3.13/go.mod h1:iNHvJNeamh514NdUWqx6i6774fAIWhTBn+tAYUT5vW8=
 github.com/jackc/pgpassfile v1.0.0 h1:/6Hmqy13Ss2zCq62VdNG8tM1wchn8zjSGOBJ6icpsIM=
 github.com/jackc/pgpassfile v1.0.0/go.mod h1:CEx0iS5ambNFdcRtxPj5JhEz+xB6uRky5eyVu/W2HEg=
 github.com/jackc/pgservicefile v0.0.0-20231201235250-de7065d80cb9 h1:L0QtFUgDarD7Fpv9jeVMgy/+Ec0mtnmYuImjTz6dtDA=

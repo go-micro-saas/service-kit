@@ -34,6 +34,7 @@ func (s *serviceAPIManager) NewGRPCConnection(apiConfig *Config, otherOpts ...gr
 	}
 	opts = append(opts, endpointOpts...)
 	logHelper.Infow(
+		"msg", "NewGRPCConnection",
 		"client.serviceName", apiConfig.ServiceName,
 		"client.transportType", apiConfig.TransportType.String(),
 		"client.registryType", apiConfig.RegistryType.String(),

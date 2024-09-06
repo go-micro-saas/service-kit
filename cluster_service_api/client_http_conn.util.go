@@ -28,6 +28,7 @@ func (s *serviceAPIManager) NewHTTPClient(apiConfig *Config, otherOpts ...http.C
 	}
 	opts = append(opts, endpointOpts...)
 	logHelper.Infow(
+		"msg", "NewHTTPClient",
 		"client.serviceName", apiConfig.ServiceName,
 		"client.transportType", apiConfig.TransportType.String(),
 		"client.registryType", apiConfig.RegistryType.String(),

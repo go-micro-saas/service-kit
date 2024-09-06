@@ -373,7 +373,11 @@ func (s *launcherManager) getServiceApiManager() (clientutil.ServiceAPIManager, 
 	if err != nil {
 		return nil, err
 	}
-	var opts []clientutil.Option
+	loggerForMiddleware, err := s.GetLoggerForMiddleware()
+	if err != nil {
+		return nil, err
+	}
+	var opts = []clientutil.Option{clientutil.WithLogger(loggerForMiddleware)}
 	for rt := range diffRT {
 		if rt == configpb.RegistryTypeEnum_CONSUL {
 			consulClient, err := s.GetConsulClient()

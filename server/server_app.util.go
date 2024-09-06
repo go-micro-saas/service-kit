@@ -5,10 +5,7 @@ import (
 	"github.com/go-kratos/kratos/v2/transport"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
-	configpb "github.com/go-micro-saas/service-kit/api/config"
 	apputil "github.com/go-micro-saas/service-kit/app"
-	consulutil "github.com/go-micro-saas/service-kit/consul"
-	jaegerutil "github.com/go-micro-saas/service-kit/jaeger"
 	setuputil "github.com/go-micro-saas/service-kit/setup"
 	tracerutil "github.com/go-micro-saas/service-kit/tracer"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
@@ -19,9 +16,25 @@ import (
 
 // NewApp .
 func NewApp(launcherManager setuputil.LauncherManager, hs *http.Server, gs *grpc.Server) (*kratos.App, error) {
-	conf := launcherManager.GetConfig()
-	if err := InitTracer(conf); err != nil {
-		return nil, err
+	var (
+		conf               = launcherManager.GetConfig()
+		appConfig          = conf.GetApp()
+		enableJaegerTracer = conf.GetSetting().GetEnableJaegerTracer()
+	)
+	if enableJaegerTracer {
+		exp, err := launcherManager.GetJaegerExporter()
+		if err != nil {
+			return nil, err
+		}
+		err = tracerutil.InitTracerWithJaegerExporter(appConfig, exp)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		err := tracerutil.InitTracer(appConfig)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	// logger
@@ -50,8 +63,9 @@ func NewApp(launcherManager setuputil.LauncherManager, hs *http.Server, gs *grpc
 	}
 
 	// appid
-	appConfig := conf.GetApp()
-	appID := apputil.ID(appConfig)
+	ac := &apputil.AppConfig{}
+	ac.SetByPbApp(appConfig)
+	appID := apputil.ID(ac)
 	appConfig.Id = appID
 	if appConfig.GetMetadata() == nil {
 		appConfig.Metadata = make(map[string]string)
@@ -89,11 +103,7 @@ func NewApp(launcherManager setuputil.LauncherManager, hs *http.Server, gs *grpc
 	// 启用服务注册中心
 	if conf.GetSetting().GetEnableConsulRegistry() {
 		stdlog.Println("|*** LOADING: ServiceRegistry: ...")
-		consulManager, err := consulutil.NewSingletonConsulManager(conf.GetConsul())
-		if err != nil {
-			return nil, err
-		}
-		consulClient, err := consulManager.GetClient()
+		consulClient, err := launcherManager.GetConsulClient()
 		if err != nil {
 			return nil, err
 		}
@@ -105,19 +115,4 @@ func NewApp(launcherManager setuputil.LauncherManager, hs *http.Server, gs *grpc
 	}
 
 	return kratos.New(appOptions...), err
-}
-
-func InitTracer(conf *configpb.Bootstrap) error {
-	if conf.GetSetting().GetEnableJaegerTracer() {
-		jaegerManager, err := jaegerutil.NewSingletonJaegerManager(conf.GetJaeger())
-		if err != nil {
-			return err
-		}
-		exp, err := jaegerManager.GetExporter()
-		if err != nil {
-			return err
-		}
-		return tracerutil.InitTracerWithJaegerExporter(conf.GetApp(), exp)
-	}
-	return tracerutil.InitTracer(conf.GetApp())
 }

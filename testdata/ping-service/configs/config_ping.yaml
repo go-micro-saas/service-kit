@@ -28,7 +28,7 @@ app:
 setting:
   enable_auth_middleware: false
   enable_jaeger_tracer: false
-  enable_consul_registry: true
+  enable_consul_registry: false
   enable_migrate_db: false
   enable_schedule_task: false
   enable_snowflake_worker: false
@@ -156,8 +156,8 @@ rabbitmq:
 consul:
   enable: false
   scheme:
-  #  address: 127.0.0.1:8500
-  address: my-consul-hostname:8500
+  address: 127.0.0.1:8500
+  # address: my-consul-hostname:8500
   path_prefix:
   datacenter:
   wait_time: 0s
@@ -187,7 +187,13 @@ etcd:
 # jaeger 服务追踪
 jaeger:
   enable: false
-  endpoint: http://127.0.0.1:14268/api/traces
+  # kind: grpc、http 类型
+  kind: grpc
+  # addr: grpc=4317 http=4318
+  addr: 127.0.0.1:4317
+  # addr: my-jaeger-hostname:4317
+  is_insecure: true
+  timeout: 0s
   with_http_basic_auth: false
   username:
   password:
