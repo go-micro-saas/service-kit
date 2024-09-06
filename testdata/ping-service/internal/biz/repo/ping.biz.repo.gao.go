@@ -7,4 +7,5 @@ import (
 
 type PingBizRepo interface {
 	GetPingMessage(ctx context.Context, param *bo.GetPingMessageParam) (*bo.GetPingMessageResult, error)
+	TestingRequest(ctx context.Context) error
 }

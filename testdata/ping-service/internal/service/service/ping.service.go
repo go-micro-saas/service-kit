@@ -50,8 +50,11 @@ func (s *pingService) Ping(ctx context.Context, req *resourcev1.PingReq) (*resou
 	}
 
 	// request
-	if req.GetMessage() == "request" {
-		s.requestClusterServiceAPI(ctx, req)
+	if req.GetMessage() == "http_and_grpc" {
+		err := s.requestClusterServiceAPI(ctx, req)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	param := dto.PingDTO.ToBoGetPingMessageParam(req)
@@ -74,6 +77,10 @@ func (s *pingService) testLogger(ctx context.Context, in *resourcev1.PingReq) {
 	debugutil.Printw("==> debugutil.Print : Ping Received: ", in.GetMessage())
 }
 
-func (s *pingService) requestClusterServiceAPI(ctx context.Context, in *resourcev1.PingReq) {
-	return
+func (s *pingService) requestClusterServiceAPI(ctx context.Context, in *resourcev1.PingReq) error {
+	err := s.pingBiz.TestingRequest(ctx)
+	if err != nil {
+		return err
+	}
+	return nil
 }
