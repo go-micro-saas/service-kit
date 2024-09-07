@@ -62,11 +62,16 @@ func (s *serviceAPIManager) getGRPCEndpointOptions(apiConfig *Config) ([]grpc.Cl
 	// registry
 	switch apiConfig.RegistryType {
 	case configpb.RegistryTypeEnum_CONSUL, configpb.RegistryTypeEnum_ETCD:
-		r, err := s.getRegistryDiscovery(apiConfig)
+		r, err := s.getAndCheckRegistryDiscovery(apiConfig, apiConfig.ServiceTarget)
 		if err != nil {
 			return nil, err
 		}
 		opts = append(opts, grpc.WithDiscovery(r))
+	default:
+		err := s.checkGeneralEndpointValidity(apiConfig.ServiceTarget)
+		if err != nil {
+			return nil, err
+		}
 	}
 	return opts, nil
 }
