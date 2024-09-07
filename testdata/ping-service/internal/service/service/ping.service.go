@@ -3,9 +3,9 @@ package service
 import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
-	errorv1 "github.com/go-micro-saas/service-kit/testdata/ping-service/api/ping/v1/errors"
-	resourcev1 "github.com/go-micro-saas/service-kit/testdata/ping-service/api/ping/v1/resources"
-	servicev1 "github.com/go-micro-saas/service-kit/testdata/ping-service/api/ping/v1/services"
+	errorv1 "github.com/go-micro-saas/service-kit/testdata/ping-service/api/ping-service/v1/errors"
+	resourcev1 "github.com/go-micro-saas/service-kit/testdata/ping-service/api/ping-service/v1/resources"
+	servicev1 "github.com/go-micro-saas/service-kit/testdata/ping-service/api/ping-service/v1/services"
 	bizrepo "github.com/go-micro-saas/service-kit/testdata/ping-service/internal/biz/repo"
 	"github.com/go-micro-saas/service-kit/testdata/ping-service/internal/service/dto"
 	debugutil "github.com/ikaiguang/go-srv-kit/debug"

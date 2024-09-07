@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
 	clientutil "github.com/go-micro-saas/service-kit/cluster_service_api"
-	resourcev1 "github.com/go-micro-saas/service-kit/testdata/ping-service/api/ping/v1/resources"
+	resourcev1 "github.com/go-micro-saas/service-kit/testdata/ping-service/api/ping-service/v1/resources"
 	"github.com/go-micro-saas/service-kit/testdata/ping-service/internal/biz/bo"
 	bizrepo "github.com/go-micro-saas/service-kit/testdata/ping-service/internal/biz/repo"
 	datarepo "github.com/go-micro-saas/service-kit/testdata/ping-service/internal/data/repo"

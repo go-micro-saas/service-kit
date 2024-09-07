@@ -1,6 +1,6 @@
 package clientutil
 
-import pingservicev1 "github.com/go-micro-saas/service-kit/testdata/ping-service/api/ping/v1/services"
+import pingservicev1 "github.com/go-micro-saas/service-kit/testdata/ping-service/api/ping-service/v1/services"
 
 // 示例：仅供参考
 const (

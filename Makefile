@@ -83,10 +83,10 @@ init:
 include api/makefile_protoc.mk
 include api/config/makefile_protoc.mk
 #include testdata/ping-service/api/makefile_protoc.mk
-include testdata/ping-service/api/ping/makefile_protoc.mk
-include testdata/ping-service/api/ping/v1/makefile_protoc.mk
-include testdata/ping-service/api/testdata/makefile_protoc.mk
-include testdata/ping-service/api/testdata/v1/makefile_protoc.mk
+include testdata/ping-service/api/ping-service/makefile_protoc.mk
+include testdata/ping-service/api/ping-service/v1/makefile_protoc.mk
+include testdata/ping-service/api/testdata-service/makefile_protoc.mk
+include testdata/ping-service/api/testdata-service/v1/makefile_protoc.mk
 
 # run
 include testdata/ping-service/internal/conf/makefile_protoc.mk
