@@ -28,7 +28,7 @@ app:
 setting:
   enable_auth_middleware: false
   enable_jaeger_tracer: false
-  enable_consul_registry: true
+  enable_consul_registry: false
   enable_migrate_db: false
   enable_schedule_task: false
   enable_snowflake_worker: false
