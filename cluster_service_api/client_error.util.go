@@ -1,4 +1,4 @@
-package errorutil
+package clientutil
 
 import (
 	"github.com/go-kratos/kratos/v2/errors"
