@@ -5,7 +5,10 @@ import (
 	"gorm.io/gorm"
 )
 
-type MigrationFunc func(dbConn *gorm.DB, opts ...MigrationOptions)
+type MigrationFunc func(dbConn *gorm.DB, opts ...MigrationOption)
+
+// MigrationOption ...
+type MigrationOption func(*MigrationOptions)
 
 // MigrationOptions ...
 type MigrationOptions struct {
@@ -18,9 +21,6 @@ func DefaultMigrationOptions() *MigrationOptions {
 		Logger: log.DefaultLogger,
 	}
 }
-
-// MigrationOption ...
-type MigrationOption func(*MigrationOptions)
 
 func WithLogger(logger log.Logger) MigrationOption {
 	return func(o *MigrationOptions) {
