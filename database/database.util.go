@@ -2,10 +2,10 @@ package dbutil
 
 import (
 	"github.com/go-kratos/kratos/v2/log"
-	setuputil "github.com/go-micro-saas/service-kit/setup"
+	"gorm.io/gorm"
 )
 
-type MigrationFunc func(launcherManager setuputil.LauncherManager, opts ...MigrationOptions)
+type MigrationFunc func(dbConn *gorm.DB, opts ...MigrationOptions)
 
 // MigrationOptions ...
 type MigrationOptions struct {
