@@ -8,6 +8,7 @@ import (
 	"github.com/go-micro-saas/service-kit/testdata/ping-service/internal/biz/bo"
 	bizrepo "github.com/go-micro-saas/service-kit/testdata/ping-service/internal/biz/repo"
 	datarepo "github.com/go-micro-saas/service-kit/testdata/ping-service/internal/data/repo"
+	"github.com/go-micro-saas/service-kit/testdata/service-api"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 )
 
@@ -43,11 +44,11 @@ func (s *pingBiz) GetPingMessage(ctx context.Context, param *bo.GetPingMessagePa
 }
 
 func (s *pingBiz) TestingRequest(ctx context.Context) error {
-	pingHTTPClient, err := clientutil.NewPingHTTPClient(s.serviceAPIManager, "ping-service-http")
+	pingHTTPClient, err := serviceapi.NewPingHTTPClient(s.serviceAPIManager, "ping-service-http")
 	if err != nil {
 		return err
 	}
-	pingGRPCClient, err := clientutil.NewPingGRPCClient(s.serviceAPIManager, "ping-service-grpc")
+	pingGRPCClient, err := serviceapi.NewPingGRPCClient(s.serviceAPIManager, "ping-service-grpc")
 	if err != nil {
 		return err
 	}
