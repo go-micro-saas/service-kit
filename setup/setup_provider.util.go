@@ -29,6 +29,15 @@ func NewSingletonLauncherManager(configFilePath string) (LauncherManager, error)
 	return singletonLauncherManager, err
 }
 
+// GetDBConn GetRecommendDBConn Postgres
+var GetDBConn = func(launcherManager LauncherManager) (*gorm.DB, error) {
+	dbConn, err := launcherManager.GetPostgresDBConn()
+	if err != nil {
+		return nil, err
+	}
+	return dbConn, nil
+}
+
 func GetLogger(launcherManager LauncherManager) (log.Logger, error) {
 	return launcherManager.GetLogger()
 }
