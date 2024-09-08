@@ -1,5 +1,9 @@
 package dbutil
 
+import setuputil "github.com/go-micro-saas/service-kit/setup"
+
+type MigrationFunc func(launcherManager setuputil.LauncherManager, opts ...MigrationOptions)
+
 // MigrationOptions ...
 type MigrationOptions struct {
 	close bool
