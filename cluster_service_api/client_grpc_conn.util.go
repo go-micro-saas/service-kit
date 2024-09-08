@@ -8,10 +8,12 @@ import (
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 	middlewarepkg "github.com/ikaiguang/go-srv-kit/kratos/middleware"
 	stdgrpc "google.golang.org/grpc"
+	"strings"
 	"time"
 )
 
 const (
+	Sep            = "://"
 	DefaultTimeout = time.Minute
 )
 
@@ -57,7 +59,7 @@ func (s *serviceAPIManager) getGRPCEndpointOptions(apiConfig *Config) ([]grpc.Cl
 	var opts []grpc.ClientOption
 
 	// endpoint
-	opts = append(opts, grpc.WithEndpoint(apiConfig.ServiceTarget))
+	endpoint := apiConfig.ServiceTarget
 
 	// registry
 	switch apiConfig.RegistryType {
@@ -68,10 +70,14 @@ func (s *serviceAPIManager) getGRPCEndpointOptions(apiConfig *Config) ([]grpc.Cl
 		}
 		opts = append(opts, grpc.WithDiscovery(r))
 	default:
+		if i := strings.Index(endpoint, Sep); i >= 0 {
+			endpoint = endpoint[i+len(Sep):]
+		}
 		err := s.checkGeneralEndpointValidity(apiConfig.ServiceTarget)
 		if err != nil {
 			return nil, err
 		}
 	}
+	opts = append(opts, grpc.WithEndpoint(endpoint))
 	return opts, nil
 }

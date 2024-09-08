@@ -26,16 +26,16 @@ func Loading(filePath string, loadingOpts ...Option) (*configpb.Bootstrap, error
 		e := errorpkg.ErrorBadRequest("[CONFIGURATION] config error, key = app")
 		return nil, errorpkg.WithStack(e)
 	}
-	if bootstrap.GetConsul() == nil {
-		e := errorpkg.ErrorBadRequest("[CONFIGURATION] config error, key = consul")
-		return nil, errorpkg.WithStack(e)
-	}
 	method := strings.ToLower(bootstrap.GetApp().GetConfigMethod())
 	switch method {
 	default:
 		return bootstrap, err
 	case CONFIG_METHOD_CONSUL:
 		//从consul加载配置
+		if bootstrap.GetConsul() == nil {
+			e := errorpkg.ErrorBadRequest("[CONFIGURATION] config error, key = consul")
+			return nil, errorpkg.WithStack(e)
+		}
 		consulClient, err := newConsulClient(bootstrap.GetConsul())
 		if err != nil {
 			return nil, err

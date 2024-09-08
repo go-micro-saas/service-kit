@@ -9,6 +9,7 @@ import (
 	clientpkg "github.com/ikaiguang/go-srv-kit/kratos/client"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 	middlewarepkg "github.com/ikaiguang/go-srv-kit/kratos/middleware"
+	"strings"
 )
 
 func (s *serviceAPIManager) NewHTTPClient(apiConfig *Config, otherOpts ...http.ClientOption) (*http.Client, error) {
@@ -52,7 +53,7 @@ func (s *serviceAPIManager) getHTTPEndpointOptions(apiConfig *Config) ([]http.Cl
 	var opts []http.ClientOption
 
 	// endpoint
-	opts = append(opts, http.WithEndpoint(apiConfig.ServiceTarget))
+	endpoint := apiConfig.ServiceTarget
 
 	// registry
 	switch apiConfig.RegistryType {
@@ -63,10 +64,15 @@ func (s *serviceAPIManager) getHTTPEndpointOptions(apiConfig *Config) ([]http.Cl
 		}
 		opts = append(opts, http.WithDiscovery(r))
 	default:
+		if !strings.Contains(endpoint, Sep) {
+			e := errorpkg.ErrorInvalidParameter("invalid ServiceTarget")
+			return nil, errorpkg.WithStack(e)
+		}
 		err := s.checkGeneralEndpointValidity(apiConfig.ServiceTarget)
 		if err != nil {
 			return nil, err
 		}
 	}
+	opts = append(opts, http.WithEndpoint(endpoint))
 	return opts, nil
 }
