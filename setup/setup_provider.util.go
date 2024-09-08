@@ -29,7 +29,12 @@ func NewSingletonLauncherManager(configFilePath string) (LauncherManager, error)
 	return singletonLauncherManager, err
 }
 
-// GetDBConn GetRecommendDBConn Postgres
+// GetRecommendDBConn 获取数据库连接
+func GetRecommendDBConn(launcherManager LauncherManager) (*gorm.DB, error) {
+	return GetDBConn(launcherManager)
+}
+
+// GetDBConn recommend Postgres
 var GetDBConn = func(launcherManager LauncherManager) (*gorm.DB, error) {
 	dbConn, err := launcherManager.GetPostgresDBConn()
 	if err != nil {
