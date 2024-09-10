@@ -221,8 +221,10 @@ cluster_service_api:
     service_target: http://127.0.0.1:10101
   - service_name: ping-service-grpc
     transport_type: grpc
-    registry_type: consul
-    service_target: discovery:///go-micro-saas:ping-service:production:v1.0.0
+    # registry_type: consul
+    # service_target: discovery:///go-micro-saas:ping-service:production:v1.0.0
+    registry_type: endpoint
+    service_target: grpc://127.0.0.1:10102
 
 # third_party_api 第三方api
 third_party_api:
