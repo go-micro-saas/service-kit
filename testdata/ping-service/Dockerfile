@@ -3,6 +3,7 @@ ARG WORK_DIR=/myworkspace/golang/src/workspace
 ARG GOPROXY=https://goproxy.io,direct
 ARG GOMODCACHE=/myworkspace/golang/pkg/mod
 ARG GOCACHE=/myworkspace/golang/build_cache
+ARG TZ=Asia/Shanghai
 
 # service name
 ARG SERVICE_NAME=ping-service
@@ -17,12 +18,14 @@ ARG GOMODCACHE
 ARG GOCACHE
 ARG SERVICE_NAME
 ARG VERSION
+ARG TZ
 
 # env
 ENV GOPATH=${GOPATH}
 ENV GOPROXY=${GOPROXY}
 ENV GOMODCACHE=${GOMODCACHE}
 ENV GOCACHE=${GOCACHE}
+ENV TZ=${TZ}
 ENV GO111MODULE=on
 ENV CGO_ENABLED=0
 
@@ -43,9 +46,11 @@ FROM debian:stable-slim
 # arg
 ARG WORK_DIR
 ARG SERVICE_NAME
+ARG TZ
 
 # env
-ENV TZ=Asia/Shanghai
+ENV TZ=$TZ
+ENV DEBIAN_FRONTEND=noninteractive
 
 WORKDIR ${WORK_DIR}
 
