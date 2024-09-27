@@ -4,6 +4,12 @@
 run-ping-service:
 	go run ./testdata/ping-service/cmd/... -conf=./testdata/ping-service/configs
 
+# ping-service
+.PHONY: run-service
+# run service :-->: run ping-service
+run-service:
+	go run ./testdata/ping-service/cmd/... -conf=./testdata/ping-service/configs
+
 .PHONY: testing-ping-service
 # testing service :-->: testing ping-service
 testing-ping-service:
