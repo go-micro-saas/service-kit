@@ -8,6 +8,7 @@ import (
 	configutil "github.com/go-micro-saas/service-kit/config"
 	middlewareutil "github.com/go-micro-saas/service-kit/middleware"
 	setuputil "github.com/go-micro-saas/service-kit/setup"
+	apppkg "github.com/ikaiguang/go-srv-kit/kratos/app"
 	stdlog "log"
 )
 
@@ -47,6 +48,7 @@ func NewHTTPServer(
 
 	// 编码 与 解码
 	opts = append(opts, apputil.ServerDecoderEncoder()...)
+	opts = append(opts, apppkg.NotFound404())
 
 	// ===== 中间件 =====
 	var (

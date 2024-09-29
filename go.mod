@@ -10,7 +10,7 @@ require (
 	github.com/google/wire v0.6.0
 	github.com/gorilla/websocket v1.5.3
 	github.com/hashicorp/consul/api v1.29.4
-	github.com/ikaiguang/go-srv-kit v0.3.14
+	github.com/ikaiguang/go-srv-kit v0.3.16
 	github.com/redis/go-redis/v9 v9.6.1
 	go.etcd.io/etcd/client/v3 v3.5.15
 	go.mongodb.org/mongo-driver v1.16.1
