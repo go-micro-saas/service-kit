@@ -92,6 +92,9 @@ include testdata/ping-service/internal/conf/makefile_protoc.mk
 # run
 include testdata/ping-service/cmd/makefile_run.mk
 
+# build
+include testdata/ping-service/devops/makefile_cicd.mk
+
 # ===== include =====
 # ===== include =====
 # ===== include =====
