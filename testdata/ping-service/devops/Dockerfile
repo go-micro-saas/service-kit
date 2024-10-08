@@ -75,4 +75,4 @@ EXPOSE 8080
 # grpc 50051 50052
 EXPOSE 50051
 
-ENTRYPOINT ./main -conf=./configs
+ENTRYPOINT ["./main", "-conf=./configs"]
