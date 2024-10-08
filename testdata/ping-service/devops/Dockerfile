@@ -60,6 +60,10 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 WORKDIR ${WORK_DIR}
 
+# https://developer.aliyun.com/mirror/debian
+# cat /etc/os-release && echo -e "\n\n\n" && cat /etc/apt/sources.list.d/debian.sources
+RUN sed -i 's|deb.debian.org|mirrors.aliyun.com|g' /etc/apt/sources.list.d/debian.sources
+
 RUN apt-get update && \
     apt-get install -y --no-install-recommends -y tzdata ca-certificates netbase telnet curl less && \
     ln -sf /usr/share/zoneinfo/${TZ} /etc/localtime && \
