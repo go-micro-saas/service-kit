@@ -1,29 +1,29 @@
-# service name
-ARG SERVICE_NAME=ping-service
+# service arg
+ARG APP_DIR=app
+ARG SERVICE_NAME=nodeid-service
+ARG VERSION=v1.0.0
 
-# golang
+# system arg
 ARG GOPATH=/myworkspace/golang
 ARG GOPROXY=https://goproxy.io,direct
 ARG GOMODCACHE=/myworkspace/golang/pkg/mod
 ARG GOCACHE=/myworkspace/golang/build_cache
-
-# service
 ARG WORK_DIR=/myworkspace/golang/src/workspace
-ARG VERSION=v1.0.0
 ARG TZ=Asia/Shanghai
 
 FROM golang:1.22.8 AS builder
+
+# service arg
+ARG APP_DIR
+ARG SERVICE_NAME
+ARG VERSION
 
 # golang arg
 ARG GOPATH
 ARG GOPROXY
 ARG GOMODCACHE
 ARG GOCACHE
-
-# service arg
 ARG WORK_DIR
-ARG SERVICE_NAME
-ARG VERSION
 ARG TZ
 
 # golang env
@@ -32,21 +32,18 @@ ENV GOPATH=${GOPATH}
 ENV GOPROXY=${GOPROXY}
 ENV GOMODCACHE=${GOMODCACHE}
 ENV GOCACHE=${GOCACHE}
-
-# service
 ENV TZ=${TZ}
 
 WORKDIR ${WORK_DIR}
 
 COPY . .
 
-RUN go mod download
-RUN go mod tidy
+RUN go mod download && go mod tidy
 
 # go build -ldflags="-s -w -X 'main.Version=1.0.0' -extldflags '-static'"
 RUN go build -ldflags="-s -w -X 'main.Version=${VERSION}' -extldflags '-static'" \
     -o ./bin/main \
-    ./app/${SERVICE_NAME}/cmd/${SERVICE_NAME}/main.go
+    ./${APP_DIR}/${SERVICE_NAME}/cmd/${SERVICE_NAME}/main.go
 
 FROM debian:stable-20240926-slim
 
@@ -69,7 +66,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder ${WORK_DIR}/bin/main ./main
-COPY --from=builder ${WORK_DIR}/app/${SERVICE_NAME}/configs ./configs
+#COPY --from=builder ${WORK_DIR}/${APP_DIR}/${SERVICE_NAME}/configs ./configs
 
 # http 8080 8081
 EXPOSE 8080
