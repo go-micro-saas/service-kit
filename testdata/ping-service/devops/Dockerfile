@@ -1,4 +1,6 @@
 # service arg
+ARG BUILD_FROM_IMAGE=golang:1.22.8
+ARG RUN_SERVICE_IMAGE=debian:stable-20240926-slim
 ARG APP_DIR=app
 ARG SERVICE_NAME=nodeid-service
 ARG VERSION=v1.0.0
@@ -11,7 +13,7 @@ ARG GOCACHE=/myworkspace/golang/build_cache
 ARG WORK_DIR=/myworkspace/golang/src/workspace
 ARG TZ=Asia/Shanghai
 
-FROM golang:1.22.8 AS builder
+FROM ${BUILD_FROM_IMAGE} AS builder
 
 # service arg
 ARG APP_DIR
@@ -45,7 +47,7 @@ RUN go build -ldflags="-s -w -X 'main.Version=${VERSION}' -extldflags '-static'"
     -o ./bin/main \
     ./${APP_DIR}/${SERVICE_NAME}/cmd/${SERVICE_NAME}/main.go
 
-FROM debian:stable-20240926-slim
+FROM ${RUN_SERVICE_IMAGE}
 
 # arg
 ARG WORK_DIR
