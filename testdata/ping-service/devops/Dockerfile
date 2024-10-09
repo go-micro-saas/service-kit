@@ -2,7 +2,7 @@
 ARG BUILD_FROM_IMAGE=golang:1.22.8
 ARG RUN_SERVICE_IMAGE=debian:stable-20240926-slim
 ARG APP_DIR=app
-ARG SERVICE_NAME=nodeid-service
+ARG SERVICE_NAME=ping-service
 ARG VERSION=v1.0.0
 
 # system arg

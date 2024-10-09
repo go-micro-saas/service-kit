@@ -18,6 +18,10 @@ func ReadStoreFiles(sourceDir, storeDir string) (map[string][]byte, error) {
 		e := errorpkg.ErrorInternalError(err.Error())
 		return nil, errorpkg.WithStack(e)
 	}
+	if len(fs) == 0 {
+		e := errorpkg.ErrorBadRequest("资源目录查无配置文件：sourceDir=%s", sourceDir)
+		return nil, errorpkg.WithStack(e)
+	}
 	if storeDir == "" {
 		e := errorpkg.ErrorBadRequest("请配置存储路径：storeDir")
 		return nil, errorpkg.WithStack(e)

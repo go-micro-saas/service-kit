@@ -17,13 +17,13 @@
 # base config
 go run testdata/configuration/main.go \
   -consul_config consul \
-  -source_dir base \
-  -store_dir go-micro-saas/general-config
+  -source_dir general-configs \
+  -store_dir go-micro-saas/general-configs/develop
 
 # service config
 go run testdata/configuration/main.go \
   -consul_config consul \
-  -source_dir service \
+  -source_dir service-configs \
   -store_dir ""
 
 ```
