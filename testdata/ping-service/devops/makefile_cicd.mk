@@ -14,3 +14,9 @@ build:
 		-t ping-service:latest \
 		-f ./testdata/ping-service/devops/docker-build/Dockerfile .
 
+# deploy-image on docker
+.PHONY: deploy-on-docker
+# deploy-on-docker :-->: deploying on docker
+deploy-on-docker:
+	docker-compose -f ./testdata/ping-service/devops/docker-deploy/docker-compose.yaml up -d
+
