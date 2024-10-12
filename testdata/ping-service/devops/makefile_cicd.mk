@@ -12,5 +12,5 @@ build:
 		--build-arg SERVICE_NAME=ping-service \
 		--build-arg VERSION=latest \
 		-t ping-service:latest \
-		-f ./testdata/ping-service/devops/Dockerfile .
+		-f ./testdata/ping-service/devops/docker-build/Dockerfile .
 
